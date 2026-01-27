@@ -1,0 +1,124 @@
+.header { position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; background: rgba(17,17,17,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-color); padding: 15px 0; }
+.header__inner { display: flex; justify-content: space-between; align-items: center; }
+.logo { font-family: var(--font-head); font-size: 24px; font-weight: 900; color: var(--yellow); text-decoration: none; text-transform: uppercase; letter-spacing: 1px; }
+.nav { display: flex; gap: 35px; }
+.nav__link { color: #fff; text-decoration: none; font-weight: 600; font-size: 14px; text-transform: uppercase; font-family: var(--font-head); transition: .3s; }
+.nav__link:hover { color: var(--yellow); }
+.header__right { display: flex; align-items: center; gap: 20px; }
+.header__icons { display: flex; gap: 20px; }
+.icon-btn { background: none; border: none; color: #fff; cursor: pointer; transition: .3s; padding: 0; display: flex; }
+.icon-btn:hover { color: var(--yellow); }
+.icon-btn svg { width: 26px; height: 26px; }
+.burger-btn { display: none; background: none; border: none; cursor: pointer; flex-direction: column; gap: 5px; }
+.burger-btn span { display: block; width: 25px; height: 3px; background: var(--yellow); transition: .3s; }
+.burger-btn.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 6px); }
+.burger-btn.active span:nth-child(2) { opacity: 0; }
+.burger-btn.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -6px); }
+
+.delivery-page { padding-top: 140px; padding-bottom: 100px; }
+
+/* АНИМАЦИЯ: Скрываем элементы до скролла */
+.animate-hidden { opacity: 0; transform: translateY(30px); transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+.animate-visible { opacity: 1; transform: translateY(0); }
+
+/* ОБЩИЙ СТИЛЬ ПАНЕЛЕЙ (ФОН #222) */
+.main-panel { border: 1px solid var(--border-color); border-radius: 12px; padding: 50px; margin-bottom: 40px; background: #222; transition: border-color 0.3s, transform 0.3s; }
+.main-panel:hover { border-color: rgba(255, 255, 255, 0.3); }
+
+.panel-header { display: flex; align-items: center; gap: 15px; margin-bottom: 30px; cursor: default; }
+.l-icon { width: 24px; height: 24px; color: var(--yellow); flex-shrink: 0; margin-bottom: 5px; transition: 0.3s; }
+.l-icon svg { width: 100%; height: 100%; }
+.panel-header:hover .l-icon { filter: drop-shadow(0 0 5px var(--yellow)); transform: scale(1.1); }
+
+.panel-title { font-family: var(--font-head); font-size: 24px; font-weight: 800; text-transform: uppercase; color: #fff; margin: 0; }
+.panel-text p { color: #b0b0b0; font-size: 15px; line-height: 1.6; margin-bottom: 20px; max-width: 100%; }
+.panel-text strong { color: #fff; font-weight: 700; }
+
+.finance-grid { display: grid; grid-template-columns: 1.8fr 1fr; gap: 50px; }
+
+.order-section { margin-top: 40px; }
+.order-head { font-family: var(--font-head); font-size: 14px; font-weight: 700; color: #fff; text-transform: uppercase; margin-bottom: 20px; }
+.order-list { list-style: none; display: flex; flex-direction: column; gap: 15px; }
+.order-list li { display: flex; align-items: center; gap: 15px; color: #ccc; font-size: 14px; font-weight: 500; }
+
+.bullet-tech { width: 20px; height: 20px; color: var(--yellow); flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.bullet-tech svg { width: 100%; height: 100%; }
+
+.finance-right { display: flex; flex-direction: column; justify-content: center; }
+
+/* КАРТОЧКА ПРЕДПРИЯТИЯ */
+.company-details-box { width: 100%; background: #222; border: 1px solid var(--border-color); border-radius: 12px; padding: 40px; transition: 0.3s; }
+.company-details-box:hover { border-color: var(--yellow); transform: translateY(-5px); box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+
+/* Заголовок внутри карточки */
+.card-inner-title { font-family: var(--font-head); font-size: 16px; font-weight: 700; color: #fff; text-transform: uppercase; margin-bottom: 30px; text-align: center; width: 100%; }
+
+.cd-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.cd-row:first-child { padding-top: 0; }
+.cd-row:last-of-type { border-bottom: none; margin-bottom: 30px; }
+.cd-label { font-size: 11px; font-weight: 700; color: #666; text-transform: uppercase; letter-spacing: 0.5px; }
+.cd-value { font-family: var(--font-head); font-size: 13px; font-weight: 700; color: #fff; text-align: right; transition: 0.2s; }
+.text-right { text-align: right; }
+
+.btn-req-download { display: flex; align-items: center; justify-content: center; width: 100%; height: 50px; background: var(--yellow); color: #000; font-family: var(--font-head); font-size: 13px; font-weight: 800; text-transform: uppercase; text-decoration: none; border-radius: 4px; border: none; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); box-shadow: 0 4px 15px rgba(255, 206, 0, 0.2); }
+.btn-req-download:hover { background: #fff; color: #000; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3); }
+.btn-req-download:active { transform: translateY(0); }
+
+.logistics-text-width { max-width: 100%; margin-bottom: 40px; }
+.features-row { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 0; }
+.log-feature-card { background: #222; border: 1px solid var(--border-color); border-radius: 12px; padding: 30px; display: flex; align-items: center; gap: 25px; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); position: relative; overflow: hidden; }
+.log-feature-card:hover { border-color: var(--yellow); transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0,0,0,0.6); }
+.lfc-icon { width: 70px; height: 70px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--yellow); transition: 0.3s; }
+.lfc-icon svg { width: 32px; height: 32px; }
+.log-feature-card:hover .lfc-icon { background: var(--yellow); border-color: var(--yellow); color: #000; }
+.lfc-content h4 { font-family: var(--font-head); font-size: 18px; font-weight: 800; color: #fff; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px; }
+.lfc-content p { font-size: 14px; color: #999; line-height: 1.5; margin: 0; }
+
+.partners-panel { text-align: center; padding-top: 50px; padding-bottom: 50px; } /* Фон уже есть в .main-panel */
+.partners-label { font-family: var(--font-head); font-size: 24px; font-weight: 800; color: #fff; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 40px; }
+.partners-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.partner-box { background: #dcdcdc; border-radius: 8px; height: 100px; display: flex; align-items: center; justify-content: center; padding: 20px; transition: 0.3s; position: relative; overflow: hidden; }
+.partner-box:hover { background: #fff; box-shadow: 0 0 20px rgba(255,255,255,0.4); transform: translateY(-5px); }
+.partner-box img { max-width: 100%; max-height: 100%; object-fit: contain; filter: grayscale(100%); transition: 0.3s; }
+.partner-box:hover img { filter: grayscale(0%); transform: scale(1.05); }
+
+.footer { background-color: #0b0b0b; padding: 50px 0 20px; border-top: 1px solid rgba(255,255,255,0.05); font-family: var(--font-body); margin-top: auto; }
+.footer__top { display: grid; grid-template-columns: 1.3fr 1fr 1.3fr; gap: 60px; margin-bottom: 30px; }
+.footer__title { font-family: var(--font-head); font-size: 14px; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; }
+.footer__desc { color: #888; font-size: 14px; line-height: 1.6; margin-bottom: 20px; max-width: 350px; }
+.footer__socials { display: flex; gap: 15px; margin-bottom: 25px; }
+.social-btn { width: 44px; height: 44px; border-radius: 50%; background: #1a1a1a; display: flex; align-items: center; justify-content: center; transition: 0.3s; color: #fff; }
+.social-btn:hover { background: var(--yellow); color: #000; }
+.social-btn svg { width: 20px; height: 20px; }
+.footer__copyright-text { color: #555; font-size: 13px; }
+.footer__nav { display: flex; flex-direction: column; gap: 12px; }
+.footer__nav a { color: #aaa; text-decoration: none; font-size: 14px; font-weight: 500; transition: 0.2s; }
+.footer__nav a:hover { color: var(--yellow); }
+.contact-block { margin-bottom: 20px; }
+.contact-label { display: block; font-size: 10px; color: #666; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; margin-bottom: 8px; font-family: var(--font-head); }
+.contact-data { display: flex; align-items: center; gap: 12px; color: #fff; font-size: 16px; font-weight: 600; text-decoration: none; line-height: 1.4; transition: 0.3s; }
+.contact-data:hover { color: var(--yellow); }
+.contact-icon { width: 20px; height: 20px; color: var(--yellow); flex-shrink: 0; }
+.footer__bottom-disclaimer { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px; color: #444; font-size: 11px; line-height: 1.5; text-align: center; }
+
+@media (max-width: 992px) {
+    .burger-btn { display: flex; }
+    .nav { position: fixed; top: 0; right: -100%; width: 100%; height: 100vh; background: #111; flex-direction: column; justify-content: center; align-items: center; transition: .4s; z-index: 1050; }
+    .nav.active { right: 0; }
+    .nav__link { font-size: 24px; margin-bottom: 20px; }
+    .finance-grid { grid-template-columns: 1fr; gap: 50px; }
+    .features-row { grid-template-columns: 1fr; }
+    .partners-row { grid-template-columns: 1fr 1fr; }
+    .main-panel, .company-details-box, .partners-panel { padding: 30px; }
+    .footer__top { grid-template-columns: 1fr 1fr; gap: 40px; }
+    .footer__col.brand-col { grid-column: 1/-1; text-align: center; }
+    .footer__socials, .footer__desc { margin: 0 auto 20px; }
+    .footer__socials { justify-content: center; }
+}
+
+@media (max-width: 768px) {
+    .partners-row { grid-template-columns: 1fr; }
+    .footer__top { grid-template-columns: 1fr; text-align: center; }
+    .contact-data { justify-content: center; }
+    .delivery-page { padding-top: 100px; }
+}

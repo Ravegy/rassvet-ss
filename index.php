@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>РАССВЕТ-С | Запчасти Komatsu</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="common.css">
     <link rel="stylesheet" href="pages/home/style.css">
 </head>
 <body>
@@ -86,6 +85,100 @@
                     <h3 class="feature-title">ГАРАНТИЯ</h3>
                     <p class="feature-desc">Только оригинальные запчасти и проверенный OEM.</p>
                 </div>
+            </div>
+        </div>
+    </section>
+<div class="ticker-wrap">
+        <div class="ticker">
+            <div class="ticker__item">KOMATSU FOREST</div>
+            <div class="ticker__item">PONSSE</div>
+            <div class="ticker__item">JOHN DEERE</div>
+            <div class="ticker__item">WARATAH</div>
+            <div class="ticker__item">LOGSET</div>
+            <div class="ticker__item">ROTTNE</div>
+            <div class="ticker__item">PARKER</div>
+            <div class="ticker__item">DANFOSS</div>
+            <div class="ticker__item">KOMATSU FOREST</div>
+            <div class="ticker__item">PONSSE</div>
+            <div class="ticker__item">JOHN DEERE</div>
+            <div class="ticker__item">WARATAH</div>
+            <div class="ticker__item">LOGSET</div>
+            <div class="ticker__item">ROTTNE</div>
+            <div class="ticker__item">PARKER</div>
+            <div class="ticker__item">DANFOSS</div>
+        </div>
+    </div>
+
+    <section class="categories">
+        <div class="container">
+            <h2 class="section-title-center">ПОПУЛЯРНЫЕ КАТЕГОРИИ</h2>
+            <div class="categories__grid">
+                <a href="#" class="cat-card">
+                    <span class="cat-icon">
+                        <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
+                    </span>
+                    <div class="cat-title">ГИДРАВЛИКА</div>
+                </a>
+                
+                <a href="#" class="cat-card">
+                    <span class="cat-icon">
+                        <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 15h-2v-2h2zm0-4h-2V7h2z"></path></svg>
+                    </span>
+                    <div class="cat-title">ЭЛЕКТРОНИКА</div>
+                </a>
+
+                <a href="#" class="cat-card">
+                    <span class="cat-icon">
+                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    </span>
+                    <div class="cat-title">ХОДОВАЯ ЧАСТЬ</div>
+                </a>
+
+                <a href="#" class="cat-card">
+                    <span class="cat-icon">
+                        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    </span>
+                    <div class="cat-title">РАСХОДНИКИ</div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+   <section class="vin-request">
+        <div class="container">
+            <div class="vin-box">
+                <div class="vin-content">
+                    <h2 class="vin-title">НЕ НАШЛИ НУЖНУЮ ДЕТАЛЬ?</h2>
+                    <p class="vin-desc">Заполните форму, и наши инженеры подберут запчасти по оригинальным каталогам (EPC) по VIN-номеру вашей техники.</p>
+                    
+                    <ul class="vin-list">
+                        <li>
+                            <span class="vin-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+                            Подбор с точностью 100%
+                        </li>
+                        <li>
+                            <span class="vin-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+                            Ответ в течение 15 минут
+                        </li>
+                        <li>
+                            <span class="vin-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+                            Предложим оригинал и аналоги
+                        </li>
+                    </ul>
+                </div>
+                
+                <form class="vin-form">
+                    <div class="form-group">
+                        <input type="text" class="form-input" placeholder="Ваше имя">
+                    </div>
+                    <div class="form-group">
+                        <input type="tel" class="form-input" placeholder="+7 (___) ___-__-__">
+                    </div>
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <input type="text" class="form-input" placeholder="VIN-номер или артикул детали">
+                    </div>
+                    <button type="submit" class="btn btn-main form-btn">ОТПРАВИТЬ ЗАПРОС</button>
+                </form>
             </div>
         </div>
     </section>
