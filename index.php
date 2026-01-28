@@ -88,15 +88,26 @@
     <div class="ticker-wrap">
         <div class="ticker">
             <div class="ticker__item">KOMATSU FOREST</div>
-            <div class="ticker__item">PONSSE</div>
-            <div class="ticker__item">JOHN DEERE</div>
+            <div class="ticker__item">PARKER</div>
+            <div class="ticker__item">SKF</div>
             <div class="ticker__item">DANFOSS</div>
             <div class="ticker__item">PARKER</div>
             <div class="ticker__item">BOSCH REXROTH</div>
             <div class="ticker__item">LOGSET</div>
             <div class="ticker__item">KOMATSU FOREST</div>
-            <div class="ticker__item">PONSSE</div>
-            <div class="ticker__item">JOHN DEERE</div>
+            <div class="ticker__item">PARKER</div>
+            <div class="ticker__item">SKF</div>
+            <div class="ticker__item">DANFOSS</div>
+            <div class="ticker__item">PARKER</div>
+            <div class="ticker__item">BOSCH REXROTH</div>
+            <div class="ticker__item">LOGSET</div>
+            <div class="ticker__item">KOMATSU FOREST</div>
+            <div class="ticker__item">PARKER</div>
+            <div class="ticker__item">SKF</div>
+            <div class="ticker__item">DANFOSS</div>
+            <div class="ticker__item">PARKER</div>
+            <div class="ticker__item">BOSCH REXROTH</div>
+            <div class="ticker__item">LOGSET</div>
         </div>
     </div>
 

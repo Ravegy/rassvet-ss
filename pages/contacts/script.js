@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(card);
     });
 
-    // 2. Логика копирования (Для всех кнопок: copy-btn, copy-btn-mini, copy-text)
+    // 2. Логика копирования
     const copyBtns = document.querySelectorAll('.copy-btn, .copy-btn-mini, .copy-text');
     
     copyBtns.forEach(btn => {
@@ -26,7 +26,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     // Меняем иконку на галочку
                     btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>';
-                    btn.style.color = '#ffce00'; // Желтый цвет
+                    // Изменил желтый цвет на красный
+                    btn.style.color = '#ff3333'; 
 
                     setTimeout(() => {
                         btn.innerHTML = originalHTML;

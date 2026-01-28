@@ -1,0 +1,192 @@
+/* --- ОСНОВНОЙ КОНТЕЙНЕР --- */
+.product-page {
+    padding-top: 140px; /* Отступ от шапки */
+    padding-bottom: 100px;
+}
+
+/* --- СЕТКА (Слева инфо, справа таблица) --- */
+.prod-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr; /* Левая часть уже, правая шире */
+    gap: 30px;
+    align-items: start; /* Чтобы блоки не растягивались по высоте */
+}
+
+/* --- КАРТОЧКИ (ОБЩИЙ СТИЛЬ) --- */
+.prod-card {
+    background: #181818;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.prod-card.padded {
+    padding: 30px;
+}
+
+/* --- ТИПОГРАФИКА (ЛЕВЫЙ БЛОК) --- */
+.prod-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #666;
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+    font-weight: 700;
+}
+
+.prod-value {
+    font-size: 18px;
+    color: #fff;
+    margin-bottom: 30px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 15px;
+    font-weight: 500;
+    font-family: sans-serif; /* Или твой шрифт заголовков */
+    word-wrap: break-word;
+}
+
+/* Артикул делаем красным и большим */
+.prod-value.main-art {
+    color: #ff3333; /* Твой фирменный красный */
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+/* Убираем черту у последнего элемента */
+.prod-value:last-of-type {
+    border-bottom: none;
+    margin-bottom: 10px;
+    padding-bottom: 0;
+}
+
+/* --- КРАСНАЯ КНОПКА "ЗАПРОСИТЬ" --- */
+.btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 18px 0;
+    background-color: #ff3333;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    
+    font-size: 14px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    margin-top: 20px;
+    box-shadow: 0 4px 15px rgba(255, 51, 51, 0.2);
+}
+
+.btn:hover {
+    background-color: #e60000;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(255, 51, 51, 0.4);
+}
+
+.btn:active {
+    transform: translateY(1px);
+}
+
+/* --- ПРАВЫЙ БЛОК: ЗАГОЛОВОК ТАБЛИЦЫ --- */
+.usage-header {
+    padding: 20px 25px;
+    background: #111;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* --- ТАБЛИЦА ПРИМЕНЯЕМОСТИ --- */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto; /* Скролл на мобилках */
+}
+
+.usage-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.usage-table th {
+    text-align: left;
+    padding: 15px 25px;
+    color: #666;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-bottom: 1px solid #222;
+}
+
+.usage-table td {
+    padding: 15px 25px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: #ccc;
+    font-size: 13px;
+    transition: 0.2s;
+}
+
+/* Эффект при наведении на строку */
+.usage-table tr:hover td {
+    background: rgba(255, 51, 51, 0.05); /* Легкая красная подсветка */
+    color: #fff;
+}
+
+.usage-link {
+    color: #ff3333;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: 0.3s;
+}
+
+.usage-link:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+/* --- АДАПТИВНОСТЬ (МОБИЛКИ) --- */
+@media (max-width: 900px) {
+    .prod-grid {
+        grid-template-columns: 1fr; /* Одна колонка */
+    }
+    
+    .product-page {
+        padding-top: 100px;
+    }
+
+    .prod-value.main-art {
+        font-size: 24px;
+    }
+}
+/* --- АНИМАЦИИ (OBSERVER) --- */
+
+/* Начальное состояние: элемент скрыт и сдвинут вниз */
+.fade-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+/* Конечное состояние: элемент видим и на месте */
+.fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Задержка для второго блока (правого), чтобы они появлялись по очереди */
+.prod-card:nth-child(2) {
+    transition-delay: 0.2s; /* Вторая карточка появится чуть позже */
+}

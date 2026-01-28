@@ -68,7 +68,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 navigator.clipboard.writeText(textToCopy).then(() => {
                     const originalHTML = btn.innerHTML;
                     btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>';
-                    btn.style.color = '#ffce00';
+                    // Изменил желтый цвет на красный
+                    btn.style.color = '#ff3333';
 
                     setTimeout(() => {
                         btn.innerHTML = originalHTML;
@@ -120,6 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } catch (error) {
                 console.error(error);
                 btn.innerHTML = 'ОШИБКА';
+                // Изменил фон ошибки на красный (был #ff3333, оставил таким же, так как это красный)
                 btn.style.background = '#ff3333';
                 btn.style.color = '#fff';
 
@@ -134,7 +136,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
     
-    // Слайдер (только если есть на странице)
     const slides = document.querySelectorAll('.slide');
     if (slides.length > 0) {
         const container = document.querySelector('.slide-card-container');

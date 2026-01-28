@@ -42,15 +42,15 @@
 .text-right{text-align:right}
 
 /* КНОПКА СКАЧАТЬ */
-.btn{display:inline-flex;align-items:center;justify-content:center;height:50px;padding:0 30px;background:var(--yellow);color:#000;font-family:var(--font-head);font-weight:700;font-size:13px;text-transform:uppercase;border-radius:4px;text-decoration:none;transition:0.3s;border:none;gap:10px}
-.btn:hover{background:#fff;transform:translateY(-2px);box-shadow:0 5px 15px rgba(255,255,255,0.1)}
+.btn{display:inline-flex;align-items:center;justify-content:center;height:50px;padding:0 30px;background:var(--yellow);color:#fff;font-family:var(--font-head);font-weight:700;font-size:13px;text-transform:uppercase;border-radius:4px;text-decoration:none;transition:0.3s;border:none;gap:10px}
+.btn:hover{background:#fff;color:#000;transform:translateY(-2px);box-shadow:0 5px 15px rgba(255,255,255,0.1)}
 .btn-full{width:100%;margin-top:auto}
 .btn svg{width:18px;height:18px}
 
 /* ЛОГИСТИКА */
 .logistics-features{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:40px;border-top:1px solid rgba(255,255,255,0.05);padding-top:40px}
 .lf-item{display:flex;gap:20px}
-.lf-icon{width:50px;height:50px;background:rgba(255,206,0,0.1);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--yellow);flex-shrink:0}
+.lf-icon{width:50px;height:50px;background:rgba(255,51,51,0.1);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--yellow);flex-shrink:0}
 .lf-icon svg{width:24px;height:24px}
 .lf-content h4{font-family:var(--font-head);font-size:16px;font-weight:800;color:#fff;text-transform:uppercase;margin-bottom:8px}
 .lf-content p{font-size:13px;color:#999;line-height:1.5;margin:0}
