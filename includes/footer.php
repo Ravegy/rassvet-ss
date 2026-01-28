@@ -2,7 +2,7 @@
     <div class="container">
         <div class="footer__top">
             <div class="footer__col brand-col">
-                <h3 class="footer__title">О КОМПАНИИ</h3>
+                <div class="footer__title">О КОМПАНИИ</div>
                 <p class="footer__desc">
                     ООО «РАССВЕТ-С» — надежный поставщик запчастей и комплектующих для лесозаготовительной техники Komatsu Forest.
                 </p>
@@ -18,28 +18,28 @@
                     </a>
                 </div>
                 <div class="footer__copyright-text">
-                    © 2026 ООО «РАССВЕТ-С». Все права защищены.
+                    &copy; 2026 ООО «РАССВЕТ-С». Все права защищены.
                 </div>
             </div>
 
-            <div class="footer__col nav-col">
-                <h3 class="footer__title">НАВИГАЦИЯ</h3>
+            <div class="footer__col">
+                <div class="footer__title">НАВИГАЦИЯ</div>
                 <nav class="footer__nav">
-                    <a href="#">Каталог</a>
-                    <a href="#">О компании</a>
-                    <a href="#">Доставка и оплата</a>
-                    <a href="#">Контакты</a>
-                    <a href="#">Политика конфиденциальности</a>
+                    <a href="/">Каталог</a>
+                    <a href="/about.php">О компании</a>
+                    <a href="/delivery.php">Доставка и оплата</a>
+                    <a href="/contacts.php">Контакты</a>
+                    <a href="/policy.php">Политика конфиденциальности</a>
                 </nav>
             </div>
 
-            <div class="footer__col contacts-col">
-                <h3 class="footer__title">КОНТАКТЫ</h3>
+            <div class="footer__col">
+                <div class="footer__title">КОНТАКТЫ</div>
                 
                 <div class="contact-block">
                     <span class="contact-label">ТЕЛЕФОН</span>
                     <a href="tel:+78120000000" class="contact-data">
-                        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.05 12.05 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.05 12.05 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.05 12.05 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.05 12.05 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
                         +7 (812) 000-00-00
                     </a>
                 </div>
@@ -47,16 +47,16 @@
                 <div class="contact-block">
                     <span class="contact-label">EMAIL</span>
                     <a href="mailto:info@rassvet-s.ru" class="contact-data">
-                        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
                         info@rassvet-s.ru
                     </a>
                 </div>
 
                 <div class="contact-block">
                     <span class="contact-label">АДРЕС СКЛАДА</span>
-                    <div class="contact-data">
-                        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                        г. Санкт-Петербург, ул. Лесопарковая, д. 5
+                    <div class="contact-data" style="align-items: flex-start;">
+                        <svg class="contact-icon" style="margin-top:3px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                        г. Санкт-Петербург, <br>ул. Лесопарковая, д. 5
                     </div>
                 </div>
             </div>
@@ -66,4 +66,11 @@
             Данный сайт носит исключительно информационный характер и ни при каких условиях информационные материалы и цены, размещенные на сайте, не являются публичной офертой, определяемой положениями Статьи 437 Гражданского кодекса РФ.
         </div>
     </div>
+
+
+
+
+
+</div>
 </footer>
+<script src="common.js"></script>

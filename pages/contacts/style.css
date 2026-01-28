@@ -1,0 +1,87 @@
+/* ОБЩИЕ */
+.contacts-page { padding-top: 140px; padding-bottom: 100px; }
+
+/* СЕТКА */
+.contacts-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 30px; }
+.contacts-info-col { display: flex; flex-direction: column; gap: 30px; }
+.contacts-map-col { display: flex; flex-direction: column; gap: 30px; }
+
+/* КАРТОЧКИ (База) */
+.tech-card { background: rgba(30,30,30,0.85); backdrop-filter: blur(10px); border: 1px solid var(--border-color); border-radius: 12px; padding: 40px; position: relative; overflow: hidden; transition: 0.3s; }
+.tech-card:hover { border-color: rgba(255,255,255,0.2); transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+
+/* ЛЕЙБЛЫ */
+.card-label { font-family: var(--font-head); font-size: 12px; font-weight: 700; color: #666; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
+
+/* 1. ГЛАВНЫЙ КОНТАКТ */
+.highlight-card { border-color: rgba(255, 51, 51, 0.3); } /* Желтоватая рамка */
+.card-icon-corner { position: absolute; top: 20px; right: 20px; color: var(--yellow); opacity: 0.15; width: 60px; height: 60px; }
+.main-phone { font-family: var(--font-head); font-size: 32px; font-weight: 800; color: #fff; text-decoration: none; line-height: 1.2; margin-bottom: 5px; transition: 0.3s; display: block; }
+.main-phone:hover { color: var(--yellow); }
+.work-time { color: #888; font-size: 14px; margin-bottom: 25px; }
+
+/* СОЦСЕТИ */
+.socials-row { display: flex; gap: 10px; margin-top: 10px; }
+.social-link { flex: 1; height: 45px; display: flex; align-items: center; justify-content: center; font-family: var(--font-head); font-size: 12px; font-weight: 700; color: #fff; text-decoration: none; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; transition: 0.3s; background: rgba(255,255,255,0.02); }
+.social-link:hover { border-color: var(--yellow); color: var(--yellow); background: rgba(255,206,0,0.05); }
+
+/* 2. ОТДЕЛЫ */
+.departments-card { padding: 30px; }
+.dept-item { margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 15px; }
+.dept-item:last-child { margin-bottom: 0; border-bottom: none; padding-bottom: 0; }
+.dept-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+.dept-name { color: #fff; font-size: 14px; font-weight: 700; text-transform: uppercase; }
+.dept-status { font-size: 10px; color: var(--yellow); background: rgba(255,206,0,0.1); padding: 2px 6px; border-radius: 3px; font-family: var(--font-head); font-weight: 700; }
+.dept-link { color: #aaa; text-decoration: none; font-size: 14px; transition: 0.3s; font-family: var(--font-body); }
+.dept-link:hover { color: #fff; }
+
+/* 3. МИНИ-РЕКВИЗИТЫ */
+.req-mini-card { padding: 30px; }
+.req-row-mini { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; background: rgba(0,0,0,0.2); padding: 8px 12px; border-radius: 4px; }
+.req-row-mini:last-child { margin-bottom: 0; }
+.req-row-mini span { color: #ccc; font-size: 13px; font-family: monospace; letter-spacing: 0.5px; }
+.copy-text { width: 24px; height: 24px; color: #666; }
+.copy-text:hover { color: var(--yellow); }
+.copy-text svg { width: 14px; height: 14px; }
+
+/* 4. ГОРИЗОНТАЛЬНЫЕ АДРЕСА */
+.addresses-row { display: flex; align-items: center; padding: 30px; gap: 30px; }
+.addr-col { flex: 1; display: flex; flex-direction: column; align-items: flex-start; }
+.vertical-divider { width: 1px; height: 60px; background: rgba(255,255,255,0.1); }
+.addr-icon { color: var(--yellow); width: 24px; margin-bottom: 10px; }
+.addr-type { font-size: 11px; font-weight: 800; color: #666; text-transform: uppercase; margin-bottom: 5px; letter-spacing: 1px; }
+.addr-col p { margin: 0; color: #fff; font-size: 15px; line-height: 1.4; font-weight: 500; }
+.addr-hint { font-size: 12px; color: #888; font-weight: 400; display: block; margin-top: 3px; }
+
+/* КАРТА */
+.map-card { padding: 0; height: 350px; border: 1px solid var(--border-color); }
+.map-overlay { width: 100%; height: 100%; position: relative; }
+.map-interface { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2; border: 1px solid rgba(255,206,0,0.1); box-shadow: inset 0 0 50px rgba(0,0,0,0.5); }
+.map-label { position: absolute; top: 20px; left: 20px; background: #000; color: var(--yellow); font-family: var(--font-head); font-size: 10px; font-weight: 700; padding: 5px 10px; border: 1px solid var(--yellow); }
+/* Светло-серая карта */
+.map-overlay iframe { filter: grayscale(100%) brightness(1.1) contrast(0.9); }
+
+/* ФОРМА */
+.form-card { padding: 30px; }
+.contact-form { display: flex; flex-direction: column; gap: 20px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.c-input { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); color: #fff; font-family: var(--font-body); padding: 0 20px; height: 50px; border-radius: 4px; outline: none; transition: 0.3s; font-size: 14px; width: 100%; }
+.c-input:focus { border-color: var(--yellow); background: rgba(0,0,0,0.3); }
+.c-area { height: 120px; padding-top: 15px; resize: none; }
+
+/* КНОПКА */
+.btn-full { width: 100%; background: var(--yellow); color: #000; font-weight: 700; border: none; height: 50px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; font-family: var(--font-head); text-transform: uppercase; font-size: 13px; border-radius: 4px; }
+.btn-full:hover { background: #fff; transform: translateY(-2px); }
+.btn-full svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+/* МЕДИА */
+@media (max-width: 992px) {
+    .contacts-grid { grid-template-columns: 1fr; }
+    .page-title { font-size: 28px; }
+}
+@media (max-width: 576px) {
+    .addresses-row { flex-direction: column; align-items: flex-start; gap: 20px; }
+    .vertical-divider { display: none; }
+    .form-row { grid-template-columns: 1fr; }
+    .main-phone { font-size: 26px; }
+}

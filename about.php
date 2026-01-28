@@ -14,6 +14,13 @@
 <main class="about-page">
     <div class="container">
         
+<div class="page-header">
+    <h1 class="page-title">О КОМПАНИИ</h1>
+    <div class="page-status">
+        <span class="status-dot"></span> РАБОТАЕМ С 2010 ГОДА
+    </div>
+</div>
+        
         <section class="section-block">
             <div class="tech-card">
                 <div class="section-header">
@@ -31,7 +38,7 @@
             </div>
         </section>
         
-<section class="stats-section">
+        <section class="stats-section">
             <div class="stats-grid">
                 <div class="stat-card">
                     <span class="stat-number">10+</span>
@@ -128,7 +135,7 @@
                         </div>
                     </div>
 
-                    <a href="#" class="btn btn-full">ПОДРОБНЕЕ</a>
+                    <a href="/service.php" class="btn btn-full">ПОДРОБНЕЕ</a>
                 </div>
 
                 <div class="tech-card">
@@ -169,7 +176,7 @@
                         </div>
                     </div>
 
-                    <a href="#" class="btn btn-full">СВЯЗАТЬСЯ С НАМИ</a>
+                    <a href="/contacts.php" class="btn btn-full">СВЯЗАТЬСЯ С НАМИ</a>
                 </div>
             </div>
         </section>

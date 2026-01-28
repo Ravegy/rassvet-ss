@@ -1,0 +1,17 @@
+.policy-page{padding-top:140px;padding-bottom:100px}
+.policy-card{max-width:1000px;margin:0 auto;padding:60px;background:#181818;border:1px solid rgba(255,255,255,0.08);border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,0.6);position:relative;overflow:hidden;transition:0.3s}
+.policy-card:hover{border-color:rgba(255,255,255,0.15);box-shadow:0 20px 50px rgba(0,0,0,0.8)}
+.policy-intro{display:flex;flex-direction:column;align-items:center;text-align:center;margin-bottom:50px;border-bottom:1px solid rgba(255,255,255,0.05);padding-bottom:40px}
+.policy-icon{width:80px;height:80px;background:rgba(255,206,0,0.1);border-radius:20px;display:flex;align-items:center;justify-content:center;color:var(--yellow);margin-bottom:25px;border:1px solid rgba(255,206,0,0.2)}
+.policy-icon svg{width:40px;height:40px}
+.policy-intro p{color:#ccc;font-size:16px;line-height:1.6;max-width:800px;margin-bottom:15px}
+.policy-content{display:flex;flex-direction:column;gap:40px}
+.policy-item h3{font-family:var(--font-head);font-size:18px;font-weight:800;color:var(--yellow);margin-bottom:20px;letter-spacing:1px;text-transform:uppercase}
+.policy-item p{color:#ddd;font-size:15px;line-height:1.7;margin-bottom:15px}
+.custom-list{list-style:none;padding-left:20px;margin-bottom:15px}
+.custom-list li{position:relative;padding-left:25px;color:#bbb;font-size:14px;margin-bottom:10px;line-height:1.5}
+.custom-list li::before{content:'';position:absolute;left:0;top:8px;width:10px;height:2px;background:var(--yellow)}
+.policy-footer-info{margin-top:50px;padding-top:30px;border-top:1px solid rgba(255,255,255,0.05);text-align:center}
+.last-update{font-size:12px;color:#666;margin-top:20px;text-transform:uppercase;letter-spacing:1px}
+.company-seal{font-family:var(--font-head);font-size:13px;font-weight:700;color:#fff;margin-top:10px;text-transform:uppercase}
+@media (max-width:768px){.policy-card{padding:30px 20px}.policy-page{padding-top:110px}.policy-item h3{font-size:16px}.policy-intro p{font-size:14px}}

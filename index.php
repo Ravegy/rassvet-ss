@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>РАССВЕТ-С | Запчасти Komatsu</title>
+    <title>Запчасти Komatsu Forest | РАССВЕТ-С</title>
     <link rel="stylesheet" href="common.css">
     <link rel="stylesheet" href="pages/home/style.css">
 </head>
@@ -11,101 +11,92 @@
 
 <?php include 'includes/header.php'; ?>
 
-<main>
+<main class="home-page">
+    
     <section class="hero">
-        <div class="container hero__grid">
-            <div class="hero__content">
-                <div class="status-bar"><span class="status-dot"></span> РАБОТАЕМ ПО ВСЕЙ РОССИИ</div>
-                <h1 class="hero__title">ЗАПЧАСТИ ДЛЯ <br><span class="text-yellow">KOMATSU FOREST</span></h1>
-                <p class="hero__desc">Оригинальные комплектующие и качественные аналоги. Ремонт и сервисное обслуживание лесозаготовительной техники.</p>
-                <div class="hero__buttons">
-                    <a href="#" class="btn btn-main">КАТАЛОГ</a>
-                    <a href="#" class="btn btn-sec">СЕРВИС</a>
+        <div class="container">
+            <div class="hero__grid">
+                <div class="hero__content">
+                    <div class="status-bar">
+                        <div class="status-dot"></div>
+                        ОФИЦИАЛЬНЫЙ ПОСТАВЩИК
+                    </div>
+                    <h1 class="hero__title">ЗАПЧАСТИ ДЛЯ <br><span class="text-yellow">ЛЕСНОЙ ТЕХНИКИ</span></h1>
+                    <p class="hero__desc">
+                        Прямые поставки комплектующих для харвестеров и форвардеров Komatsu Forest, Ponsse, John Deere. Собственный склад в Санкт-Петербурге.
+                    </p>
+                    <div class="hero__buttons">
+                        <a href="catalog.php" class="btn btn-main">ПЕРЕЙТИ В КАТАЛОГ</a>
+                        <a href="service.php" class="btn btn-sec">СЕРВИС И РЕМОНТ</a>
+                    </div>
                 </div>
-            </div>
-            
-<div class="hero__image-block">
-                <div class="industrial-box" id="hero-slider">
-                    <div class="slider-overlay"></div>
-                    
-                    <div class="slide-card-container">
-                        <div class="slide-card">
-                            <span class="slide-card-category text-yellow">ТЕХНИКА В РАБОТЕ</span>
-                            <h3 class="slide-card-title"></h3>
+                
+                <div class="hero__image-block">
+                    <div class="industrial-box">
+                        <div class="slide active" style="background-image: url('img/slide1.jpg');"></div>
+                        <div class="slide" style="background-image: url('img/slide2.jpg');"></div>
+                        <div class="slide" style="background-image: url('img/slide3.jpg');"></div>
+                        
+                        <div class="slider-overlay"></div>
+                        <div class="box-decor"></div>
+
+                        <div class="slide-card-container active">
+                            <span class="slide-card-category">В НАЛИЧИИ</span>
+                            <h3 class="slide-card-title">ГИДРАВЛИКА</h3>
                             <div class="slide-card-line"></div>
                         </div>
                     </div>
-                    
-                    <div class="slide active" 
-                         style="background-image: url('https://rare-gallery.com/thumbs/824532-Harvester-2014-17-Komatsu-911-Forests-Trees.jpg')" 
-                         data-caption="KOMATSU 875">
-                    </div>
-                    <div class="slide" 
-                         style="background-image: url('https://rare-gallery.com/thumbs/833386-2016-17-Komatsu-855-Forests-Forwarder-Red-Trunk.jpg')"
-                         data-caption="HARVESTER 931XC">
-                    </div>
-                    <div class="slide" 
-                         style="background-image: url('https://rare-gallery.com/thumbs/835335-2016-17-Komatsu-875-Forests-Forwarder-Wood-log.jpg')"
-                         data-caption="FORWARDER 855">
-                    </div>
-                    
-                    <div class="box-decor"></div>
                 </div>
             </div>
-            
         </div>
     </section>
+
     <section class="features">
-        <div class="container features__grid">
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+        <div class="container">
+            <div class="features__grid">
+                <div class="tech-card feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                    </div>
+                    <div class="feature-text">
+                        <h3 class="feature-title">СКЛАД В СПБ</h3>
+                        <p class="feature-desc">Более 5000 позиций в наличии. Отгрузка в день оплаты.</p>
+                    </div>
                 </div>
-                <div class="feature-text">
-                    <h3 class="feature-title">СКЛАД В СПБ</h3>
-                    <p class="feature-desc">90% позиций в наличии. Быстрая логистика по всей России.</p>
+                <div class="tech-card feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    </div>
+                    <div class="feature-text">
+                        <h3 class="feature-title">ОПЕРАТИВНОСТЬ</h3>
+                        <p class="feature-desc">Доставка до терминала ТК за наш счет. Авиадоставка за 24 часа.</p>
+                    </div>
                 </div>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                </div>
-                <div class="feature-text">
-                    <h3 class="feature-title">ОТГРУЗКА 24/7</h3>
-                    <p class="feature-desc">Отправляем груз в день обращения. Работаем без выходных.</p>
-                </div>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
-                </div>
-                <div class="feature-text">
-                    <h3 class="feature-title">ГАРАНТИЯ</h3>
-                    <p class="feature-desc">Только оригинальные запчасти и проверенный OEM.</p>
+                <div class="tech-card feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>
+                    </div>
+                    <div class="feature-text">
+                        <h3 class="feature-title">ГАРАНТИЯ</h3>
+                        <p class="feature-desc">Только проверенные бренды (OEM). Гарантия на все узлы от 6 месяцев.</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
-<div class="ticker-wrap">
+
+    <div class="ticker-wrap">
         <div class="ticker">
             <div class="ticker__item">KOMATSU FOREST</div>
             <div class="ticker__item">PONSSE</div>
             <div class="ticker__item">JOHN DEERE</div>
-            <div class="ticker__item">WARATAH</div>
-            <div class="ticker__item">LOGSET</div>
-            <div class="ticker__item">ROTTNE</div>
-            <div class="ticker__item">PARKER</div>
             <div class="ticker__item">DANFOSS</div>
+            <div class="ticker__item">PARKER</div>
+            <div class="ticker__item">BOSCH REXROTH</div>
+            <div class="ticker__item">LOGSET</div>
             <div class="ticker__item">KOMATSU FOREST</div>
             <div class="ticker__item">PONSSE</div>
             <div class="ticker__item">JOHN DEERE</div>
-            <div class="ticker__item">WARATAH</div>
-            <div class="ticker__item">LOGSET</div>
-            <div class="ticker__item">ROTTNE</div>
-            <div class="ticker__item">PARKER</div>
-            <div class="ticker__item">DANFOSS</div>
         </div>
     </div>
 
@@ -113,78 +104,86 @@
         <div class="container">
             <h2 class="section-title-center">ПОПУЛЯРНЫЕ КАТЕГОРИИ</h2>
             <div class="categories__grid">
-                <a href="#" class="cat-card">
-                    <span class="cat-icon">
-                        <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
-                    </span>
-                    <div class="cat-title">ГИДРАВЛИКА</div>
+                
+                <a href="#" class="tech-card cat-card">
+                    <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg></div>
+                    <h3 class="cat-title">ГИДРАВЛИКА</h3>
+                </a>
+
+                <a href="#" class="tech-card cat-card">
+                    <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg></div>
+                    <h3 class="cat-title">ЭЛЕКТРОНИКА</h3>
+                </a>
+
+                <a href="#" class="tech-card cat-card">
+                    <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3"></circle></svg></div>
+                    <h3 class="cat-title">ХОДОВАЯ ЧАСТЬ</h3>
+                </a>
+
+                <a href="#" class="tech-card cat-card">
+                    <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg></div>
+                    <h3 class="cat-title">ДВИГАТЕЛЬ</h3>
+                </a>
+
+                 <a href="#" class="tech-card cat-card">
+                    <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 9l6 6 6-6"/></svg></div>
+                    <h3 class="cat-title">ФИЛЬТРЫ</h3>
                 </a>
                 
-                <a href="#" class="cat-card">
-                    <span class="cat-icon">
-                        <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 15h-2v-2h2zm0-4h-2V7h2z"></path></svg>
-                    </span>
-                    <div class="cat-title">ЭЛЕКТРОНИКА</div>
+                <a href="#" class="tech-card cat-card">
+                    <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="2"></circle><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"/></svg></div>
+                    <h3 class="cat-title">ДАТЧИКИ</h3>
                 </a>
 
-                <a href="#" class="cat-card">
-                    <span class="cat-icon">
-                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-                    </span>
-                    <div class="cat-title">ХОДОВАЯ ЧАСТЬ</div>
+                <a href="#" class="tech-card cat-card">
+                    <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></div>
+                    <h3 class="cat-title">АГРЕГАТЫ</h3>
                 </a>
 
-                <a href="#" class="cat-card">
-                    <span class="cat-icon">
-                        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                    </span>
-                    <div class="cat-title">РАСХОДНИКИ</div>
+                <a href="catalog.php" class="tech-card cat-card cat-card-all">
+                    <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div>
+                    <h3 class="cat-title">ВЕСЬ КАТАЛОГ</h3>
                 </a>
             </div>
-        </div>
-    </section>
+        </section>
 
-   <section class="vin-request">
-        <div class="container">
-            <div class="vin-box">
-                <div class="vin-content">
-                    <h2 class="vin-title">НЕ НАШЛИ НУЖНУЮ ДЕТАЛЬ?</h2>
-                    <p class="vin-desc">Заполните форму, и наши инженеры подберут запчасти по оригинальным каталогам (EPC) по VIN-номеру вашей техники.</p>
+        <section class="vin-request">
+            <div class="container">
+                <div class="tech-card vin-box">
+                    <div class="vin-content">
+                        <h2 class="vin-title">НЕ ЗНАЕТЕ АРТИКУЛ?</h2>
+                        <p class="vin-desc">
+                            Оставьте заявку на подбор запчасти. Мы проверим совместимость по VIN-коду вашей техники и предложим варианты (Оригинал / OEM).
+                        </p>
+                        <ul class="vin-list">
+                            <li>
+                                <div class="vin-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></div>
+                                <span>Проверка по официальным каталогам</span>
+                            </li>
+                            <li>
+                                <div class="vin-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></div>
+                                <span>Ответ в течение 15 минут</span>
+                            </li>
+                        </ul>
+                    </div>
                     
-                    <ul class="vin-list">
-                        <li>
-                            <span class="vin-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
-                            Подбор с точностью 100%
-                        </li>
-                        <li>
-                            <span class="vin-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
-                            Ответ в течение 15 минут
-                        </li>
-                        <li>
-                            <span class="vin-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
-                            Предложим оригинал и аналоги
-                        </li>
-                    </ul>
+                    <form class="vin-form">
+                        <div class="form-group">
+                            <input type="text" name="name" class="form-input" placeholder="Ваше имя" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="tel" name="phone" class="form-input" placeholder="Ваш телефон" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="message" class="form-input" placeholder="VIN-код или Модель техники">
+                        </div>
+                        <button type="submit" class="btn btn-main form-btn">ПОДОБРАТЬ ЗАПЧАСТЬ</button>
+                    </form>
                 </div>
-                
-                <form class="vin-form">
-                    <div class="form-group">
-                        <input type="text" class="form-input" placeholder="Ваше имя">
-                    </div>
-                    <div class="form-group">
-                        <input type="tel" class="form-input" placeholder="+7 (___) ___-__-__">
-                    </div>
-                    <div class="form-group" style="grid-column: 1 / -1;">
-                        <input type="text" class="form-input" placeholder="VIN-номер или артикул детали">
-                    </div>
-                    <button type="submit" class="btn btn-main form-btn">ОТПРАВИТЬ ЗАПРОС</button>
-                </form>
             </div>
-        </div>
-    </section>
+        </section>
+
 </main>
 
 <?php include 'includes/footer.php'; ?>
-<script src="pages/home/script.js"></script>
-</body>
 </html>

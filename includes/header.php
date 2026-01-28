@@ -3,10 +3,10 @@
         <a href="/" class="logo">РАССВЕТ-С</a>
         <nav class="nav" id="nav-menu">
             <a href="/" class="nav__link active">Главная</a>
-            <a href="#" class="nav__link">Каталог</a>
-            <a href="/about.php" class="nav__link">Компания</a>
-            <a href="#" class="nav__link">Доставка</a>
-            <a href="#" class="nav__link">Контакты</a>
+            <a href="#" class="nav__link">Каталог Komatsu</a>
+            <a href="/about.php" class="nav__link">О Компания</a>
+            <a href="/delivery.php" class="nav__link">Доставка и Оплата</a>
+            <a href="/contacts.php" class="nav__link">Контакты</a>
         </nav>
         <div class="header__right">
             <div class="header__icons">
