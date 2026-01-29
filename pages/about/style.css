@@ -1,7 +1,4 @@
-/* --- СТРАНИЦА О КОМПАНИИ --- */
 .about-page { padding-top: 140px; padding-bottom: 100px; }
-
-/* Карточки */
 .tech-card {
     background-color: var(--card-bg);
     border: 1px solid var(--border-color);
@@ -13,8 +10,6 @@
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .tech-card:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); }
-
-/* ЗАГОЛОВКИ СЕКЦИЙ (Левая колонка) */
 .section-header { display: flex; align-items: center; gap: 15px; margin-bottom: 30px; }
 .section-icon { color: var(--yellow); display: flex; align-items: center; width: 28px; height: 28px; flex-shrink: 0; transition: 0.3s; }
 .section-icon svg { width: 100%; height: 100%; }
@@ -23,15 +18,13 @@
 .section-title {
     font-family: var(--font-head);
     font-size: 24px;
-    font-weight: 800; /* Жирный */
-    text-transform: uppercase; /* Заглавные */
+    font-weight: 800;
+    text-transform: uppercase;
     color: #fff;
     letter-spacing: 0.5px;
     margin: 0;
     line-height: 1.2;
 }
-
-/* ЗАГОЛОВКИ В КАРТОЧКАХ (Правая колонка) */
 .assortment-title, .card-title {
     font-family: var(--font-head);
     font-size: 20px;
@@ -43,11 +36,8 @@
     letter-spacing: 0.5px;
     line-height: 1.3;
 }
-
 .card-head { display: flex; align-items: center; gap: 15px; margin-bottom: 30px; }
 .card-head .card-title { margin-bottom: 0; }
-
-/* БЛОК ЦИФР */
 .stats-section { margin-bottom: 60px; }
 .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
 .stat-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 30px 20px; text-align: center; transition: 0.3s; position: relative; overflow: hidden; }
@@ -56,22 +46,16 @@
 .stat-card:hover::before { opacity: 1; }
 .stat-number { font-family: var(--font-head); font-size: 42px; font-weight: 900; color: var(--yellow); line-height: 1; margin-bottom: 10px; display: block; }
 .stat-label { font-size: 13px; color: #888; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; }
-
-/* ТЕКСТ */
 .about-text p { color: #b0b0b0; font-size: 15px; margin-bottom: 20px; line-height: 1.7; }
 .about-text p:last-child { margin-bottom: 0; }
 .about-text strong { color: #fff; font-weight: 700; }
 .section-block { margin-bottom: 60px; }
 .grid-2-col { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: stretch; }
-
-/* СПИСОК "ПОСТАВКА" */
 .custom-list { list-style: none; display: flex; flex-direction: column; gap: 15px; }
 .custom-list li { position: relative; padding-left: 30px; color: #ccc; font-size: 14px; font-weight: 500; transition: 0.3s; cursor: default; }
 .custom-list li::before { content: ''; position: absolute; left: 0; top: 6px; width: 10px; height: 10px; border: 2px solid var(--yellow); transform: rotate(45deg); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 .custom-list li:hover { color: #fff; transform: translateX(5px); }
 .custom-list li:hover::before { background-color: var(--yellow); box-shadow: 0 0 10px rgba(255, 51, 51, 0.6); transform: rotate(225deg) scale(1.2); }
-
-/* БЛОК "СЕРВИС" */
 .service-subtitle { color: #fff; font-size: 16px; font-weight: 600; margin-bottom: 10px; font-family: var(--font-head); }
 .service-desc { color: #b0b0b0; font-size: 14px; margin-bottom: 30px; }
 .service-list { display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px; margin-top: auto; }
@@ -82,8 +66,6 @@
 .srv-text p { font-size: 12px; color: #888; line-height: 1.4; margin: 0; }
 .srv-item:hover .srv-icon { transform: scale(1.2) rotate(15deg); filter: drop-shadow(0 0 5px rgba(255,51,51,0.5)); }
 .srv-item:hover .srv-text h4 { color: var(--yellow); }
-
-/* БЛОК "ПРИНЦИПЫ" */
 .yellow-bar { width: 4px; height: 24px; background: var(--yellow); border-radius: 2px; }
 .principles-list { display: flex; flex-direction: column; gap: 25px; margin-bottom: 40px; flex-grow: 1; }
 .p-item { display: flex; gap: 20px; transition: 0.3s; cursor: default; }
@@ -92,24 +74,18 @@
 .p-content p { font-size: 12px; color: #999; line-height: 1.5; }
 .p-item:hover .p-icon { background: var(--yellow); color: #000; border-color: var(--yellow); transform: scale(1.1); box-shadow: 0 0 15px rgba(255, 51, 51, 0.3); }
 .p-item:hover .p-content h4 { color: var(--yellow); }
-
-/* КНОПКИ */
 .btn { display: inline-flex; align-items: center; justify-content: center; height: 50px; padding: 0 30px; background: var(--yellow); color: #000; font-family: var(--font-head); font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; border-radius: 4px; text-decoration: none; transition: 0.3s; cursor: pointer; border: none; }
 .btn:hover { background: #fff; }
 .btn-full { width: 100%; margin-top: auto; }
-
-/* MEDIA */
 @media (max-width: 992px) {
     .grid-2-col { grid-template-columns: 1fr; gap: 30px; }
     .tech-card { height: auto; }
     .stats-grid { grid-template-columns: repeat(2, 1fr); }
 }
-
 @media (max-width: 576px) {
     .stats-grid { grid-template-columns: 1fr; }
     .stat-number { font-size: 36px; }
 }
-
 @media (max-width: 768px) {
     .about-page { padding-top: 100px; padding-bottom: 60px; }
     .section-block { margin-bottom: 40px; }

@@ -1,79 +1,364 @@
-/* СТРАНИЦА */
-.delivery-page{padding-top:140px;padding-bottom:100px}
-.section-block{margin-bottom:60px}
-
-/* КАРТОЧКИ */
-.tech-card{background:rgba(30,30,30,0.85);backdrop-filter:blur(10px);border:1px solid var(--border-color);border-radius:12px;padding:40px;height:100%;display:flex;flex-direction:column;transition:transform 0.3s,box-shadow 0.3s}
-.tech-card:hover{transform:translateY(-2px);border-color:rgba(255,255,255,0.2);box-shadow:0 10px 30px rgba(0,0,0,0.3)}
-
-/* ЗАГОЛОВКИ */
-.section-header{display:flex;align-items:center;gap:15px;margin-bottom:30px}
-.section-icon{color:var(--yellow);width:28px;height:28px;flex-shrink:0}
-.section-icon svg{width:100%;height:100%}
-.section-title{font-family:var(--font-head);font-size:24px;font-weight:800;text-transform:uppercase;color:#fff;letter-spacing:0.5px;margin:0;line-height:1.2}
-.section-title-center{text-align:center;font-family:var(--font-head);font-size:24px;font-weight:800;color:#fff;text-transform:uppercase;margin-bottom:40px}
-
-/* ТЕКСТ */
-.about-text p{color:#b0b0b0;font-size:15px;margin-bottom:20px;line-height:1.7}
-.about-text p:last-child{margin-bottom:0}
-.about-text strong{color:#fff;font-weight:700}
-
-/* СЕТКА ФИНАНСОВ */
-.grid-delivery{display:grid;grid-template-columns:1.6fr 1fr;gap:30px;align-items:stretch}
-
-/* СПИСОК ПОРЯДОК РАБОТЫ */
-.order-block{margin-top:30px;padding-top:30px;border-top:1px solid rgba(255,255,255,0.05)}
-.card-subtitle{font-family:var(--font-head);font-size:14px;font-weight:800;color:#fff;text-transform:uppercase;margin-bottom:20px}
-.custom-list{list-style:none;display:flex;flex-direction:column;gap:15px}
-.custom-list li{position:relative;padding-left:25px;color:#ccc;font-size:14px;font-weight:500;transition:0.3s}
-.custom-list li::before{content:'';position:absolute;left:0;top:7px;width:8px;height:8px;background:var(--yellow);transform:rotate(45deg);transition:0.3s}
-.custom-list li:hover{color:#fff;transform:translateX(5px)}
-
-/* РЕКВИЗИТЫ */
-.card-head-center{display:flex;align-items:center;gap:15px;margin-bottom:30px}
-.yellow-bar{width:4px;height:24px;background:var(--yellow);border-radius:2px}
-.card-title{font-family:var(--font-head);font-size:20px;font-weight:800;text-transform:uppercase;color:#fff;margin:0}
-.req-grid{display:flex;flex-direction:column;gap:0;margin-bottom:30px}
-.req-row{display:flex;justify-content:space-between;align-items:flex-start;padding:15px 0;border-bottom:1px solid rgba(255,255,255,0.08)}
-.req-row:first-child{padding-top:0}
-.req-row:last-child{border-bottom:none}
-.req-label{font-size:11px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:0.5px}
-.req-value{font-family:var(--font-head);font-size:14px;font-weight:700;color:#fff;text-align:right;transition:0.2s}
-.text-right{text-align:right}
-
-/* КНОПКА СКАЧАТЬ */
-.btn{display:inline-flex;align-items:center;justify-content:center;height:50px;padding:0 30px;background:var(--yellow);color:#fff;font-family:var(--font-head);font-weight:700;font-size:13px;text-transform:uppercase;border-radius:4px;text-decoration:none;transition:0.3s;border:none;gap:10px}
-.btn:hover{background:#fff;color:#000;transform:translateY(-2px);box-shadow:0 5px 15px rgba(255,255,255,0.1)}
-.btn-full{width:100%;margin-top:auto}
-.btn svg{width:18px;height:18px}
-
-/* ЛОГИСТИКА */
-.logistics-features{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:40px;border-top:1px solid rgba(255,255,255,0.05);padding-top:40px}
-.lf-item{display:flex;gap:20px}
-.lf-icon{width:50px;height:50px;background:rgba(255,51,51,0.1);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--yellow);flex-shrink:0}
-.lf-icon svg{width:24px;height:24px}
-.lf-content h4{font-family:var(--font-head);font-size:16px;font-weight:800;color:#fff;text-transform:uppercase;margin-bottom:8px}
-.lf-content p{font-size:13px;color:#999;line-height:1.5;margin:0}
-
-/* ПАРТНЕРЫ */
-.partners-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
-.partner-card{background:rgba(255,255,255,0.05);border:1px solid var(--border-color);border-radius:12px;height:100px;display:flex;align-items:center;justify-content:center;padding:20px;transition:0.3s}
-.partner-card:hover{background:#fff;transform:translateY(-5px);box-shadow:0 10px 30px rgba(0,0,0,0.2)}
-.partner-card img{max-width:100%;max-height:100%;filter:grayscale(100%) opacity(0.7);transition:0.3s}
-.partner-card:hover img{filter:grayscale(0%) opacity(1)}
-
-/* АНИМАЦИЯ ПОЯВЛЕНИЯ */
-.animate-hidden{opacity:0;transform:translateY(30px)}
-.animate-visible{opacity:1;transform:translateY(0)}
-
-/* МЕДИА */
-@media (max-width:992px){
-    .grid-delivery{grid-template-columns:1fr}
-    .partners-grid{grid-template-columns:1fr 1fr}
-    .logistics-features{grid-template-columns:1fr}
+.delivery-page {
+  padding-top: 140px;
+  padding-bottom: 100px;
 }
-@media (max-width:576px){
-    .partners-grid{grid-template-columns:1fr}
-    .req-row{flex-direction:column;gap:5px}
-    .req-value{text-align:left}
+.section-block {
+  margin-bottom: 60px;
+}
+.tech-card {
+  background: rgba(30, 30, 30, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 40px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.tech-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+.section-icon {
+  color: var(--yellow);
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+}
+.section-icon svg {
+  width: 100%;
+  height: 100%;
+}
+.section-title {
+  font-family: var(--font-head);
+  font-size: 24px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #fff;
+  letter-spacing: 0.5px;
+  margin: 0;
+  line-height: 1.2;
+}
+.section-title-center {
+  text-align: center;
+  font-family: var(--font-head);
+  font-size: 24px;
+  font-weight: 800;
+  color: #fff;
+  text-transform: uppercase;
+  margin-bottom: 40px;
+}
+.about-text p {
+  color: #b0b0b0;
+  font-size: 15px;
+  margin-bottom: 20px;
+  line-height: 1.7;
+}
+.about-text p:last-child {
+  margin-bottom: 0;
+}
+.about-text strong {
+  color: #fff;
+  font-weight: 700;
+}
+.grid-delivery {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 30px;
+  align-items: stretch;
+}
+.order-block {
+  margin-top: 30px;
+  padding-top: 30px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+.card-subtitle {
+  font-family: var(--font-head);
+  font-size: 14px;
+  font-weight: 800;
+  color: #fff;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.custom-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.custom-list li {
+  position: relative;
+  padding-left: 25px;
+  color: #ccc;
+  font-size: 14px;
+  font-weight: 500;
+  transition: 0.3s;
+}
+.custom-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 7px;
+  width: 8px;
+  height: 8px;
+  background: var(--yellow);
+  transform: rotate(45deg);
+  transition: 0.3s;
+}
+.custom-list li:hover {
+  color: #fff;
+  transform: translateX(5px);
+}
+.card-head-center {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+.yellow-bar {
+  width: 4px;
+  height: 24px;
+  background: var(--yellow);
+  border-radius: 2px;
+}
+.card-title {
+  font-family: var(--font-head);
+  font-size: 20px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #fff;
+  margin: 0;
+}
+.req-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: 30px;
+}
+.req-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 15px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.req-row:first-child {
+  padding-top: 0;
+}
+.req-row:last-child {
+  border-bottom: none;
+}
+.req-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.req-value {
+  font-family: var(--font-head);
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  text-align: right;
+  transition: 0.2s;
+}
+.text-right {
+  text-align: right;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  padding: 0 30px;
+  background: var(--yellow);
+  color: #fff;
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 13px;
+  text-transform: uppercase;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: 0.3s;
+  border: none;
+  gap: 10px;
+}
+.btn:hover {
+  background: #fff;
+  color: #000;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1);
+}
+.btn-full {
+  width: 100%;
+  margin-top: auto;
+}
+.btn svg {
+  width: 18px;
+  height: 18px;
+}
+.logistics-features {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-top: 40px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 40px;
+}
+.lf-item {
+  display: flex;
+  gap: 20px;
+}
+.lf-icon {
+  width: 50px;
+  height: 50px;
+  background: rgba(255, 51, 51, 0.1);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--yellow);
+  flex-shrink: 0;
+}
+.lf-icon svg {
+  width: 24px;
+  height: 24px;
+}
+.lf-content h4 {
+  font-family: var(--font-head);
+  font-size: 16px;
+  font-weight: 800;
+  color: #fff;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.lf-content p {
+  font-size: 13px;
+  color: #999;
+  line-height: 1.5;
+  margin: 0;
+}
+.partners-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+.partner-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  transition: 0.3s;
+}
+.partner-card:hover {
+  background: #fff;
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+.partner-card img {
+  max-width: 100%;
+  max-height: 100%;
+  filter: grayscale(100%) opacity(0.7);
+  transition: 0.3s;
+}
+.partner-card:hover img {
+  filter: grayscale(0%) opacity(1);
+}
+.animate-hidden {
+  opacity: 0;
+  transform: translateY(30px);
+}
+.animate-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.pdf-wrap {
+  padding: 40px;
+  background: #fff;
+  color: #000;
+  font-family: sans-serif;
+  width: 100%;
+  max-width: 800px;
+}
+.pdf-head {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 2px solid #000;
+  padding-bottom: 20px;
+  margin-bottom: 30px;
+}
+.pdf-h1 {
+  font-size: 28px;
+  font-weight: 900;
+  margin: 0;
+}
+.pdf-contacts {
+  text-align: right;
+  font-size: 12px;
+  line-height: 1.4;
+}
+.pdf-title {
+  text-align: center;
+  font-weight: 700;
+  font-size: 20px;
+  margin-bottom: 30px;
+  text-transform: uppercase;
+}
+.pdf-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.pdf-table td {
+  border: 1px solid #000;
+  padding: 8px;
+}
+.td-gray {
+  background: #eee;
+  font-weight: 700;
+  width: 35%;
+}
+.pdf-foot {
+  margin-top: 30px;
+  text-align: center;
+  font-size: 11px;
+  color: #666;
+  border-top: 1px solid #ccc;
+  padding-top: 10px;
+}
+@media (max-width: 992px) {
+  .grid-delivery {
+    grid-template-columns: 1fr;
+  }
+  .partners-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .logistics-features {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 576px) {
+  .partners-grid {
+    grid-template-columns: 1fr;
+  }
+  .req-row {
+    flex-direction: column;
+    gap: 5px;
+  }
+  .req-value {
+    text-align: left;
+  }
 }

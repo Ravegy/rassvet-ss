@@ -1,246 +1,75 @@
-.scheme-page {
-    padding-top: 130px;
-    padding-bottom: 80px;
-}
+.scheme-page{padding-top:130px;padding-bottom:80px}
 
-/* --- НАВИГАЦИЯ (ХЛЕБНЫЕ КРОШКИ) --- */
-.breadcrumbs {
-    color: #888;
-    font-size: 13px;
-    margin-bottom: 20px;
-    font-weight: 600;
-}
+/* КНОПКА НАЗАД */
+.back-nav{margin-bottom:20px}
+.back-link{display:inline-flex;align-items:center;gap:10px;color:#888;text-decoration:none;font-size:13px;font-weight:700;text-transform:uppercase;transition:0.3s;font-family:var(--font-head);letter-spacing:0.5px}
+.back-link:hover{color:var(--yellow);transform:translateX(-5px)}
+.back-link svg{width:20px;height:20px}
 
-.breadcrumbs a {
-    color: #fff;
-    text-decoration: none;
-    transition: 0.2s;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
+.scheme-title{font-family:var(--font-head);font-size:28px;font-weight:900;color:#fff;text-transform:uppercase;margin-bottom:30px;border-left:4px solid var(--yellow);padding-left:20px}
+.scheme-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:30px;align-items:start;max-width:100%}
+.scheme-viewer{padding:0;background:#181818;border:1px solid rgba(255,255,255,0.1);position:sticky;top:100px;min-width:0}
+.scheme-img-wrapper{background:#fff;padding:20px;min-height:400px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;border-bottom:1px solid #333}
+.scheme-image{max-width:100%;max-height:600px;display:block;object-fit:contain}
+.scheme-controls{padding:15px 20px;background:#181818;color:#888;font-size:12px;display:flex;align-items:center;gap:10px}
+.parts-list{padding:0;display:flex;flex-direction:column;height:calc(100vh - 150px);min-height:600px;background:#181818;border:1px solid rgba(255,255,255,0.1);min-width:0}
+.parts-list h3{font-family:var(--font-head);font-size:16px;font-weight:800;color:#fff;padding:20px;margin:0;border-bottom:1px solid rgba(255,255,255,0.05);background:rgba(255,255,255,0.02);flex-shrink:0}
 
-.breadcrumbs a:hover {
-    color: var(--yellow);
-    border-color: var(--yellow);
+/* Скроллбар */
+.table-responsive{
+    overflow-y:auto;
+    flex-grow:1;
+    scrollbar-width:thin;
+    scrollbar-color:var(--yellow) #333;
+    padding-bottom: 5px;
 }
+.table-responsive::-webkit-scrollbar{width:6px;height:6px}
+.table-responsive::-webkit-scrollbar-track{background:#222}
+.table-responsive::-webkit-scrollbar-thumb{background-color:var(--yellow);border-radius:3px}
 
-.breadcrumbs span {
-    color: var(--yellow);
-    margin-left: 5px;
-}
+.parts-table{width:100%;border-collapse:collapse}
+.parts-table th{position:sticky;top:0;background:#111;color:#666;font-size:11px;text-transform:uppercase;font-weight:700;padding:12px 10px;text-align:left;border-bottom:1px solid rgba(255,255,255,0.1);z-index:2;box-shadow:0 2px 5px rgba(0,0,0,0.5)}
+.parts-table th:first-child { text-align: center; }
+.parts-table td{padding:12px 10px;border-bottom:1px solid rgba(255,255,255,0.05);color:#ddd;font-size:13px;vertical-align:top;line-height:1.4;transition:0.2s}
+.parts-table tr:hover td{background:rgba(255,51,51,0.08);color:#fff}
+.pos-num{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;background:rgba(255,255,255,0.1);border-radius:50%;font-size:11px;font-weight:700;color:var(--yellow)}
+.parts-table tr:hover .pos-num{background:var(--yellow);color:#000}
+.part-art{font-family:var(--font-head);font-weight:700;color:#fff;white-space:nowrap}
+.parts-table td:nth-child(4){font-size:12px;color:#999}
+.parts-table tr:hover td:nth-child(4){color:#ccc}
+.btn-req{color:#666;width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:transparent;border:1px solid rgba(255,255,255,0.1);border-radius:4px;cursor:pointer;transition:0.3s}
+.btn-req:hover{color:#fff;background:var(--yellow);border-color:var(--yellow)}
+.parts-footer{padding:20px;border-top:1px solid rgba(255,255,255,0.05);background:#111;flex-shrink:0}
 
-/* --- ЗАГОЛОВОК --- */
-.scheme-title {
-    font-family: var(--font-head);
-    font-size: 28px;
-    font-weight: 900;
-    color: #fff;
-    text-transform: uppercase;
-    margin-bottom: 30px;
-    border-left: 4px solid var(--yellow);
-    padding-left: 20px;
-}
+@media(max-width:992px){.scheme-grid{grid-template-columns:1fr}.scheme-viewer{position:static}.scheme-img-wrapper{min-height:auto}.parts-list{height:auto;min-height:0}}
 
-/* --- СЕТКА (СХЕМА + ТАБЛИЦА) --- */
-.scheme-grid {
-    display: grid;
-    grid-template-columns: 1.5fr 1fr;
-    gap: 30px;
-    align-items: start;
-}
+@media(max-width:576px){
+    .scheme-page{padding-top:100px}
+    .scheme-title{font-size:20px;margin-bottom:20px}
+    .tech-card{padding:20px} 
+    
+    .table-responsive{overflow-x:auto;display:block;width:100%}
+    .parts-table{min-width:auto;width:auto}
+    .parts-table th,.parts-table td{padding:10px 15px;font-size:12px;white-space:nowrap;width:auto!important}
 
-/* --- ЛЕВЫЙ БЛОК: ЧЕРТЕЖ --- */
-.scheme-viewer {
-    padding: 0;
-    background: #181818;
-    border: 1px solid rgba(255,255,255,0.1);
-    position: sticky;
-    top: 100px; /* Чтобы схема ехала за экраном при прокрутке */
-}
-
-.scheme-img-wrapper {
-    background: #fff;
-    padding: 20px;
-    min-height: 400px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    position: relative;
-    border-bottom: 1px solid #333;
-}
-
-.scheme-image {
-    max-width: 100%;
-    max-height: 600px;
-    display: block;
-    object-fit: contain;
-}
-
-.scheme-controls {
-    padding: 15px 20px;
-    background: #181818;
-    color: #888;
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-/* --- ПРАВЫЙ БЛОК: ТАБЛИЦА ЗАПЧАСТЕЙ --- */
-.parts-list {
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    /* Ограничиваем высоту таблицы, чтобы появился скролл внутри блока */
-    height: calc(100vh - 150px); 
-    min-height: 600px;
-    background: #181818;
-    border: 1px solid rgba(255,255,255,0.1);
-}
-
-.parts-list h3 {
-    font-family: var(--font-head);
-    font-size: 16px;
-    font-weight: 800;
-    color: #fff;
-    padding: 20px;
-    margin: 0;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-    background: rgba(255,255,255,0.02);
-    flex-shrink: 0;
-}
-
-.table-responsive {
-    overflow-y: auto; /* Вертикальная прокрутка */
-    flex-grow: 1;
-    /* Красивый скроллбар для Webkit */
-    scrollbar-width: thin;
-    scrollbar-color: var(--yellow) #333;
-}
-
-.table-responsive::-webkit-scrollbar {
-    width: 6px;
-}
-.table-responsive::-webkit-scrollbar-track {
-    background: #111;
-}
-.table-responsive::-webkit-scrollbar-thumb {
-    background-color: var(--yellow);
-    border-radius: 3px;
-}
-
-/* --- САМА ТАБЛИЦА --- */
-.parts-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.parts-table th {
-    position: sticky; /* Липкий заголовок */
-    top: 0;
-    background: #111;
-    color: #666;
-    font-size: 11px;
-    text-transform: uppercase;
-    font-weight: 700;
-    padding: 12px 10px;
-    text-align: left;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-    z-index: 2;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
-}
-
-.parts-table td {
-    padding: 12px 10px;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-    color: #ddd;
-    font-size: 13px;
-    vertical-align: top; /* Чтобы текст начинался сверху, если описание длинное */
-    line-height: 1.4;
-    transition: 0.2s;
-}
-
-/* Подсветка строки при наведении */
-.parts-table tr:hover td {
-    background: rgba(255, 51, 51, 0.08);
-    color: #fff;
-}
-
-/* Кружок с номером (ID) */
-.pos-num {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
-    background: rgba(255,255,255,0.1);
-    border-radius: 50%;
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--yellow);
-}
-.parts-table tr:hover .pos-num {
-    background: var(--yellow);
-    color: #000;
-}
-
-/* Артикул (Number) */
-.part-art {
-    font-family: var(--font-head);
-    font-weight: 700;
-    color: #fff;
-    white-space: nowrap;
-}
-
-/* Колонка Specifications (если мы не задаем инлайн стили) */
-.parts-table td:nth-child(4) {
-    font-size: 12px;
-    color: #999;
-}
-.parts-table tr:hover td:nth-child(4) {
-    color: #ccc;
-}
-
-/* Кнопка запроса */
-.btn-req {
-    color: #666;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 4px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-.btn-req:hover {
-    color: #fff;
-    background: var(--yellow);
-    border-color: var(--yellow);
-}
-
-.parts-footer {
-    padding: 20px;
-    border-top: 1px solid rgba(255,255,255,0.05);
-    background: #111;
-    flex-shrink: 0;
-}
-
-/* --- АДАПТИВНОСТЬ --- */
-@media (max-width: 992px) {
-    .scheme-grid {
-        grid-template-columns: 1fr;
-    }
-    .scheme-viewer {
-        position: static; /* Отключаем липкость на мобильных */
+    .scheme-viewer { 
+        width: 100%; 
+        min-width: 0; 
+        border: none !important; 
+        background: transparent !important;
+        padding: 0 !important; 
     }
     .scheme-img-wrapper {
-        min-height: auto;
+        padding: 0 !important;
+        border: none !important;
+        border-radius: 4px;
     }
-    .parts-list {
-        height: auto;
-        max-height: 600px;
+
+    .parts-list { 
+        width: 100%; 
+        min-width: 0; 
+        border: none !important; 
+        background: #181818 !important;
+        padding: 0 !important; 
     }
 }

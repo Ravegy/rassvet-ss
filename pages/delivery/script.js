@@ -1,27 +1,48 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const copyBtn = document.querySelector('.btn-download');
-    if (copyBtn) {
-        copyBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            const requisites = `ООО "РАССВЕТ-С"\nИНН: 7805626388\nКПП: 780501001\nОГРН: 1137847277873\nАдрес: 198095, г. Санкт-Петербург, ул. Промышленная, д. 42`;
-            navigator.clipboard.writeText(requisites).then(() => {
-                const originalText = copyBtn.innerHTML;
-                copyBtn.innerHTML = 'СКОПИРОВАНО В БУФЕР';
-                setTimeout(() => {
-                    copyBtn.innerHTML = originalText;
-                }, 2000);
-            });
-        });
-    }
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('animate-visible');
-            }
-        });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.tech-card, .partner-card, .lf-item').forEach(el => {
-        el.classList.add('animate-hidden');
-        observer.observe(el);
-    });
+	const b = document.querySelector('.btn-download');
+	if (b) {
+		b.addEventListener('click', (e) => {
+			e.preventDefault();
+			const el = document.getElementById('pdf-template');
+			if (!el) return;
+			const t = b.innerHTML;
+			b.innerHTML = 'ГЕНЕРАЦИЯ...';
+			b.style.opacity = '0.7';
+			el.style.display = 'block';
+			html2pdf().set({
+				margin: 10,
+				filename: 'Requisites_RASSVET-S.pdf',
+				image: {
+					type: 'jpeg',
+					quality: 0.98
+				},
+				html2canvas: {
+					scale: 2
+				},
+				jsPDF: {
+					unit: 'mm',
+					format: 'a4',
+					orientation: 'portrait'
+				}
+			}).from(el).save().then(() => {
+				el.style.display = 'none';
+				b.innerHTML = t;
+				b.style.opacity = '1'
+			}).catch(() => {
+				el.style.display = 'none';
+				b.innerHTML = 'ОШИБКА';
+			})
+		})
+	}
+	const obs = new IntersectionObserver((e) => {
+		e.forEach(i => {
+			if (i.isIntersecting) i.target.classList.add('animate-visible')
+		})
+	}, {
+		threshold: 0.1
+	});
+	document.querySelectorAll('.tech-card, .partner-card, .lf-item').forEach(e => {
+		e.classList.add('animate-hidden');
+		obs.observe(e)
+	})
 });
