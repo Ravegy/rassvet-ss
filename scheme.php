@@ -4,8 +4,6 @@ require_once 'includes/db.php';
 $model = isset($_GET['model']) ? urldecode($_GET['model']) : '';
 $scheme_id = isset($_GET['id']) ? $_GET['id'] : '';
 
-// 1. Получаем инфо о схеме И ID РОДИТЕЛЯ (parent_id)
-// Добавили parent_id в выборку
 $stmt = $pdo->prepare("SELECT name, image, parent_id FROM structure WHERE cat_id = ? AND model = ?");
 $stmt->execute([$scheme_id, $model]);
 $scheme_info = $stmt->fetch();
@@ -13,12 +11,29 @@ $scheme_info = $stmt->fetch();
 $scheme_title = $scheme_info ? $scheme_info['name'] : 'Схема';
 $scheme_image = (!empty($scheme_info['image'])) ? $scheme_info['image'] : 'cat-harvester.jpg';
 
-// Логика кнопки НАЗАД:
-// Если у схемы есть родитель (parent_id не 0 и не пустой), идем к нему.
-// Иначе идем в корень (ROOT).
 $back_id = (!empty($scheme_info['parent_id']) && $scheme_info['parent_id'] != '0') ? $scheme_info['parent_id'] : 'ROOT';
 
-// 2. Получаем список запчастей
+// --- СОБИРАЕМ ПУТЬ (ОТ МЛАДШЕГО К СТАРШЕМУ) ---
+$breadcrumbs = [];
+$curr_id = $back_id;
+
+while ($curr_id && $curr_id !== 'ROOT') {
+    $stmt_path = $pdo->prepare("SELECT name, parent_id FROM structure WHERE cat_id = ? AND model = ?");
+    $stmt_path->execute([$curr_id, $model]);
+    $node = $stmt_path->fetch();
+    
+    if ($node) {
+        // ИЗМЕНЕНИЕ: Добавляем в конец массива ($breadcrumbs[]), а не в начало (array_unshift)
+        // Теперь порядок будет: [Впуск] -> [Двигатель]
+        $breadcrumbs[] = $node['name'];
+        
+        $curr_id = (!empty($node['parent_id']) && $node['parent_id'] != '0') ? $node['parent_id'] : 'ROOT';
+    } else {
+        break;
+    }
+}
+// ----------------------------------------------------
+
 $stmt_parts = $pdo->prepare("SELECT * FROM parts WHERE cat_id = ? AND model = ?");
 $stmt_parts->execute([$scheme_id, $model]);
 $parts = $stmt_parts->fetchAll();
@@ -51,16 +66,54 @@ usort($parts, function($a, $b) {
             </a>
         </div>
 
-        <h1 class="scheme-title"><?= htmlspecialchars($scheme_title) ?></h1>
+        <div class="scheme-header">
+            <div class="scheme-number">
+                № <?= htmlspecialchars($scheme_id) ?>
+                
+                <?php foreach ($breadcrumbs as $crumb): ?>
+                    <span style="color: #666; margin: 0 5px;">/</span> 
+                    <span style="color: #ccc;"><?= htmlspecialchars($crumb) ?></span>
+                <?php endforeach; ?>
+
+                <span style="color: #666; margin: 0 5px;">/</span> 
+                <span style="color: #fff;"><?= htmlspecialchars($model) ?></span>
+            </div>
+            
+            <h1 class="scheme-title"><?= htmlspecialchars($scheme_title) ?></h1>
+        </div>
 
         <div class="scheme-grid">
             
-            <div class="scheme-viewer tech-card">
-                <div class="scheme-img-wrapper">
-                    <img src="img/<?= htmlspecialchars($scheme_image) ?>" alt="<?= htmlspecialchars($scheme_title) ?>" class="scheme-image">
+            <div class="scheme-viewer tech-card" id="scheme-viewer-container">
+                
+                <div class="scheme-toolbar">
+                    <div class="toolbar-group">
+                        <button class="btn-tool" id="btn-fullscreen" title="На весь экран">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                        </button>
+                        <button class="btn-tool btn-close-modal" id="btn-close-modal" title="Закрыть">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        </button>
+                    </div>
+                    <div class="toolbar-group">
+                        <button class="btn-tool" id="btn-zoom-out" title="Уменьшить">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        </button>
+                        <button class="btn-tool" id="btn-reset" title="Сбросить" style="width: auto; padding: 0 10px; font-size: 12px; font-weight: bold;">
+                            100%
+                        </button>
+                        <button class="btn-tool" id="btn-zoom-in" title="Увеличить">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        </button>
+                    </div>
                 </div>
+
+                <div class="scheme-img-wrapper" id="scheme-wrapper">
+                    <img src="img/<?= htmlspecialchars($scheme_image) ?>" alt="<?= htmlspecialchars($scheme_title) ?>" class="scheme-image" id="scheme-image">
+                </div>
+                
                 <div class="scheme-controls">
-                    <span class="hint">Нажмите на номер позиции в таблице для поиска (в разработке)</span>
+                    <span class="hint">Колесико / Щипок: Зум &bull; Драг: Перемещение</span>
                 </div>
             </div>
 
@@ -105,5 +158,8 @@ usort($parts, function($a, $b) {
 </main>
 
 <?php include 'includes/footer.php'; ?>
+
+<script src="pages/scheme/script.js?v=<?= time() ?>"></script>
+
 </body>
 </html>

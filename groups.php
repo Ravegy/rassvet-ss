@@ -4,20 +4,29 @@ require_once 'includes/db.php'; // Подключаем БД
 $model = isset($_GET['model']) ? urldecode($_GET['model']) : 'Техника';
 $current_id = isset($_GET['id']) ? $_GET['id'] : 'ROOT';
 
-// 1. Узнаем название текущей категории (чтобы написать в заголовке)
+// 1. Логика для заголовка и кнопки НАЗАД
 $current_name = "Каталог";
+$back_url = "models.php"; // Если мы в ROOT, назад ведет к выбору модели
+
 if ($current_id !== 'ROOT') {
-    $stmt = $pdo->prepare("SELECT name, is_scheme FROM structure WHERE cat_id = ? AND model = ?");
+    // ВАЖНО: Добавили parent_id в запрос, чтобы знать, куда возвращаться
+    $stmt = $pdo->prepare("SELECT name, is_scheme, parent_id FROM structure WHERE cat_id = ? AND model = ?");
     $stmt->execute([$current_id, $model]);
     $cat_info = $stmt->fetch();
     
     if ($cat_info) {
         $current_name = $cat_info['name'];
-        // Если это схема, а мы попали сюда случайно — редиректим на scheme.php
+        
+        // Редирект, если это схема (защита от случайного попадания)
         if ($cat_info['is_scheme'] == 1) {
             header("Location: scheme.php?model=" . urlencode($model) . "&id=" . $current_id);
             exit;
         }
+
+        // Вычисляем ссылку НАЗАД
+        // Если parent_id пустой или 0, значит родитель — это корень (ROOT)
+        $parent_id = (!empty($cat_info['parent_id']) && $cat_info['parent_id'] != '0') ? $cat_info['parent_id'] : 'ROOT';
+        $back_url = "groups.php?model=" . urlencode($model) . "&id=" . $parent_id;
     }
 }
 
@@ -45,7 +54,7 @@ $subcategories = $stmt->fetchAll();
         
         <div class="page-header">
             <h1 class="page-title"><?= htmlspecialchars($current_name) ?> <span style="color:#666; font-size: 0.6em;">(<?= htmlspecialchars($model) ?>)</span></h1>
-            <a href="#" onclick="history.back(); return false;" class="btn-back">← НАЗАД</a>
+            <a href="<?= htmlspecialchars($back_url) ?>" class="btn-back">← НАЗАД</a>
         </div>
 
         <?php if (!empty($subcategories)): ?>
