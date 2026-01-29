@@ -1,0 +1,192 @@
+/* pages/profile/style.css */
+
+.profile-page { 
+    padding-top: 150px; 
+    padding-bottom: 80px; 
+}
+
+.container-sm { 
+    max-width: 800px; 
+    margin: 0 auto; 
+}
+
+/* Карточка профиля */
+.profile-card { 
+    background: #181818; 
+    border: 1px solid rgba(255,255,255,0.1); 
+    padding: 40px; 
+    border-radius: 12px; 
+    display: flex; 
+    gap: 40px; 
+    align-items: flex-start; 
+}
+
+/* Аватарка */
+.profile-avatar { 
+    width: 100px; 
+    height: 100px; 
+    background: #333; 
+    border-radius: 50%; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    font-size: 36px; 
+    color: var(--yellow); 
+    font-weight: 900; 
+    border: 2px solid var(--yellow); 
+    flex-shrink: 0;
+    text-transform: uppercase;
+}
+
+.profile-info { 
+    flex-grow: 1; 
+    width: 100%; 
+}
+
+.profile-name { 
+    font-family: var(--font-head); 
+    font-size: 32px; 
+    color: #fff; 
+    margin-bottom: 30px; 
+    text-transform: uppercase; 
+    line-height: 1.1;
+}
+
+/* Группы данных */
+.data-group {
+    margin-bottom: 20px;
+}
+
+.data-label {
+    font-size: 11px;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+    display: block;
+    font-weight: 700;
+}
+
+.data-value {
+    font-size: 16px;
+    color: #fff;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+/* Статусы Telegram */
+.tg-status { 
+    display: inline-flex; 
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px; 
+    border-radius: 6px; 
+    font-size: 13px; 
+    font-weight: bold; 
+    margin-top: 5px;
+}
+
+.tg-linked { 
+    background: rgba(50, 255, 50, 0.1); 
+    color: #44ff44; 
+    border: 1px solid rgba(50, 255, 50, 0.2); 
+}
+
+.tg-unlinked { 
+    background: rgba(255, 255, 255, 0.05); 
+    color: #888; 
+    border: 1px solid rgba(255, 255, 255, 0.1); 
+}
+
+/* Блок привязки */
+.tg-connect-box { 
+    margin-top: 25px; 
+    padding: 20px; 
+    background: rgba(255,204,0,0.05); 
+    border: 1px dashed rgba(255,204,0,0.3);
+    border-radius: 8px; 
+}
+
+.tg-hint { 
+    font-size: 13px; 
+    color: #ccc; 
+    margin-bottom: 15px; 
+    display: block; 
+    line-height: 1.4; 
+}
+
+/* Кнопка выхода */
+.btn-logout { 
+    display: inline-block;
+    margin-top: 30px;
+    background: transparent; 
+    border: 1px solid #333; 
+    color: #888; 
+    padding: 10px 25px; 
+    cursor: pointer; 
+    border-radius: 4px; 
+    transition: 0.2s; 
+    text-decoration: none; 
+    font-size: 13px; 
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.btn-logout:hover { 
+    border-color: #ff3333; 
+    color: #ff3333; 
+}
+
+/* --- МОБИЛЬНАЯ ВЕРСИЯ --- */
+@media(max-width: 768px) {
+    .profile-page { 
+        padding-top: 110px; 
+    }
+    
+    .profile-card { 
+        flex-direction: column; 
+        align-items: center; 
+        text-align: center; 
+        padding: 25px 20px;
+        gap: 25px;
+    }
+    
+    .profile-avatar {
+        width: 80px; 
+        height: 80px; 
+        font-size: 28px;
+    }
+    
+    .profile-name {
+        font-size: 24px;
+        margin-bottom: 25px;
+    }
+    
+    .data-group {
+        background: rgba(255,255,255,0.03); 
+        padding: 15px;
+        border-radius: 8px;
+        border: none;
+        margin-bottom: 10px;
+    }
+    
+    .data-value { 
+        border-bottom: none; 
+        padding-bottom: 0; 
+    }
+    
+    .btn-logout {
+        width: 100%;
+        text-align: center;
+        padding: 15px;
+        background: rgba(255, 50, 50, 0.1);
+        border-color: transparent;
+        color: #ff3333;
+        margin-top: 10px;
+    }
+    
+    .tg-connect-box {
+        text-align: center;
+        padding: 15px;
+    }
+}

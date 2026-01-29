@@ -85,7 +85,7 @@ $usage_list = $stmt_usage->fetchAll();
                                     <td><?= $use['scheme_name'] ?: 'Схема '.$use['cat_id'] ?></td>
                                     <td style="text-align:center;"><?= $use['pos_code'] ?></td>
                                     <td style="text-align:right;">
-                                        <a href="scheme.php?model=<?= urlencode($use['model']) ?>&id=<?= $use['cat_id'] ?>" class="usage-link">ПЕРЕЙТИ →</a>
+                                        <a href="scheme.php?model=<?= urlencode($use['model']) ?>&id=<?= $use['cat_id'] ?>&highlight=<?= urlencode($part_info['part_number']) ?>" class="usage-link">ПЕРЕЙТИ →</a>
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>

@@ -1,17 +1,17 @@
 .scheme-page{padding-top:130px;padding-bottom:80px}
 
+/* Кнопка назад */
 .back-nav{margin-bottom:20px}
 .back-link{display:inline-flex;align-items:center;gap:10px;color:#888;text-decoration:none;font-size:13px;font-weight:700;text-transform:uppercase;transition:0.3s;font-family:var(--font-head);letter-spacing:0.5px}
 .back-link:hover{color:var(--yellow);transform:translateX(-5px)}
 .back-link svg{width:20px;height:20px}
 
-/* --- НОВЫЙ БЛОК ЗАГОЛОВКА С НОМЕРОМ --- */
+/* Заголовок схемы */
 .scheme-header {
     border-left: 4px solid var(--yellow);
     padding-left: 20px;
     margin-bottom: 30px;
 }
-
 .scheme-number {
     display: block;
     color: var(--yellow);
@@ -21,7 +21,6 @@
     line-height: 1;
     font-family: var(--font-head);
 }
-
 .scheme-title {
     font-family: var(--font-head);
     font-size: 28px;
@@ -29,16 +28,15 @@
     color: #fff;
     text-transform: uppercase;
     margin: 0;
-    padding: 0;
-    border: none; /* Убрали бордер отсюда, перенесли в .scheme-header */
 }
-/* ------------------------------------- */
 
+/* Сетка страницы */
 .scheme-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:30px;align-items:start;max-width:100%}
 
+/* --- КОНТЕЙНЕР СХЕМЫ --- */
 .scheme-viewer{padding:0;background:#181818;border:1px solid rgba(255,255,255,0.1);position:relative;top:0;min-width:0;display:flex;flex-direction:column;overflow:hidden; transition: 0.3s all;}
 
-/* Модальный режим */
+/* Модальный режим (Fullscreen) */
 .scheme-viewer.modal-mode {
     position: fixed !important;
     top: 0;
@@ -55,6 +53,9 @@
     height: calc(100vh - 60px - 45px) !important; 
     background: #222;
 }
+/* В модальном режиме меняем кнопки */
+.scheme-viewer.modal-mode .btn-close-modal { display: flex; }
+.scheme-viewer.modal-mode #btn-fullscreen { display: none; }
 
 /* Тулбар */
 .scheme-toolbar {
@@ -67,15 +68,16 @@
     z-index: 10;
 }
 .toolbar-group { display: flex; gap: 10px; align-items: center; }
+
 .btn-tool { background: #222; border: 1px solid #333; color: #fff; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 4px; cursor: pointer; transition: 0.2s; }
 .btn-tool:hover { background: var(--yellow); color: #000; border-color: var(--yellow); }
 .btn-tool svg { width: 20px; height: 20px; }
+
+/* Кнопка закрытия (скрыта по умолчанию) */
 .btn-close-modal { display: none; }
 .btn-close-modal:hover { background: #ff3333; border-color: #ff3333; color: #fff; }
-.scheme-viewer.modal-mode .btn-close-modal { display: flex; }
-.scheme-viewer.modal-mode #btn-fullscreen { display: none; }
 
-/* Картинка */
+/* Область картинки */
 .scheme-img-wrapper {
     background: #fff;
     height: 500px;
@@ -88,6 +90,7 @@
     justify-content: center;
 }
 .scheme-img-wrapper:active { cursor: grabbing; }
+
 .scheme-image {
     max-width: 100%;
     max-height: 100%;
@@ -99,43 +102,115 @@
 }
 .scheme-controls{padding:15px 20px;background:#181818;color:#888;font-size:12px;display:flex;align-items:center;gap:10px;border-top:1px solid #333; flex-shrink: 0;}
 
-/* Список запчастей */
-.parts-list{padding:0;display:flex;flex-direction:column;height:auto;max-height:calc(100vh - 150px);min-height:0;background:#181818;border:1px solid rgba(255,255,255,0.1);min-width:0}
+/* --- СПИСОК ЗАПЧАСТЕЙ --- */
+.parts-list{
+    padding:0;
+    display:flex;
+    flex-direction:column;
+    height:auto;
+    max-height:calc(100vh - 150px);
+    min-height:0;
+    background:#181818;
+    border:1px solid rgba(255,255,255,0.1);
+    min-width:0;
+}
 .parts-list h3{font-family:var(--font-head);font-size:16px;font-weight:800;color:#fff;padding:20px;margin:0;border-bottom:1px solid rgba(255,255,255,0.05);background:rgba(255,255,255,0.02);flex-shrink:0}
-.table-responsive{overflow-y:auto;flex-grow:1;scrollbar-width:thin;scrollbar-color:var(--yellow) #333;padding-bottom:5px}
+
+/* Скроллбар таблицы */
+.table-responsive{
+    overflow-y:auto;
+    flex-grow:1;
+    scrollbar-width:thin;
+    scrollbar-color:var(--yellow) #333;
+    padding-bottom:5px;
+}
 .table-responsive::-webkit-scrollbar{width:6px;height:6px}
 .table-responsive::-webkit-scrollbar-track{background:#222}
 .table-responsive::-webkit-scrollbar-thumb{background-color:var(--yellow);border-radius:3px}
+
 .parts-table{width:100%;border-collapse:collapse}
 .parts-table th{position:sticky;top:0;background:#111;color:#666;font-size:11px;text-transform:uppercase;font-weight:700;padding:12px 10px;text-align:left;border-bottom:1px solid rgba(255,255,255,0.1);z-index:2;box-shadow:0 2px 5px rgba(0,0,0,0.5)}
 .parts-table th:first-child { text-align: center; }
+
 .parts-table td{padding:12px 10px;border-bottom:1px solid rgba(255,255,255,0.05);color:#ddd;font-size:13px;vertical-align:top;line-height:1.4;transition:0.2s}
 .parts-table tr:hover td{background:rgba(255,51,51,0.08);color:#fff}
+
 .pos-num{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;background:rgba(255,255,255,0.1);border-radius:50%;font-size:11px;font-weight:700;color:var(--yellow)}
 .parts-table tr:hover .pos-num{background:var(--yellow);color:#000}
+
 .part-art{font-family:var(--font-head);font-weight:700;color:#fff;white-space:nowrap}
 .parts-table td:nth-child(4){font-size:12px;color:#999}
 .parts-table tr:hover td:nth-child(4){color:#ccc}
 
-@media(max-width:992px){.scheme-grid{grid-template-columns:1fr}.scheme-img-wrapper{min-height:auto}.parts-list{height:auto;min-height:0}}
+/* ПОДСВЕТКА ТОЛЬКО КРУЖКА (ID) */
+
+/* 1. Убираем фон у ячеек, если он был */
+.highlight-row td {
+    background: transparent !important;
+    color: inherit !important;
+    border-bottom: 1px solid rgba(255,255,255,0.05) !important; /* Стандартная граница */
+}
+
+/* 2. Анимация пульсации кружка */
+@keyframes circle-pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 rgba(255, 204, 0, 0.4);
+        background: var(--yellow);
+        color: #000;
+    }
+    50% {
+        transform: scale(1.15); /* Чуть увеличиваем */
+        box-shadow: 0 0 15px rgba(255,255,255,0.05); /* Яркое свечение */
+        background: #fff; /* Меняем цвет на белый в пике */
+        color: #000;
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 rgba(255,255,255,0.05);
+        background: var(--yellow);
+        color: #000;
+    }
+}
+
+/* 3. Применяем анимацию к кружку внутри найденной строки */
+.highlight-row .pos-num {
+    animation: circle-pulse 1.2s infinite ease-in-out; /* Бесконечная анимация */
+    background: var(--yellow); /* Начальный цвет - желтый */
+    color: #000;
+    font-weight: 900;
+    position: relative;
+    z-index: 5; /* Чтобы при увеличении был поверх всего */
+}
+
+/* АДАПТИВНОСТЬ */
+@media(max-width:992px){
+    .scheme-grid{grid-template-columns:1fr}
+    .scheme-img-wrapper{min-height:auto}
+    .parts-list{height:auto;min-height:0}
+}
+
 @media(max-width:576px){
     .scheme-page{padding-top:100px}
-    
-    /* Обновляем отступы заголовка на мобилке */
     .scheme-header { margin-bottom: 20px; }
     .scheme-title { font-size: 20px; }
-    
     .tech-card{padding:20px} 
+    
     .table-responsive{overflow-x:auto;display:block;width:100%}
     .parts-table{min-width:auto;width:auto}
+    /* Запрет переноса и автоширина для мобилки */
     .parts-table th,.parts-table td{padding:10px 15px;font-size:12px;white-space:nowrap;width:auto!important}
     
+    /* Схема на мобилке */
     .scheme-viewer { width: 100%; min-width: 0; border: none !important; background: transparent !important; padding: 0 !important; }
     .scheme-toolbar { background: #111; border-top-left-radius: 8px; border-top-right-radius: 8px; }
     .scheme-img-wrapper { padding: 0 !important; border: none !important; height: 400px; background: #eee; }
     .parts-list { width: 100%; min-width: 0; border: none !important; background: #181818 !important; padding: 0 !important; }
     
+    /* Модальный режим на мобилке */
     .scheme-viewer.modal-mode { background: #000 !important; }
     .scheme-viewer.modal-mode .scheme-toolbar { border-radius: 0; }
 }
+
+/* Блокировка скролла сайта при открытой модалке */
 body.modal-open { overflow: hidden; }

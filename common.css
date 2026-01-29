@@ -60,3 +60,17 @@ body{background-color:var(--bg);color:var(--text);font-family:var(--font-body);l
 @media(max-width:992px){.burger-btn{display:flex}.nav{position:fixed;top:0;right:-100%;width:100%;height:100vh;background:#111;flex-direction:column;justify-content:center;align-items:center;transition:.4s;z-index:1050}.nav.active{right:0}.nav__link{font-size:24px;margin-bottom:25px}.footer__top{grid-template-columns:1fr 1fr;gap:40px}.footer__col.brand-col{grid-column:1/-1;text-align:center}.footer__desc{margin:0 auto 20px}.footer__socials{justify-content:center}}
 @media(max-width:768px){.footer__top{grid-template-columns:1fr;text-align:center}.contact-data{justify-content:center}.footer__nav{align-items:center}}
 @media(max-width:576px){.logo{font-size:17px;gap:6px}.logo svg,.logo img{width:24px;height:24px}.header__contacts{gap:10px}.page-title{font-size:28px}.search-dropdown{position:fixed;top:60px;left:10px;right:10px;width:auto;z-index:1200}}
+/* Выравнивание иконок в шапке на мобильных устройствах */
+@media (max-width: 768px) {
+    .header__icons {
+        display: flex;
+        align-items: center;
+        gap: 15px; /* Одинаковое расстояние между всеми иконками */
+    }
+
+    /* Убираем старые отступы у самих иконок, чтобы они не мешали */
+    .header__icons > * {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+}

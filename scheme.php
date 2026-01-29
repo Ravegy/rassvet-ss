@@ -3,7 +3,10 @@ require_once 'includes/db.php';
 
 $model = isset($_GET['model']) ? urldecode($_GET['model']) : '';
 $scheme_id = isset($_GET['id']) ? $_GET['id'] : '';
+// Получаем артикул для подсветки
+$highlight = isset($_GET['highlight']) ? $_GET['highlight'] : '';
 
+// 1. Получаем инфо о схеме и родителе
 $stmt = $pdo->prepare("SELECT name, image, parent_id FROM structure WHERE cat_id = ? AND model = ?");
 $stmt->execute([$scheme_id, $model]);
 $scheme_info = $stmt->fetch();
@@ -11,9 +14,10 @@ $scheme_info = $stmt->fetch();
 $scheme_title = $scheme_info ? $scheme_info['name'] : 'Схема';
 $scheme_image = (!empty($scheme_info['image'])) ? $scheme_info['image'] : 'cat-harvester.jpg';
 
+// ID для кнопки "Назад"
 $back_id = (!empty($scheme_info['parent_id']) && $scheme_info['parent_id'] != '0') ? $scheme_info['parent_id'] : 'ROOT';
 
-// --- СОБИРАЕМ ПУТЬ (ОТ МЛАДШЕГО К СТАРШЕМУ) ---
+// 2. Собираем путь (Хлебные крошки: Снизу -> Вверх)
 $breadcrumbs = [];
 $curr_id = $back_id;
 
@@ -23,21 +27,20 @@ while ($curr_id && $curr_id !== 'ROOT') {
     $node = $stmt_path->fetch();
     
     if ($node) {
-        // ИЗМЕНЕНИЕ: Добавляем в конец массива ($breadcrumbs[]), а не в начало (array_unshift)
-        // Теперь порядок будет: [Впуск] -> [Двигатель]
+        // Добавляем в конец (порядок: Узел -> Группа -> ... -> Модель)
         $breadcrumbs[] = $node['name'];
-        
         $curr_id = (!empty($node['parent_id']) && $node['parent_id'] != '0') ? $node['parent_id'] : 'ROOT';
     } else {
         break;
     }
 }
-// ----------------------------------------------------
 
+// 3. Получаем запчасти
 $stmt_parts = $pdo->prepare("SELECT * FROM parts WHERE cat_id = ? AND model = ?");
 $stmt_parts->execute([$scheme_id, $model]);
 $parts = $stmt_parts->fetchAll();
 
+// Сортировка по номеру позиции
 usort($parts, function($a, $b) {
     return (int)$a['pos_code'] <=> (int)$b['pos_code'];
 });
@@ -134,7 +137,14 @@ usort($parts, function($a, $b) {
                         <tbody>
                             <?php if (count($parts) > 0): ?>
                                 <?php foreach ($parts as $part): ?>
-                                <tr>
+                                <?php 
+                                    // Проверка на подсветку
+                                    // Сравниваем как строки, чтобы избежать проблем с типами
+                                    $is_highlight = ($highlight && (string)$part['part_number'] === (string)$highlight);
+                                    $row_class = $is_highlight ? 'highlight-row' : '';
+                                    $row_id = $is_highlight ? 'target-part' : '';
+                                ?>
+                                <tr class="<?= $row_class ?>" id="<?= $row_id ?>">
                                     <td class="pos-cell"><span class="pos-num"><?= $part['pos_code'] ?></span></td>
                                     <td class="art-cell"><span class="part-art"><?= $part['part_number'] ?></span></td>
                                     <td><?= $part['name'] ?></td>

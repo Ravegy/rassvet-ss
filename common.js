@@ -82,6 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const forms = document.querySelectorAll('form');
     forms.forEach(form => {
+        if (form.classList.contains('static-form')) return;
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
 
