@@ -1,13 +1,20 @@
 /* pages/profile/style.css */
 
 .profile-page { 
-    padding-top: 150px; 
+    padding-top: 140px; /* Идентично странице контактов */
     padding-bottom: 80px; 
 }
 
 .container-sm { 
     max-width: 800px; 
     margin: 0 auto; 
+}
+
+/* Синхронизация размера шрифта с контактами на планшетах */
+@media (max-width: 992px) {
+  .page-title {
+    font-size: 28px;
+  }
 }
 
 /* Карточка профиля */
@@ -18,7 +25,16 @@
     border-radius: 12px; 
     display: flex; 
     gap: 40px; 
-    align-items: flex-start; 
+    align-items: flex-start;
+    
+    /* Анимация появления */
+    opacity: 0;
+    transform: translateY(20px);
+    transition: 0.6s ease-out;
+}
+.profile-card.visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 /* Аватарка */
@@ -140,7 +156,7 @@
 /* --- МОБИЛЬНАЯ ВЕРСИЯ --- */
 @media(max-width: 768px) {
     .profile-page { 
-        padding-top: 110px; 
+        padding-top: 100px; /* Идентично мобильной версии контактов */
     }
     
     .profile-card { 
@@ -188,5 +204,63 @@
     .tg-connect-box {
         text-align: center;
         padding: 15px;
+    }
+}
+/* ... (Ваш существующий CSS) ... */
+
+/* Стили для поля города */
+.input-with-btn {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.profile-input {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 6px;
+    width: 100%;
+    font-family: var(--font-body);
+    font-size: 15px;
+    transition: 0.3s;
+}
+
+.profile-input:focus {
+    outline: none;
+    border-color: var(--yellow);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.btn-save-mini {
+    background: #333;
+    border: 1px solid #444;
+    color: var(--yellow);
+    width: 42px;
+    height: 42px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.2s;
+    flex-shrink: 0;
+}
+
+.btn-save-mini:hover {
+    background: var(--yellow);
+    color: #000;
+    border-color: var(--yellow);
+}
+
+.btn-save-mini svg {
+    width: 20px;
+    height: 20px;
+}
+
+@media(max-width: 768px) {
+    .profile-input {
+        font-size: 16px; /* Чтобы на айфонах не приближало */
     }
 }

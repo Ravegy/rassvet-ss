@@ -214,3 +214,47 @@
 
 /* Блокировка скролла сайта при открытой модалке */
 body.modal-open { overflow: hidden; }
+
+/* --- ВОДЯНОЙ ЗНАК НА СХЕМЕ --- */
+
+/* Убедимся, что родитель имеет позиционирование */
+.scheme-img-wrapper {
+    position: relative;
+    z-index: 1;
+}
+
+.scheme-watermark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-30deg); /* По центру и с наклоном */
+    z-index: 10; /* Поверх картинки */
+    
+    text-align: center;
+    pointer-events: none; /* ПРОПУСКАТЬ КЛИКИ (чтобы работал зум и драг) */
+    user-select: none;    /* Не выделять текст */
+    
+    /* Стили текста */
+    font-family: var(--font-head);
+    font-weight: 900;
+    text-transform: uppercase;
+    color: #000;
+    opacity: 0.1; /* Еле заметный (5%) */
+    white-space: nowrap;
+    
+    /* Адаптивный размер */
+    font-size: clamp(20px, 5vw, 50px);
+    line-height: 1.2;
+    
+    /* Чтобы текст не вылезал за границы вьюпорта */
+    max-width: 100%; 
+}
+
+.wm-line {
+    display: block;
+}
+
+.wm-sub {
+    font-size: 0.8em; /* Вторая строка чуть меньше */
+    font-weight: 700;
+}

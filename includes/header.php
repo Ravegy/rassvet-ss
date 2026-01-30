@@ -25,7 +25,13 @@
                 </div>
 
                 <button class="icon-btn" aria-label="Избранное"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.001 4.529c2.349-2.109 5.979-2.039 8.242.228 2.262 2.268 2.34 5.88.236 8.236l-8.48 8.492-8.478-8.492c-2.104-2.356-2.025-5.974.236-8.236 2.265-2.264 5.888-2.34 8.244-.228z"/></svg></button>
-                <button class="icon-btn" aria-label="Корзина"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg></button>
+                
+                <div class="cart-wrapper">
+                    <button class="icon-btn" id="cart-toggle" aria-label="Корзина">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                        <span class="cart-count" id="cart-count">0</span>
+                    </button>
+                </div>
 
 <?php
     if (session_status() === PHP_SESSION_NONE) session_start();
@@ -53,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Открытие/Закрытие по клику на лупу
     toggle.addEventListener('click', function(e) {
-        e.stopPropagation(); // Чтобы клик не ушел в document
+        e.stopPropagation(); 
         dropdown.classList.toggle('active');
         if (dropdown.classList.contains('active')) {
             setTimeout(() => input.focus(), 100);

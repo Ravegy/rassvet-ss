@@ -41,12 +41,6 @@ $usage_list = $stmt_usage->fetchAll();
 <main class="product-page">
     <div class="container">
         
-        <div class="breadcrumbs fade-up" style="margin-bottom: 20px; color:#666; font-size:13px;">
-            <a href="catalog.php" style="color:#fff; text-decoration:none;">Каталог</a> / 
-            <span>Поиск</span> / 
-            <span style="color:#ff3333;"><?= htmlspecialchars($art) ?></span>
-        </div>
-
         <h1 class="scheme-title fade-up" style="color:#fff; text-transform:uppercase; font-size:28px; margin-bottom:30px;">КАРТОЧКА ТОВАРА</h1>
 
         <div class="prod-grid">
@@ -61,7 +55,7 @@ $usage_list = $stmt_usage->fetchAll();
                 <div class="prod-label">ХАРАКТЕРИСТИКИ (SPECS)</div>
                 <div class="prod-value"><?= htmlspecialchars($part_info['specs'] ?: 'Нет данных') ?></div>
                 
-                <button class="btn">ЗАПРОСИТЬ ЦЕНУ</button>
+                <button class="btn btn-add-cart" data-art="<?= htmlspecialchars($part_info['part_number']) ?>">ДОБАВИТЬ В КОРЗИНУ</button>
             </div>
 
             <div class="prod-card fade-up">

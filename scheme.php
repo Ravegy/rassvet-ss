@@ -113,6 +113,11 @@ usort($parts, function($a, $b) {
 
                 <div class="scheme-img-wrapper" id="scheme-wrapper">
                     <img src="img/<?= htmlspecialchars($scheme_image) ?>" alt="<?= htmlspecialchars($scheme_title) ?>" class="scheme-image" id="scheme-image">
+                    
+                    <div class="scheme-watermark">
+                        <div class="wm-line">ОНЛАЙН КАТАЛОГ РАССВЕТ-С</div>
+                        <div class="wm-line wm-sub">RASSVET-S.RU</div>
+                    </div>
                 </div>
                 
                 <div class="scheme-controls">
