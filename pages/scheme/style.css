@@ -1,260 +1,171 @@
 .scheme-page{padding-top:130px;padding-bottom:80px}
-
-/* Кнопка назад */
 .back-nav{margin-bottom:20px}
 .back-link{display:inline-flex;align-items:center;gap:10px;color:#888;text-decoration:none;font-size:13px;font-weight:700;text-transform:uppercase;transition:0.3s;font-family:var(--font-head);letter-spacing:0.5px}
 .back-link:hover{color:var(--yellow);transform:translateX(-5px)}
 .back-link svg{width:20px;height:20px}
 
-/* Заголовок схемы */
-.scheme-header {
-    border-left: 4px solid var(--yellow);
-    padding-left: 20px;
-    margin-bottom: 30px;
-}
-.scheme-number {
-    display: block;
-    color: var(--yellow);
-    font-size: 14px;
-    font-weight: 700;
-    margin-bottom: 5px;
-    line-height: 1;
-    font-family: var(--font-head);
-}
-.scheme-title {
-    font-family: var(--font-head);
-    font-size: 28px;
-    font-weight: 900;
-    color: #fff;
-    text-transform: uppercase;
-    margin: 0;
-}
-
-/* Сетка страницы */
+.scheme-header { border-left: 4px solid var(--yellow); padding-left: 20px; margin-bottom: 30px; }
+.scheme-number { display: block; color: var(--yellow); font-size: 14px; font-weight: 700; margin-bottom: 5px; line-height: 1; font-family: var(--font-head); }
+.scheme-title { font-family: var(--font-head); font-size: 28px; font-weight: 900; color: #fff; text-transform: uppercase; margin: 0; }
 .scheme-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:30px;align-items:start;max-width:100%}
 
-/* --- КОНТЕЙНЕР СХЕМЫ --- */
+/* Вьювер */
 .scheme-viewer{padding:0;background:#181818;border:1px solid rgba(255,255,255,0.1);position:relative;top:0;min-width:0;display:flex;flex-direction:column;overflow:hidden; transition: 0.3s all;}
-
-/* Модальный режим (Fullscreen) */
-.scheme-viewer.modal-mode {
-    position: fixed !important;
-    top: 0;
-    left: 0;
-    width: 100vw !important;
-    height: 100vh !important;
-    z-index: 9999;
-    border: none;
-    border-radius: 0;
-    margin: 0;
-    background: #111;
-}
-.scheme-viewer.modal-mode .scheme-img-wrapper {
-    height: calc(100vh - 60px - 45px) !important; 
-    background: #222;
-}
-/* В модальном режиме меняем кнопки */
+.scheme-viewer.modal-mode { position: fixed !important; top: 0; left: 0; width: 100vw !important; height: 100vh !important; z-index: 9999; border: none; background: #111; }
+.scheme-viewer.modal-mode .scheme-img-wrapper { height: calc(100vh - 60px - 45px) !important; background: #222; }
 .scheme-viewer.modal-mode .btn-close-modal { display: flex; }
 .scheme-viewer.modal-mode #btn-fullscreen { display: none; }
-
-/* Тулбар */
-.scheme-toolbar {
-    background: #000;
-    padding: 10px 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #333;
-    z-index: 10;
-}
+.scheme-toolbar { background: #000; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; z-index: 10; }
 .toolbar-group { display: flex; gap: 10px; align-items: center; }
-
 .btn-tool { background: #222; border: 1px solid #333; color: #fff; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 4px; cursor: pointer; transition: 0.2s; }
 .btn-tool:hover { background: var(--yellow); color: #000; border-color: var(--yellow); }
-.btn-tool svg { width: 20px; height: 20px; }
-
-/* Кнопка закрытия (скрыта по умолчанию) */
 .btn-close-modal { display: none; }
-.btn-close-modal:hover { background: #ff3333; border-color: #ff3333; color: #fff; }
-
-/* Область картинки */
-.scheme-img-wrapper {
-    background: #fff;
-    height: 500px;
-    width: 100%;
-    overflow: hidden;
-    position: relative;
-    cursor: grab;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+.scheme-img-wrapper { background: #fff; height: 500px; width: 100%; overflow: hidden; position: relative; cursor: grab; display: flex; align-items: center; justify-content: center; }
 .scheme-img-wrapper:active { cursor: grabbing; }
-
-.scheme-image {
-    max-width: 100%;
-    max-height: 100%;
-    display: block;
-    transform-origin: center center;
-    transition: transform 0.1s ease-out;
-    pointer-events: none;
-    user-select: none;
-}
+.scheme-image { max-width: 100%; max-height: 100%; display: block; transform-origin: center center; transition: transform 0.1s ease-out; pointer-events: none; user-select: none; }
 .scheme-controls{padding:15px 20px;background:#181818;color:#888;font-size:12px;display:flex;align-items:center;gap:10px;border-top:1px solid #333; flex-shrink: 0;}
+.scheme-watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); z-index: 10; text-align: center; pointer-events: none; user-select: none; font-family: var(--font-head); font-weight: 900; text-transform: uppercase; color: #000; opacity: 0.1; white-space: nowrap; font-size: clamp(20px, 5vw, 50px); line-height: 1.2; }
+.wm-sub { font-size: 0.8em; font-weight: 700; }
 
-/* --- СПИСОК ЗАПЧАСТЕЙ --- */
-.parts-list{
-    padding:0;
-    display:flex;
-    flex-direction:column;
-    height:auto;
-    max-height:calc(100vh - 150px);
-    min-height:0;
-    background:#181818;
-    border:1px solid rgba(255,255,255,0.1);
-    min-width:0;
-}
+/* Таблица */
+.parts-list{ padding:0; display:flex; flex-direction:column; height:auto; max-height:calc(100vh - 150px); min-height:0; background:#181818; border:1px solid rgba(255,255,255,0.1); min-width:0; }
 .parts-list h3{font-family:var(--font-head);font-size:16px;font-weight:800;color:#fff;padding:20px;margin:0;border-bottom:1px solid rgba(255,255,255,0.05);background:rgba(255,255,255,0.02);flex-shrink:0}
-
-/* Скроллбар таблицы */
-.table-responsive{
-    overflow-y:auto;
-    flex-grow:1;
-    scrollbar-width:thin;
-    scrollbar-color:var(--yellow) #333;
-    padding-bottom:5px;
-}
+.table-responsive{ overflow-y:auto; flex-grow:1; scrollbar-width:thin; scrollbar-color:var(--yellow) #333; padding-bottom:5px; }
 .table-responsive::-webkit-scrollbar{width:6px;height:6px}
 .table-responsive::-webkit-scrollbar-track{background:#222}
 .table-responsive::-webkit-scrollbar-thumb{background-color:var(--yellow);border-radius:3px}
 
-.parts-table{width:100%;border-collapse:collapse}
-.parts-table th{position:sticky;top:0;background:#111;color:#666;font-size:11px;text-transform:uppercase;font-weight:700;padding:12px 10px;text-align:left;border-bottom:1px solid rgba(255,255,255,0.1);z-index:2;box-shadow:0 2px 5px rgba(0,0,0,0.5)}
-.parts-table th:first-child { text-align: center; }
-
-.parts-table td{padding:12px 10px;border-bottom:1px solid rgba(255,255,255,0.05);color:#ddd;font-size:13px;vertical-align:top;line-height:1.4;transition:0.2s}
-.parts-table tr:hover td{background:rgba(255,51,51,0.08);color:#fff}
-
+.scheme-table{width:100%;border-collapse:collapse}
+.scheme-table th{position:sticky;top:0;background:#111;color:#666;font-size:11px;text-transform:uppercase;font-weight:700;padding:12px 10px;text-align:left;border-bottom:1px solid rgba(255,255,255,0.1);z-index:2;box-shadow:0 2px 5px rgba(0,0,0,0.5)}
+.scheme-table th:first-child { text-align: center; }
+.scheme-table td{padding:12px 10px;border-bottom:1px solid rgba(255,255,255,0.05);color:#ddd;font-size:13px;vertical-align:top;line-height:1.4;transition:0.2s}
+.part-row:hover td, .part-row.active td{background:rgba(255,51,51,0.08);color:#fff; cursor: pointer;}
 .pos-num{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;background:rgba(255,255,255,0.1);border-radius:50%;font-size:11px;font-weight:700;color:var(--yellow)}
-.parts-table tr:hover .pos-num{background:var(--yellow);color:#000}
-
+.part-row:hover .pos-num, .part-row.active .pos-num{background:var(--yellow);color:#000}
 .part-art{font-family:var(--font-head);font-weight:700;color:#fff;white-space:nowrap}
-.parts-table td:nth-child(4){font-size:12px;color:#999}
-.parts-table tr:hover td:nth-child(4){color:#ccc}
+.scheme-table td:nth-child(4){font-size:12px;color:#999}
+.part-row:hover td:nth-child(4), .part-row.active td:nth-child(4){color:#ccc}
 
-/* ПОДСВЕТКА ТОЛЬКО КРУЖКА (ID) */
+/* Выпадающая строка */
+.part-details-row { display: none; }
+.part-details-row.active { display: table-row; }
+.part-details-row td { background: #111; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 0; }
 
-/* 1. Убираем фон у ячеек, если он был */
-.highlight-row td {
-    background: transparent !important;
-    color: inherit !important;
-    border-bottom: 1px solid rgba(255,255,255,0.05) !important; /* Стандартная граница */
+.details-content { 
+    padding: 10px 15px; 
+    display: flex; 
+    justify-content: flex-start; 
+    align-items: center; 
+    gap: 15px;
+    border-left: 2px solid var(--yellow);
 }
 
-/* 2. Анимация пульсации кружка */
+/* === АНИМИРОВАННЫЕ КНОПКИ (СЕРДЦЕ И КОРЗИНА) === */
+.heart-container, .cart-container {
+  --active-color: #ff3333;
+  position: relative;
+  width: 30px; 
+  height: 30px; 
+  transition: .3s;
+}
+
+.heart-container .checkbox, .cart-container .checkbox {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  z-index: 20;
+  cursor: pointer;
+}
+
+.heart-container .svg-container, .cart-container .svg-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ОБЩИЕ ПРАВИЛА (Сброс) */
+.heart-container .svg-outline, .heart-container .svg-filled,
+.cart-container .svg-outline, .cart-container .svg-filled {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+/* --- СТИЛИ ДЛЯ СЕРДЦА (Заливка всегда) --- */
+.heart-container .svg-outline, 
+.heart-container .svg-filled {
+    fill: var(--active-color);
+}
+
+/* --- СТИЛИ ДЛЯ КОРЗИНЫ (Линии vs Заливка) --- */
+/* Пустая корзина - это ЛИНИИ */
+.cart-container .svg-outline {
+    fill: none;
+    stroke: var(--active-color);
+    stroke-width: 2px; /* Толщина линий */
+}
+/* Полная корзина - это ЗАЛИВКА */
+.cart-container .svg-filled {
+    fill: var(--active-color);
+    stroke: none;
+}
+
+/* АНИМАЦИИ ПОЯВЛЕНИЯ */
+.heart-container .svg-filled, .cart-container .svg-filled {
+  animation: keyframes-svg-filled 1s;
+  display: none;
+}
+
+.heart-container .svg-celebrate, .cart-container .svg-celebrate {
+  position: absolute;
+  animation: keyframes-svg-celebrate .5s;
+  animation-fill-mode: forwards;
+  display: none;
+  stroke: var(--active-color);
+  fill: var(--active-color);
+  stroke-width: 2px;
+}
+
+/* ЛОГИКА CHECKED */
+.heart-container .checkbox:checked~.svg-container .svg-filled,
+.cart-container .checkbox:checked~.svg-container .svg-filled {
+  display: block
+}
+
+.heart-container .checkbox:checked~.svg-container .svg-celebrate,
+.cart-container .checkbox:checked~.svg-container .svg-celebrate {
+  display: block
+}
+
+@keyframes keyframes-svg-filled {
+  0% { transform: scale(0); }
+  25% { transform: scale(1.2); }
+  50% { transform: scale(1); filter: brightness(1.5); }
+}
+
+@keyframes keyframes-svg-celebrate {
+  0% { transform: scale(0); }
+  50% { opacity: 1; filter: brightness(1.5); }
+  100% { transform: scale(1.4); opacity: 0; display: none; }
+}
+
+/* Подсветка строки при переходе из поиска */
+.highlight-row td { background: transparent !important; color: inherit !important; border-bottom: 1px solid rgba(255,255,255,0.05) !important; }
 @keyframes circle-pulse {
-    0% {
-        transform: scale(1);
-        box-shadow: 0 0 0 rgba(255, 204, 0, 0.4);
-        background: var(--yellow);
-        color: #000;
-    }
-    50% {
-        transform: scale(1.15); /* Чуть увеличиваем */
-        box-shadow: 0 0 15px rgba(255,255,255,0.05); /* Яркое свечение */
-        background: #fff; /* Меняем цвет на белый в пике */
-        color: #000;
-    }
-    100% {
-        transform: scale(1);
-        box-shadow: 0 0 0 rgba(255,255,255,0.05);
-        background: var(--yellow);
-        color: #000;
-    }
+    0% { transform: scale(1); box-shadow: 0 0 0 rgba(255, 204, 0, 0.4); background: var(--yellow); color: #000; }
+    50% { transform: scale(1.15); box-shadow: 0 0 15px rgba(255,255,255,0.05); background: #fff; color: #000; }
+    100% { transform: scale(1); box-shadow: 0 0 0 rgba(255,255,255,0.05); background: var(--yellow); color: #000; }
 }
+.highlight-row .pos-num { animation: circle-pulse 1.2s infinite ease-in-out; background: var(--yellow); color: #000; font-weight: 900; position: relative; z-index: 5; }
 
-/* 3. Применяем анимацию к кружку внутри найденной строки */
-.highlight-row .pos-num {
-    animation: circle-pulse 1.2s infinite ease-in-out; /* Бесконечная анимация */
-    background: var(--yellow); /* Начальный цвет - желтый */
-    color: #000;
-    font-weight: 900;
-    position: relative;
-    z-index: 5; /* Чтобы при увеличении был поверх всего */
-}
-
-/* АДАПТИВНОСТЬ */
-@media(max-width:992px){
-    .scheme-grid{grid-template-columns:1fr}
-    .scheme-img-wrapper{min-height:auto}
-    .parts-list{height:auto;min-height:0}
-}
-
+/* Адаптив */
+@media(max-width:992px){ .scheme-grid{grid-template-columns:1fr} .scheme-img-wrapper{min-height:auto} .parts-list{height:auto;min-height:0} }
 @media(max-width:576px){
-    .scheme-page{padding-top:100px}
-    .scheme-header { margin-bottom: 20px; }
-    .scheme-title { font-size: 20px; }
-    .tech-card{padding:20px} 
-    
-    .table-responsive{overflow-x:auto;display:block;width:100%}
-    .parts-table{min-width:auto;width:auto}
-    /* Запрет переноса и автоширина для мобилки */
-    .parts-table th,.parts-table td{padding:10px 15px;font-size:12px;white-space:nowrap;width:auto!important}
-    
-    /* Схема на мобилке */
-    .scheme-viewer { width: 100%; min-width: 0; border: none !important; background: transparent !important; padding: 0 !important; }
-    .scheme-toolbar { background: #111; border-top-left-radius: 8px; border-top-right-radius: 8px; }
-    .scheme-img-wrapper { padding: 0 !important; border: none !important; height: 400px; background: #eee; }
-    .parts-list { width: 100%; min-width: 0; border: none !important; background: #181818 !important; padding: 0 !important; }
-    
-    /* Модальный режим на мобилке */
-    .scheme-viewer.modal-mode { background: #000 !important; }
-    .scheme-viewer.modal-mode .scheme-toolbar { border-radius: 0; }
+    .scheme-page{padding-top:100px} 
+    .table-responsive{overflow-x:auto;display:block;width:100%} .scheme-table{min-width:auto;width:auto} .scheme-table th, .scheme-table td{padding:10px 15px;font-size:12px;white-space:nowrap;width:auto!important}
+    .scheme-viewer { width: 100%; border: none !important; padding: 0 !important; } .scheme-img-wrapper { height: 400px; background: #eee; } .parts-list { border: none !important; }
 }
-
-/* Блокировка скролла сайта при открытой модалке */
 body.modal-open { overflow: hidden; }
-
-/* --- ВОДЯНОЙ ЗНАК НА СХЕМЕ --- */
-
-/* Убедимся, что родитель имеет позиционирование */
-.scheme-img-wrapper {
-    position: relative;
-    z-index: 1;
-}
-
-.scheme-watermark {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) rotate(-30deg); /* По центру и с наклоном */
-    z-index: 10; /* Поверх картинки */
-    
-    text-align: center;
-    pointer-events: none; /* ПРОПУСКАТЬ КЛИКИ (чтобы работал зум и драг) */
-    user-select: none;    /* Не выделять текст */
-    
-    /* Стили текста */
-    font-family: var(--font-head);
-    font-weight: 900;
-    text-transform: uppercase;
-    color: #000;
-    opacity: 0.1; /* Еле заметный (5%) */
-    white-space: nowrap;
-    
-    /* Адаптивный размер */
-    font-size: clamp(20px, 5vw, 50px);
-    line-height: 1.2;
-    
-    /* Чтобы текст не вылезал за границы вьюпорта */
-    max-width: 100%; 
-}
-
-.wm-line {
-    display: block;
-}
-
-.wm-sub {
-    font-size: 0.8em; /* Вторая строка чуть меньше */
-    font-weight: 700;
-}

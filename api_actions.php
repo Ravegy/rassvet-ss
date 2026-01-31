@@ -9,57 +9,45 @@ $action = isset($_POST['action']) ? $_POST['action'] : '';
 $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 0;
 $session_id = session_id();
 
-// --- ФУНКЦИЯ ПОЛУЧЕНИЯ КОРЗИНЫ ---
+// --- ИСПРАВЛЕННАЯ ФУНКЦИЯ (Без LEFT JOIN, чтобы не было дублей при выводе) ---
 function getCart($pdo, $user_id, $session_id) {
+    // Берем имя товара подзапросом
+    $sql = "SELECT c.qty, c.part_number, 
+            (SELECT name FROM parts WHERE part_number = c.part_number LIMIT 1) as name 
+            FROM cart c 
+            WHERE ";
+
     if ($user_id > 0) {
-        $stmt = $pdo->prepare("SELECT c.qty, p.part_number, p.name 
-                               FROM cart c 
-                               LEFT JOIN parts p ON c.part_number = p.part_number 
-                               WHERE c.user_id = ?");
-        $stmt->execute([$user_id]);
+        $sql .= "c.user_id = ?";
+        $params = [$user_id];
     } else {
-        $stmt = $pdo->prepare("SELECT c.qty, p.part_number, p.name 
-                               FROM cart c 
-                               LEFT JOIN parts p ON c.part_number = p.part_number 
-                               WHERE c.session_id = ? AND c.user_id = 0");
-        $stmt->execute([$session_id]);
+        $sql .= "c.session_id = ? AND c.user_id = 0";
+        $params = [$session_id];
     }
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($params);
     return $stmt->fetchAll();
 }
 
 try {
-    // 1. ДОБАВИТЬ В КОРЗИНУ
+    // 1. ДОБАВИТЬ В КОРЗИНУ (С защитой от дублей)
     if ($action == 'add_cart') {
         $art = $_POST['article'];
-        $qty = 1;
+        $qty = isset($_POST['qty']) ? (int)$_POST['qty'] : 1;
 
         if ($user_id > 0) {
             $sql = "INSERT INTO cart (user_id, part_number, qty) VALUES (?, ?, ?) 
-                    ON DUPLICATE KEY UPDATE qty = qty + 1";
-            $pdo->prepare($sql)->execute([$user_id, $art, $qty]);
+                    ON DUPLICATE KEY UPDATE qty = qty + ?";
+            $pdo->prepare($sql)->execute([$user_id, $art, $qty, $qty]);
         } else {
             $sql = "INSERT INTO cart (user_id, session_id, part_number, qty) VALUES (0, ?, ?, ?) 
-                    ON DUPLICATE KEY UPDATE qty = qty + 1";
-            $pdo->prepare($sql)->execute([$session_id, $art, $qty]);
+                    ON DUPLICATE KEY UPDATE qty = qty + ?";
+            $pdo->prepare($sql)->execute([$session_id, $art, $qty, $qty]);
         }
         echo json_encode(['status' => 'success', 'cart' => getCart($pdo, $user_id, $session_id)]);
 
-    // 2. ПОЛУЧИТЬ КОРЗИНУ
-    } elseif ($action == 'get_cart') {
-        echo json_encode(['status' => 'success', 'cart' => getCart($pdo, $user_id, $session_id)]);
-
-    // 3. ДОБАВИТЬ В ИЗБРАННОЕ
-    } elseif ($action == 'add_fav') {
-        if ($user_id == 0) {
-            echo json_encode(['status' => 'error', 'message' => 'Нужна авторизация']);
-            exit;
-        }
-        $art = $_POST['article'];
-        $sql = "INSERT IGNORE INTO favorites (user_id, part_number) VALUES (?, ?)";
-        $pdo->prepare($sql)->execute([$user_id, $art]);
-        echo json_encode(['status' => 'success']);
-
-    // 4. УДАЛИТЬ ИЗ КОРЗИНЫ (НОВОЕ)
+    // 2. УДАЛИТЬ ИЗ КОРЗИНЫ
     } elseif ($action == 'delete_item') {
         $art = $_POST['article'];
         if ($user_id > 0) {
@@ -69,16 +57,35 @@ try {
         }
         echo json_encode(['status' => 'success', 'cart' => getCart($pdo, $user_id, $session_id)]);
 
-    // 5. ИЗМЕНИТЬ КОЛИЧЕСТВО (НОВОЕ)
+    // 3. ПОЛУЧИТЬ КОРЗИНУ
+    } elseif ($action == 'get_cart') {
+        echo json_encode(['status' => 'success', 'cart' => getCart($pdo, $user_id, $session_id)]);
+
+    // 4. ИЗБРАННОЕ (Тоггл)
+    } elseif ($action == 'add_fav') {
+        if ($user_id == 0) {
+            echo json_encode(['status' => 'error', 'message' => 'Нужна авторизация']);
+            exit;
+        }
+        $art = $_POST['article'];
+        
+        $check = $pdo->prepare("SELECT id FROM favorites WHERE user_id = ? AND part_number = ?");
+        $check->execute([$user_id, $art]);
+        if($check->rowCount() > 0){
+             $pdo->prepare("DELETE FROM favorites WHERE user_id = ? AND part_number = ?")->execute([$user_id, $art]);
+             echo json_encode(['status' => 'removed']);
+        } else {
+             $pdo->prepare("INSERT INTO favorites (user_id, part_number) VALUES (?, ?)")->execute([$user_id, $art]);
+             echo json_encode(['status' => 'added']);
+        }
+
+    // 5. ИЗМЕНИТЬ КОЛИЧЕСТВО
     } elseif ($action == 'update_qty') {
         $art = $_POST['article'];
-        $direction = $_POST['direction']; // 'plus' или 'minus'
-
-        // Определяем условие WHERE
+        $direction = $_POST['direction']; 
         $where = ($user_id > 0) ? "user_id = ?" : "session_id = ? AND user_id = 0";
         $params = ($user_id > 0) ? [$user_id, $art] : [$session_id, $art];
         
-        // Получаем текущее кол-во
         $stmt = $pdo->prepare("SELECT qty FROM cart WHERE $where AND part_number = ?");
         $stmt->execute($params);
         $row = $stmt->fetch();
@@ -87,16 +94,13 @@ try {
             $newQty = $row['qty'];
             if ($direction == 'plus') $newQty++;
             if ($direction == 'minus') $newQty--;
-
-            if ($newQty < 1) $newQty = 1; // Не даем уйти в ноль кнопкой минус
-
-            // Обновляем
+            if ($newQty < 1) $newQty = 1;
+            
             $sql = "UPDATE cart SET qty = ? WHERE $where AND part_number = ?";
-            // Пересобираем параметры: qty, id, art
-            $updateParams = array_merge([$newQty], $params); 
-            $pdo->prepare($sql)->execute($updateParams);
+            // Добавляем newQty в начало массива параметров
+            array_unshift($params, $newQty);
+            $pdo->prepare($sql)->execute($params);
         }
-        
         echo json_encode(['status' => 'success', 'cart' => getCart($pdo, $user_id, $session_id)]);
     }
 
