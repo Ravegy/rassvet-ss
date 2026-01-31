@@ -8,18 +8,21 @@ if (isset($_SESSION['user_id'])) {
 }
 
 $error = '';
+$actionType = ''; 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $action = $_POST['action'];
-    $email = trim($_POST['email']);
-    $password = $_POST['password'];
+    $action = $_POST['action'] ?? '';
+    $email = trim($_POST['email'] ?? '');
+    $password = $_POST['password'] ?? '';
+    $actionType = $action;
 
     if ($action === 'register') {
-        $name = trim($_POST['name']);
+        $name = trim($_POST['name'] ?? '');
+        
         $stmt = $pdo->prepare("SELECT id FROM users WHERE email = ?");
         $stmt->execute([$email]);
         if ($stmt->fetch()) {
-            $error = "Этот Email уже занят!";
+            $error = "Email занят!";
         } else {
             $hash = password_hash($password, PASSWORD_DEFAULT);
             $stmt = $pdo->prepare("INSERT INTO users (email, password, name) VALUES (?, ?, ?)");
@@ -29,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 header('Location: profile.php');
                 exit;
             } else {
-                $error = "Ошибка регистрации.";
+                $error = "Ошибка регистрации";
             }
         }
     } elseif ($action === 'login') {
@@ -43,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header('Location: profile.php');
             exit;
         } else {
-            $error = "Неверный логин или пароль.";
+            $error = "Неверные данные";
         }
     }
 }
@@ -52,103 +55,157 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <title>Вход | РАССВЕТ-С</title>
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css">
+    
     <link rel="stylesheet" href="common.css?v=<?= time() ?>">
-    <style>
-        .auth-page { padding-top: 150px; padding-bottom: 100px; min-height: 80vh; }
-        .auth-container { max-width: 400px; margin: 0 auto; background: #181818; padding: 40px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
-        .auth-title { font-family: var(--font-head); font-size: 24px; color: #fff; text-align: center; margin-bottom: 30px; text-transform: uppercase; }
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; color: #888; font-size: 12px; margin-bottom: 5px; }
-        .form-input { width: 100%; background: #222; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 4px; font-size: 14px; }
-        .form-input:focus { border-color: var(--yellow); outline: none; }
-        .btn-auth { width: 100%; background: var(--yellow); color: #000; font-weight: 700; border: none; padding: 12px; cursor: pointer; border-radius: 4px; font-family: var(--font-head); text-transform: uppercase; margin-top: 10px; }
-        .btn-auth:hover { background: #fff; }
-        .auth-switch { text-align: center; margin-top: 20px; font-size: 13px; color: #666; cursor: pointer; }
-        .auth-switch span { color: var(--yellow); text-decoration: underline; }
-        .error-msg { background: rgba(255, 50, 50, 0.1); color: #ff3333; padding: 10px; border-radius: 4px; margin-bottom: 20px; text-align: center; font-size: 13px; }
-        .tg-auth-block { margin-top: 30px; border-top: 1px solid #333; padding-top: 20px; text-align: center; }
-        .tg-label { color: #888; font-size: 12px; margin-bottom: 10px; display: block; }
-    </style>
+    <link rel="stylesheet" href="pages/login/style.css?v=<?= time() ?>">
 </head>
 <body>
+
 <?php include 'includes/header.php'; ?>
 
-<main class="auth-page">
+<main class="auth-wrap">
     <div class="container">
-        <div class="auth-container">
-            <h1 class="auth-title" id="form-title">ВХОД</h1>
+        
+        <div class="page-header">
+            <h1 class="page-title">ЛИЧНЫЙ КАБИНЕТ</h1>
+            <div class="page-status"><span class="status-dot"></span> ДОСТУП В СИСТЕМУ</div>
+        </div>
 
-            <?php if ($error): ?>
-                <div class="error-msg"><?= $error ?></div>
-            <?php endif; ?>
+        <div class="row justify-content-center">
+            <div class="col-12 text-center align-self-center">
+                <div class="section text-center">
+                    
+                    <input class="checkbox" type="checkbox" id="reg-log" name="reg-log" 
+                        <?= ($actionType === 'register' && $error) ? 'checked' : '' ?> 
+                    />
+                    
+                    <label for="reg-log" class="toggle-btn"></label>
+                    
+                    <div class="card-3d-wrap mx-auto">
+                        <div class="card-3d-wrapper">
+                            
+                            <div class="card-front">
+                                <div class="center-wrap">
+                                    <div class="section text-center">
+                                        
+                                        <h4 class="mb-4 pb-3">ВХОД</h4>
+                                        
+                                        <?php if ($error && ($actionType === 'login' || $actionType === '')): ?>
+                                            <div class="error-msg"><?= $error ?></div>
+                                        <?php endif; ?>
 
-            <form method="POST" id="auth-form" class="static-form">
-                <input type="hidden" name="action" id="action-input" value="login">
-                
-                <div class="form-group" id="name-group" style="display:none;">
-                    <label>Ваше имя</label>
-                    <input type="text" name="name" class="form-input" placeholder="Иван">
+                                        <form action="login.php" method="POST" class="static-form">
+                                            <input type="hidden" name="action" value="login">
+                                            
+                                            <div class="form-group">
+                                                <input type="email" name="email" class="form-style" placeholder="Ваша почта" 
+                                                       required autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
+                                                <i class="input-icon uil uil-at"></i>
+                                            </div>  
+                                            <div class="form-group mt-2">
+                                                <input type="password" name="password" class="form-style" placeholder="Ваш пароль" 
+                                                       required autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
+                                                <i class="input-icon uil uil-lock-alt"></i>
+                                            </div>
+                                            
+                                            <?php 
+                                                $isLoginErr = ($error && $actionType === 'login');
+                                                $btnClass = $isLoginErr ? "btn-flip btn-error" : "btn-flip";
+                                                $btnText = $isLoginErr ? "ОШИБКА" : "ВОЙТИ";
+                                            ?>
+                                            <button type="submit" class="<?= $btnClass ?>" id="login-btn" data-original="ВОЙТИ"><?= $btnText ?></button>
+                                        </form>
+                                        
+                                        <a href="#" class="link">Забыли пароль?</a>
+
+                                        <div class="tg-custom-wrapper">
+                                            <div class="tg-visual-btn">
+                                                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.48-.94-2.4-1.54-1.06-.7-.37-1.09.23-1.72.16-.16 2.92-2.67 2.97-2.9.01-.03.01-.14-.05-.2-.06-.06-.16-.04-.23-.02-.1.02-1.66 1.06-4.69 3.11-.45.3-.85.45-1.21.44-.4-.01-1.16-.22-1.73-.41-.7-.23-1.26-.35-1.21-.73.03-.2.3-.4.82-.6 3.22-1.4 5.37-2.33 6.45-2.78 3.07-1.28 3.71-1.5 4.12-1.51.09 0 .29.02.42.12.11.09.14.21.15.29 0 .09.01.25 0 .28z"/></svg>
+                                                <span>Войти через Telegram</span>
+                                            </div>
+                                            <div class="tg-widget-overlay">
+                                                <script async src="https://telegram.org/js/telegram-widget.js?22" 
+                                                        data-telegram-login="rassvet_s_bot" 
+                                                        data-size="large" 
+                                                        data-radius="4" 
+                                                        data-auth-url="tg_auth.php" 
+                                                        data-request-access="write"></script>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-back">
+                                <div class="center-wrap">
+                                    <div class="section text-center">
+                                        
+                                        <h4 class="mb-4 pb-3">РЕГИСТРАЦИЯ</h4>
+                                        
+                                        <?php if ($error && $actionType === 'register'): ?>
+                                            <div class="error-msg"><?= $error ?></div>
+                                        <?php endif; ?>
+
+                                        <form action="login.php" method="POST" class="static-form">
+                                            <input type="hidden" name="action" value="register">
+
+                                            <div class="form-group">
+                                                <input type="text" name="name" class="form-style" placeholder="Ваше имя" 
+                                                       required autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
+                                                <i class="input-icon uil uil-user"></i>
+                                            </div>  
+                                            <div class="form-group mt-2">
+                                                <input type="email" name="email" class="form-style" placeholder="Ваша почта" 
+                                                       required autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
+                                                <i class="input-icon uil uil-at"></i>
+                                            </div>  
+                                            <div class="form-group mt-2">
+                                                <input type="password" name="password" class="form-style" placeholder="Придумайте пароль" 
+                                                       required autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
+                                                <i class="input-icon uil uil-lock-alt"></i>
+                                            </div>
+                                            
+                                            <?php 
+                                                $isRegErr = ($error && $actionType === 'register');
+                                                $btnClass = $isRegErr ? "btn-flip btn-error" : "btn-flip";
+                                                $btnText = $isRegErr ? "ОШИБКА" : "СОЗДАТЬ АККАУНТ";
+                                            ?>
+                                            <button type="submit" class="<?= $btnClass ?>" id="reg-btn" data-original="СОЗДАТЬ АККАУНТ"><?= $btnText ?></button>
+                                        </form>
+
+                                        <div class="tg-custom-wrapper">
+                                            <div class="tg-visual-btn">
+                                                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.48-.94-2.4-1.54-1.06-.7-.37-1.09.23-1.72.16-.16 2.92-2.67 2.97-2.9.01-.03.01-.14-.05-.2-.06-.06-.16-.04-.23-.02-.1.02-1.66 1.06-4.69 3.11-.45.3-.85.45-1.21.44-.4-.01-1.16-.22-1.73-.41-.7-.23-1.26-.35-1.21-.73.03-.2.3-.4.82-.6 3.22-1.4 5.37-2.33 6.45-2.78 3.07-1.28 3.71-1.5 4.12-1.51.09 0 .29.02.42.12.11.09.14.21.15.29 0 .09.01.25 0 .28z"/></svg>
+                                                <span>Войти через Telegram</span>
+                                            </div>
+                                            <div class="tg-widget-overlay">
+                                                <script async src="https://telegram.org/js/telegram-widget.js?22" 
+                                                        data-telegram-login="rassvet_s_bot" 
+                                                        data-size="large" 
+                                                        data-radius="4" 
+                                                        data-auth-url="tg_auth.php" 
+                                                        data-request-access="write"></script>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
-
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" name="email" class="form-input" placeholder="mail@example.com" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Пароль</label>
-                    <input type="password" name="password" class="form-input" placeholder="******" required>
-                </div>
-
-                <button type="submit" class="btn-auth" id="btn-submit">ВОЙТИ</button>
-            </form>
-
-            <div class="auth-switch" onclick="toggleAuth()">
-                <span id="switch-text">Нет аккаунта? Зарегистрироваться</span>
-            </div>
-
-            <div class="tg-auth-block">
-                <span class="tg-label">ИЛИ ЧЕРЕЗ TELEGRAM</span>
-                <script async src="https://telegram.org/js/telegram-widget.js?22" 
-                        data-telegram-login="rassvet_s_bot" 
-                        data-size="large" 
-                        data-radius="4" 
-                        data-auth-url="tg_auth.php" 
-                        data-request-access="write"></script>
             </div>
         </div>
     </div>
 </main>
 
-<script>
-    let isLogin = true;
-    function toggleAuth() {
-        isLogin = !isLogin;
-        const title = document.getElementById('form-title');
-        const action = document.getElementById('action-input');
-        const nameGroup = document.getElementById('name-group');
-        const btn = document.getElementById('btn-submit');
-        const switchText = document.getElementById('switch-text');
-        const nameInput = document.querySelector('input[name="name"]');
-
-        if (isLogin) {
-            title.innerText = 'ВХОД';
-            action.value = 'login';
-            nameGroup.style.display = 'none';
-            nameInput.required = false;
-            btn.innerText = 'ВОЙТИ';
-            switchText.innerText = 'Нет аккаунта? Зарегистрироваться';
-        } else {
-            title.innerText = 'РЕГИСТРАЦИЯ';
-            action.value = 'register';
-            nameGroup.style.display = 'block';
-            nameInput.required = true;
-            btn.innerText = 'СОЗДАТЬ АККАУНТ';
-            switchText.innerText = 'Есть аккаунт? Войти';
-        }
-    }
-</script>
+<script src="pages/login/script.js?v=<?= time() ?>"></script>
 
 <?php include 'includes/footer.php'; ?>
 </body>

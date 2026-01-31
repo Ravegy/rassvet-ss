@@ -149,3 +149,197 @@
     .industrial-box { height: 250px; }
     .categories__grid { grid-template-columns: 1fr; }
 }
+/* --- Стили для Bento-галереи внутри Hero --- */
+
+/* Контейнер для выравнивания в правой колонке */
+.hero__bento-wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: flex-end; /* Прижимаем вправо */
+    align-items: center; /* Центрируем по вертикали */
+}
+
+/* Сама сетка */
+.bento-container {
+    width: 100%;
+    max-width: 500px; 
+    /* Важно: задаем соотношение сторон, чтобы блок всегда был квадратным */
+    aspect-ratio: 1 / 1; 
+    display: grid;
+    gap: 10px;
+    /* По умолчанию 3 равные колонки */
+    grid-template-columns: 1fr 1fr 1fr;
+    transition: all 500ms ease-in-out;
+}
+
+/* === Логика "раздвигания" колонок === */
+.bento-container:has(.bento-col:nth-child(1):hover) { grid-template-columns: 3fr 1fr 1fr; }
+.bento-container:has(.bento-col:nth-child(2):hover) { grid-template-columns: 1fr 3fr 1fr; }
+.bento-container:has(.bento-col:nth-child(3):hover) { grid-template-columns: 1fr 1fr 3fr; }
+
+/* Колонки */
+.bento-col {
+    display: grid;
+    gap: 10px;
+    height: 100%; /* Заполняем высоту контейнера */
+    /* По умолчанию 3 равных ряда */
+    grid-template-rows: 1fr 1fr 1fr;
+    transition: all 500ms ease-in-out;
+}
+
+/* === Логика "раздвигания" рядов === */
+.bento-col:has(.bento-item:nth-child(1):hover) { grid-template-rows: 3fr 1fr 1fr; }
+.bento-col:has(.bento-item:nth-child(2):hover) { grid-template-rows: 1fr 3fr 1fr; }
+.bento-col:has(.bento-item:nth-child(3):hover) { grid-template-rows: 1fr 1fr 3fr; }
+
+/* Ячейка с картинкой */
+.bento-item {
+    position: relative; /* Важно для позиционирования картинки */
+    overflow: hidden;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    background: #222;
+    /* Исправление бага с "полосой": запрещаем блоку схлопываться */
+    min-height: 0; 
+    min-width: 0;
+}
+
+/* Сама картинка */
+.bento-item img {
+    /* АБСОЛЮТНОЕ ПОЗИЦИОНИРОВАНИЕ - РЕШАЕТ ПРОБЛЕМУ */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Картинка обрезается, но заполняет весь блок */
+    
+    transition: all 500ms ease-in-out;
+    filter: brightness(0.8) contrast(1.1) saturate(1); /* ЧБ по умолчанию */
+}
+
+/* Эффекты при наведении */
+.bento-col:hover .bento-item img {
+    /* Если навели на колонку - остальные темнеют */
+    filter: blur(2px) brightness(0.4) saturate(0);
+}
+
+.bento-col .bento-item:hover img {
+    /* Активная картинка - яркая и четкая */
+    filter: blur(0) brightness(1.1) contrast(1.1) saturate(1.1);
+    transform: scale(1.1); /* Легкий зум */
+}
+
+/* --- Адаптив для мобильных --- */
+@media (max-width: 992px) {
+    .hero__grid {
+        grid-template-columns: 1fr; /* Одна колонка */
+        gap: 30px;
+        text-align: center;
+    }
+    
+    /* === ИСПРАВЛЕНИЕ ПОРЯДКА === */
+    .hero__content {
+        order: 1; /* Текст и кнопки - СВЕРХУ */
+    }
+
+    .hero__bento-wrapper {
+        order: 2; /* Галерея - СНИЗУ */
+        justify-content: center;
+        margin-top: 20px;
+    }
+    /* =========================== */
+    
+    /* Настройки блока галереи */
+    .bento-container {
+        max-width: 340px; 
+        width: 100%;
+        aspect-ratio: 1 / 1;
+    }
+
+    /* Отключаем сложные эффекты наведения для телефона */
+    .bento-container:has(.bento-col:nth-child(1):hover),
+    .bento-container:has(.bento-col:nth-child(2):hover),
+    .bento-container:has(.bento-col:nth-child(3):hover) { 
+        grid-template-columns: 1fr 1fr 1fr; 
+    }
+
+    .bento-col:has(.bento-item:nth-child(1):hover),
+    .bento-col:has(.bento-item:nth-child(2):hover),
+    .bento-col:has(.bento-item:nth-child(3):hover) { 
+        grid-template-rows: 1fr 1fr 1fr; 
+    }
+
+    .bento-item img {
+        filter: none !important;
+        transform: none !important;
+    }
+    
+    .bento-col:hover .bento-item img {
+        filter: none !important;
+    }
+}
+/* ======================== */
+/* АНИМАЦИИ ПОЯВЛЕНИЯ */
+/* ======================== */
+
+/* 1. Появление слева (для текста) */
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-100px); /* Едет из-за левого края */
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* 2. Появление справа (для фото/галереи) */
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(100px); /* Едет из-за правого края */
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* 3. Появление снизу (для кнопок или мелких деталей) */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Классы, которые мы будем вешать в HTML */
+.anim-hidden {
+    opacity: 0; /* Скрываем элементы до начала анимации */
+}
+
+.animate-left {
+    animation: slideInLeft 1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+.animate-right {
+    animation: slideInRight 1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+.animate-up {
+    animation: fadeInUp 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+/* Задержки (чтобы элементы появлялись по очереди) */
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-500 { animation-delay: 0.5s; }

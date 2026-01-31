@@ -1,0 +1,181 @@
+/* Основная обертка */
+.auth-wrap {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 14px;
+    color: #ccc;
+    min-height: 100vh; 
+    padding-top: 140px; 
+    padding-bottom: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Утилиты */
+.section { position: relative; width: 100%; display: block; }
+.text-center { text-align: center; }
+.mb-4 { margin-bottom: 1.5rem; }
+.pb-3 { padding-bottom: 1rem; }
+.mt-2 { margin-top: 0.5rem; }
+.mt-3 { margin-top: 1rem; }
+.mt-4 { margin-top: 1.5rem; }
+
+/* Заголовки */
+h4 {
+    font-family: var(--font-head);
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 0;
+}
+
+/* Скрытый чекбокс */
+[type="checkbox"]:checked, [type="checkbox"]:not(:checked) { position: absolute; left: -9999px; }
+
+/* Тумблер */
+.toggle-btn {
+    position: relative;
+    display: block;
+    width: 60px; 
+    height: 16px; 
+    border-radius: 8px; 
+    margin: 0 auto 30px auto;
+    cursor: pointer;
+    background-color: var(--yellow); 
+    transition: 0.3s;
+    z-index: 100;
+}
+
+.toggle-btn:before {
+    position: absolute; display: block; width: 36px; height: 36px; border-radius: 50%;
+    color: var(--yellow); background-color: #fff;
+    font-family: 'unicons'; content: '\eb4f'; 
+    top: -10px; left: -10px; 
+    line-height: 36px; text-align: center; font-size: 24px; 
+    transition: all 0.5s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.checkbox:checked + .toggle-btn:before { 
+    transform: translateX(44px) rotate(-270deg); 
+}
+
+/* 3D Карточка (ПК версия - 480px) */
+.card-3d-wrap {
+    position: relative; 
+    width: 440px; 
+    max-width: 100%; 
+    height: 480px; 
+    -webkit-transform-style: preserve-3d; transform-style: preserve-3d; perspective: 800px; 
+}
+
+.card-3d-wrapper {
+    width: 100%; height: 100%; position: absolute; top: 0; left: 0;
+    -webkit-transform-style: preserve-3d; transform-style: preserve-3d; transition: all 600ms ease-out;
+}
+
+.card-front, .card-back {
+    width: 100%; height: 100%;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    position: absolute; border-radius: 6px; left: 0; top: 0;
+    -webkit-transform-style: preserve-3d; transform-style: preserve-3d;
+    backface-visibility: hidden;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+}
+
+.card-back { transform: rotateY(180deg); }
+.checkbox:checked ~ .card-3d-wrap .card-3d-wrapper { transform: rotateY(180deg); }
+
+.center-wrap { 
+    position: absolute; width: 100%; padding: 0 35px; top: 50%; left: 0; 
+    transform: translate3d(0, -50%, 35px) perspective(100px); 
+    z-index: 20; display: block; 
+}
+
+/* Поля */
+.form-group { position: relative; display: block; margin: 0; padding: 0; }
+.form-style {
+    padding: 13px 20px; padding-left: 55px; height: 48px; width: 100%; 
+    font-family: var(--font-body); font-weight: 500; border-radius: 4px; font-size: 14px; line-height: 22px; letter-spacing: 0.5px; outline: none;
+    color: #fff; background-color: #111;
+    border: 1px solid #333; transition: all 200ms linear;
+}
+.form-style:focus { border-color: var(--yellow); box-shadow: 0 0 10px rgba(255, 51, 51, 0.2); }
+.form-style::placeholder { color: #555; }
+
+.input-icon {
+    position: absolute; top: 0; left: 18px; height: 48px; font-size: 24px; line-height: 48px; text-align: left;
+    color: var(--yellow);
+    transition: all 200ms linear;
+}
+
+/* Кнопка */
+.btn-flip {
+    border-radius: 4px; height: 44px; font-size: 13px; font-weight: 800; text-transform: uppercase; transition: all 200ms linear; padding: 0 30px; letter-spacing: 1px; display: inline-flex; align-items: center; justify-content: center; border: none; cursor: pointer; width: 100%; margin-top: 15px;
+    font-family: var(--font-head);
+    background-color: var(--yellow); color: #fff;
+    box-shadow: 0 8px 24px 0 rgba(255, 51, 51, 0.2);
+}
+.btn-flip:hover {
+    background-color: #fff; color: #000;
+    box-shadow: 0 8px 24px 0 rgba(255, 255, 255, 0.2);
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.btn-error {
+    animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+    background-color: #ff3333 !important;
+    color: #fff !important;
+    box-shadow: 0 0 15px rgba(255, 51, 51, 0.5) !important;
+}
+
+.link { color: #888; text-decoration: none; transition: 0.3s; font-size: 13px; font-weight: 500; display: inline-block; margin-top: 15px; }
+.link:hover { color: var(--yellow); }
+
+.error-msg {
+    color: #ff3333; background: rgba(255, 51, 51, 0.1); border: 1px solid rgba(255, 51, 51, 0.3);
+    padding: 10px; border-radius: 4px; margin-bottom: 15px; font-size: 12px; text-align: center;
+}
+
+.tg-custom-wrapper { position: relative; width: 100%; height: 44px; margin-top: 15px; cursor: pointer; }
+.tg-visual-btn {
+    width: 100%; height: 100%; background: #2AABEE; border-radius: 4px; display: flex; align-items: center; justify-content: center; gap: 10px;
+    color: #fff; font-weight: 700; font-family: var(--font-head); font-size: 12px; text-transform: uppercase; transition: 0.3s;
+    box-shadow: 0 4px 15px rgba(42, 171, 238, 0.2);
+}
+.tg-visual-btn:hover { background: #229ED9; box-shadow: 0 4px 20px rgba(42, 171, 238, 0.4); }
+.tg-visual-btn svg { width: 24px; height: 24px; fill: #fff; }
+.tg-widget-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.01; z-index: 10; overflow: hidden; display: flex; justify-content: center; align-items: center; }
+.tg-widget-overlay iframe { transform: scale(2); }
+
+/* --- АДАПТИВНОСТЬ --- */
+@media (max-width: 992px) {
+    .auth-wrap { padding-top: 100px; }
+}
+
+@media (max-width: 576px) {
+    .card-3d-wrap {
+        width: 100%;
+        max-width: 100%; 
+        height: 460px; /* Уменьшили до компактного размера под контент */
+        margin: 0;
+    }
+    
+    .center-wrap {
+        padding: 0 20px;
+    }
+
+    /* Уменьшаем отступы заголовка для компактности */
+    h4 {
+        margin-bottom: 15px !important;
+        padding-bottom: 5px !important;
+    }
+}

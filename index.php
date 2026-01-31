@@ -16,37 +16,49 @@
     <section class="hero">
         <div class="container">
             <div class="hero__grid">
+                
                 <div class="hero__content">
-                    <div class="status-bar">
-                        <div class="status-dot"></div>
-                        ОФИЦИАЛЬНЫЙ ПОСТАВЩИК
+                    
+                    <div class="anim-hidden animate-left">
+                        <div class="status-bar">
+                            <div class="status-dot"></div>
+                            ОФИЦИАЛЬНЫЙ ПОСТАВЩИК С 2015 ГОДА
+                        </div>
+                        <h1 class="hero__title">ЗАПЧАСТИ ДЛЯ <br><span class="text-yellow">ЛЕСНОЙ ТЕХНИКИ</span></h1>
                     </div>
-                    <h1 class="hero__title">ЗАПЧАСТИ ДЛЯ <br><span class="text-yellow">ЛЕСНОЙ ТЕХНИКИ</span></h1>
-                    <p class="hero__desc">
+                    
+                    <p class="hero__desc anim-hidden animate-left delay-200">
                         Прямые поставки комплектующих для харвестеров и форвардеров Komatsu Forest, Ponsse, John Deere. Собственный склад в Санкт-Петербурге.
                     </p>
-                    <div class="hero__buttons">
+                    
+                    <div class="hero__buttons anim-hidden animate-up delay-300">
                         <a href="catalog.php" class="btn btn-main">ПЕРЕЙТИ В КАТАЛОГ</a>
                         <a href="service.php" class="btn btn-sec">СЕРВИС И РЕМОНТ</a>
                     </div>
                 </div>
                 
-                <div class="hero__image-block">
-                    <div class="industrial-box">
-                        <div class="slide active" style="background-image: url('img/slide1.jpg');"></div>
-                        <div class="slide" style="background-image: url('img/slide2.jpg');"></div>
-                        <div class="slide" style="background-image: url('img/slide3.jpg');"></div>
+                <div class="hero__bento-wrapper anim-hidden animate-right delay-100">
+                    <div class="bento-container">
                         
-                        <div class="slider-overlay"></div>
-                        <div class="box-decor"></div>
+                        <div class="bento-col">
+                        <div class="bento-item"><img src="https://i.pinimg.com/1200x/65/f2/52/65f252158bc27926c8673cc4129842d4.jpg" alt=""></div>
+                        <div class="bento-item"><img src="https://i.pinimg.com/1200x/02/c6/2e/02c62e10d3d24f2c13dce0a5728ffed3.jpg" alt=""></div>
+                        <div class="bento-item"><img src="https://www.komatsuforest.com.au/-/media/komatsu-forest/images/product-images/wheeled-harvesters/komatsu-951xc/komatsu-951xc-2.jpg?thn=0&w=1200&hash=4BA388AE128D50C1E7B9EAF49E9AFF93E26D11C2" alt=""></div>
+                    </div>
+                    <div class="bento-col">
+                        <div class="bento-item"><img src="https://www.komatsuforest.com.au/-/media/komatsu-forest/images/product-images/komatsu-grapples/komatsu-grapples-new-design.jpg?thn=0&w=1200&hash=C8D87E4925C06BDDD84B76EAE2CD4D5ED5BF9D95" alt=""></div>
+                        <div class="bento-item"><img src="https://www.komatsuforest.com.au/-/media/komatsu-forest/images/product-images/wheeled-harvesters/komatsu-901xc-2020/ko901xc_2019_8828.jpg?thn=0&w=1200&hash=ADCF887C020FAC211AE9204B144C60EEEB0D3C35" alt=""></div>
+                        <div class="bento-item"><img src="https://www.komatsuforest.com.au/-/media/komatsu-forest/images/product-images/forwarders/komatsu-895-2025/ko895_mg_5233.jpg?thn=0&w=1200&hash=F4C9478859B52B7DB7CD1AB4D37D3A468AE80C8A" alt=""></div>
+                    </div>
+                    <div class="bento-col">
+                        <div class="bento-item"><img src="https://www.komatsuforest.com.au/-/media/komatsu-forest/images/product-images/harvester-heads/komatsu-c164/komatsu-c164-top.jpg?thn=0&w=1200&hash=E299EEC771C1C47674CD52CE38D7514E65C55835" alt=""></div>
+                        <div class="bento-item"><img src="https://i.pinimg.com/1200x/31/5e/d1/315ed1626d7b2d21243834adf5cc6425.jpg" alt=""></div>
+                        <div class="bento-item"><img src="https://www.komatsuforest.com.au/-/media/komatsu-forest/images/product-images/options-forwarders/comfort-ride-2021.jpg?thn=0&w=1200&hash=213C1F939B991268FAA4EF54BC95926E2703C07B" alt=""></div>
+                    </div>
 
-                        <div class="slide-card-container active">
-                            <span class="slide-card-category">В НАЛИЧИИ</span>
-                            <h3 class="slide-card-title">ГИДРАВЛИКА</h3>
-                            <div class="slide-card-line"></div>
-                        </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>
