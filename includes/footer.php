@@ -94,7 +94,7 @@
                 <span>ИТОГО:</span>
                 <span class="cart-total-sum" id="cart-total-sum">По запросу</span>
             </div>
-            <a href="cart.php" class="btn btn-main">ЗАПРОСИТЬ</a>
+            <a href="checkout.php" class="btn btn-main">ЗАПРОСИТЬ</a>
         </div>
     </div>
 </div>
