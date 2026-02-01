@@ -116,19 +116,50 @@ try {
         }
 
         $pdo->prepare("DELETE FROM cart WHERE user_id = ?")->execute([$user_id]);
-        $pdo->prepare("UPDATE users SET phone = ?, address = ?, city = ? WHERE id = ? AND (phone IS NULL OR phone = '')")->execute([$phone, $address, $address, $user_id]);
+        
+        // Обновляем данные пользователя при заказе (если они пустые)
+        $updates = [];
+        $u_params = [];
+        
+        // Логика умного обновления при заказе
+        if($phone) { $updates[] = "phone = COALESCE(NULLIF(phone, ''), ?)"; $u_params[] = $phone; }
+        if($address) { $updates[] = "address = COALESCE(NULLIF(address, ''), ?)"; $u_params[] = $address; }
+        if($company) { $updates[] = "company_name = COALESCE(NULLIF(company_name, ''), ?)"; $u_params[] = $company; }
+        if($inn) { $updates[] = "inn = COALESCE(NULLIF(inn, ''), ?)"; $u_params[] = $inn; }
+        
+        if (!empty($updates)) {
+            $u_sql = "UPDATE users SET " . implode(', ', $updates) . " WHERE id = ?";
+            $u_params[] = $user_id;
+            $pdo->prepare($u_sql)->execute($u_params);
+        }
 
         echo json_encode(['status' => 'success', 'order_id' => $orderId]);
 
+    // [ОБНОВЛЕНИЕ] Умное сохранение профиля
     } elseif ($action == 'update_profile') {
         if ($user_id == 0) exit;
-        $name = $_POST['name'];
-        $email = $_POST['email'];
-        $phone = $_POST['phone'];
-        $address = $_POST['address'];
-        $sql = "UPDATE users SET name = ?, email = ?, phone = ?, address = ? WHERE id = ?";
-        $pdo->prepare($sql)->execute([$name, $email, $phone, $address, $user_id]);
-        echo json_encode(['status' => 'success']);
+
+        $fields = [];
+        $params = [];
+
+        // Проверяем каждое поле: если оно пришло, добавляем в запрос
+        if (isset($_POST['name'])) { $fields[] = 'name = ?'; $params[] = $_POST['name']; }
+        if (isset($_POST['email'])) { $fields[] = 'email = ?'; $params[] = $_POST['email']; }
+        if (isset($_POST['phone'])) { $fields[] = 'phone = ?'; $params[] = $_POST['phone']; }
+        if (isset($_POST['address'])) { $fields[] = 'address = ?'; $params[] = $_POST['address']; }
+        
+        // Новые поля организации
+        if (isset($_POST['company_name'])) { $fields[] = 'company_name = ?'; $params[] = $_POST['company_name']; }
+        if (isset($_POST['inn'])) { $fields[] = 'inn = ?'; $params[] = $_POST['inn']; }
+
+        if (!empty($fields)) {
+            $sql = "UPDATE users SET " . implode(', ', $fields) . " WHERE id = ?";
+            $params[] = $user_id;
+            $pdo->prepare($sql)->execute($params);
+            echo json_encode(['status' => 'success']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'No data']);
+        }
 
     } elseif ($action == 'update_order_status') {
         if (!isAdmin($pdo, $user_id)) {

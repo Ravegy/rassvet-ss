@@ -36,34 +36,20 @@ if (!isset($_SESSION['user_id'])) {
 
                         <div class="auth-benefits">
                             <div class="benefit-item">
-                                <span class="b-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                                        <polyline points="20 6 9 17 4 12"></polyline>
-                                    </svg>
-                                </span>
+                                <span class="b-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
                                 <span>Автоматически заполнять ваши реквизиты</span>
                             </div>
                             <div class="benefit-item">
-                                <span class="b-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                                        <polyline points="20 6 9 17 4 12"></polyline>
-                                    </svg>
-                                </span>
+                                <span class="b-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
                                 <span>Сохранять историю ваших заказов</span>
                             </div>
                             <div class="benefit-item">
-                                <span class="b-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                                        <polyline points="20 6 9 17 4 12"></polyline>
-                                    </svg>
-                                </span>
+                                <span class="b-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
                                 <span>Предоставлять персональные скидки</span>
                             </div>
                         </div>
 
-                        <a href="login.php" class="btn btn-main btn-auth-go">
-                            ВОЙТИ ИЛИ СОЗДАТЬ АККАУНТ
-                        </a>
+                        <a href="login.php" class="btn btn-main btn-auth-go">ВОЙТИ ИЛИ СОЗДАТЬ АККАУНТ</a>
                     </div>
                 </div>
             </div>
@@ -82,9 +68,16 @@ $stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
 $stmt->execute([$user_id]);
 $user = $stmt->fetch();
 
-$prefill_name = htmlspecialchars($user['name'] ?? '');
-$prefill_email = htmlspecialchars($user['email'] ?? '');
-$prefill_city = htmlspecialchars($user['city'] ?? ''); 
+// [ИЗМЕНЕНИЕ] Подгружаем ВСЕ данные из профиля
+$prefill_name    = htmlspecialchars($user['name'] ?? '');
+$prefill_email   = htmlspecialchars($user['email'] ?? '');
+$prefill_phone   = htmlspecialchars($user['phone'] ?? '');
+$prefill_address = htmlspecialchars($user['address'] ?? $user['city'] ?? '');
+$prefill_company = htmlspecialchars($user['company_name'] ?? '');
+$prefill_inn     = htmlspecialchars($user['inn'] ?? '');
+
+// Если заполнены данные юр. лица, сразу включаем переключатель "Юр. лицо"
+$is_yur = (!empty($prefill_company) || !empty($prefill_inn));
 
 $sql = "SELECT c.qty, c.part_number, 
         (SELECT name FROM parts WHERE part_number = c.part_number LIMIT 1) as name 
@@ -108,6 +101,9 @@ if (empty($cartItems)) {
     
     <link rel="stylesheet" href="common.css?v=<?= time() ?>">
     <link rel="stylesheet" href="pages/checkout/style.css?v=<?= time() ?>">
+    <style>
+        .legal-fields { display: <?= $is_yur ? 'block' : 'none' ?>; }
+    </style>
 </head>
 <body>
 
@@ -128,10 +124,10 @@ if (empty($cartItems)) {
                 <form id="checkoutForm" class="static-form">
                     
                     <div class="entity-switch">
-                        <input type="radio" name="entity_type" id="type-fiz" value="fiz" class="switch-radio" checked>
+                        <input type="radio" name="entity_type" id="type-fiz" value="fiz" class="switch-radio" <?= !$is_yur ? 'checked' : '' ?>>
                         <label for="type-fiz" class="switch-label">ФИЗИЧЕСКОЕ ЛИЦО</label>
                         
-                        <input type="radio" name="entity_type" id="type-yur" value="yur" class="switch-radio">
+                        <input type="radio" name="entity_type" id="type-yur" value="yur" class="switch-radio" <?= $is_yur ? 'checked' : '' ?>>
                         <label for="type-yur" class="switch-label">ЮРИДИЧЕСКОЕ ЛИЦО</label>
                     </div>
 
@@ -143,17 +139,17 @@ if (empty($cartItems)) {
                     <div id="legal-block" class="legal-fields">
                         <div class="form-group">
                             <label class="input-label">Название компании</label>
-                            <input type="text" name="company_name" class="c-input" placeholder="Например: ООО «ЛесТранс»">
+                            <input type="text" name="company_name" class="c-input" placeholder="Например: ООО «ЛесТранс»" value="<?= $prefill_company ?>">
                         </div>
                         <div class="form-group">
                             <label class="input-label">ИНН</label>
-                            <input type="text" name="inn" class="c-input" placeholder="10 или 12 цифр">
+                            <input type="text" name="inn" class="c-input" placeholder="10 или 12 цифр" value="<?= $prefill_inn ?>">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="input-label">Телефон</label>
-                        <input type="tel" name="phone" class="c-input" placeholder="+7 (___) ___-__-__" required>
+                        <input type="tel" name="phone" class="c-input" placeholder="+7 (___) ___-__-__" required value="<?= $prefill_phone ?>">
                     </div>
                     
                     <div class="form-group">
@@ -163,7 +159,7 @@ if (empty($cartItems)) {
 
                     <div class="form-group">
                         <label class="input-label">Адрес доставки</label>
-                        <input type="text" name="address" class="c-input" placeholder="Город, Улица, Дом..." value="<?= $prefill_city ?>">
+                        <input type="text" name="address" class="c-input" placeholder="Город, Улица, Дом..." value="<?= $prefill_address ?>">
                     </div>
 
                     <div class="form-group">

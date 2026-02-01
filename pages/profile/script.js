@@ -5,14 +5,10 @@ function toggleOrder(element) {
     element.classList.toggle('active');
 }
 
-// [НОВОЕ] Смена статуса (для Админа)
+// Смена статуса (для Админа)
 async function changeStatus(selectElement, orderId) {
     const newStatus = selectElement.value;
-    
-    // Меняем цвет селекта сразу для красоты
     selectElement.className = 'status-select st-' + newStatus;
-
-    // Отключаем на время запроса
     selectElement.disabled = true;
 
     try {
@@ -25,7 +21,6 @@ async function changeStatus(selectElement, orderId) {
         let result = await response.json();
 
         if (result.status === 'success') {
-            // Успех, просто включаем обратно
             selectElement.disabled = false;
         } else {
             alert('Ошибка обновления: ' + result.message);
@@ -38,7 +33,6 @@ async function changeStatus(selectElement, orderId) {
     }
 }
 
-// Стандартные скрипты
 document.addEventListener('DOMContentLoaded', () => {
     // Маска телефона
     const phoneInput = document.querySelector('input[name="phone"]');
@@ -53,32 +47,52 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Сохранение профиля
-    const form = document.getElementById('profileForm');
-    if(form) {
+    // [ОБНОВЛЕНИЕ] Обработка ВСЕХ форм профиля (и Данные, и Организация)
+    const forms = document.querySelectorAll('.profile-form');
+    
+    forms.forEach(form => {
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const btn = form.querySelector('.btn-save');
+            
+            const btn = form.querySelector('button[type="submit"]');
+            if (!btn) return;
+
             const originalText = btn.innerText;
             btn.innerText = 'СОХРАНЕНИЕ...';
             btn.disabled = true;
+            btn.style.opacity = '0.7';
+
             const fd = new FormData(form);
+            
             try {
                 let response = await fetch('api_actions.php', { method: 'POST', body: fd });
                 let result = await response.json();
+                
                 if(result.status === 'success') {
                     btn.innerText = 'СОХРАНЕНО!';
-                    btn.style.background = '#4CAF50';
-                    btn.style.color = '#fff';
+                    // Успешный стиль (желтый или зеленый)
+                    btn.style.borderColor = '#4CAF50';
+                    btn.style.color = '#4CAF50';
+                    
                     setTimeout(() => {
                         btn.innerText = originalText;
-                        btn.style.background = ''; btn.style.color = ''; btn.disabled = false;
+                        btn.style.borderColor = ''; 
+                        btn.style.color = '';
+                        btn.style.opacity = '';
+                        btn.disabled = false;
                     }, 2000);
                 } else {
                     alert('Ошибка: ' + result.message);
-                    btn.innerText = originalText; btn.disabled = false;
+                    btn.innerText = originalText; 
+                    btn.disabled = false;
+                    btn.style.opacity = '';
                 }
-            } catch (err) { console.error(err); btn.innerText = originalText; btn.disabled = false; }
+            } catch (err) { 
+                console.error(err); 
+                btn.innerText = originalText; 
+                btn.disabled = false;
+                btn.style.opacity = '';
+            }
         });
-    }
+    });
 });

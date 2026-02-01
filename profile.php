@@ -58,7 +58,7 @@ $statuses = [
             
             <div class="tech-card profile-info">
                 <span class="card-label">МОИ ДАННЫЕ</span>
-                <form id="profileForm" class="static-form">
+                <form class="static-form profile-form">
                     <input type="hidden" name="action" value="update_profile">
                     <div class="form-group">
                         <label class="input-label">Имя</label>
@@ -76,31 +76,45 @@ $statuses = [
                         <label class="input-label">Адрес доставки</label>
                         <input type="text" name="address" class="c-input" value="<?= htmlspecialchars($user['address'] ?? '') ?>" placeholder="Город, улица...">
                     </div>
-                    <button type="submit" class="btn btn-main btn-save">СОХРАНИТЬ ИЗМЕНЕНИЯ</button>
+                    
+                    <button type="submit" class="btn-save-custom">СОХРАНИТЬ ИЗМЕНЕНИЯ</button>
+                    <a href="logout.php" class="btn-logout">ВЫЙТИ ИЗ АККАУНТА</a>
+                </form>
+            </div>
+
+            <div class="tech-card profile-org">
+                <span class="card-label">РЕКВИЗИТЫ ОРГАНИЗАЦИИ</span>
+                <form class="static-form profile-form">
+                    <input type="hidden" name="action" value="update_profile">
+                    <div class="form-group">
+                        <label class="input-label">Название компании</label>
+                        <input type="text" name="company_name" class="c-input" value="<?= htmlspecialchars($user['company_name'] ?? '') ?>" placeholder='ООО "Пример"'>
+                    </div>
+                    <div class="form-group">
+                        <label class="input-label">ИНН</label>
+                        <input type="text" name="inn" class="c-input" value="<?= htmlspecialchars($user['inn'] ?? '') ?>" placeholder="Введите ИНН">
+                    </div>
+                    <button type="submit" class="btn-save-custom">СОХРАНИТЬ РЕКВИЗИТЫ</button>
                 </form>
             </div>
 
             <div class="tech-card profile-tg">
-                <span class="card-label">ПРИВЯЗКА TELEGRAM</span>
+                <span class="card-label">TELEGRAM</span>
                 <div class="tg-status">
                     <?php if (!empty($user['telegram_id'])): ?>
                         <div class="tg-connected">
-                            <div class="tg-icon-ok">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            </div>
+                            <div class="tg-icon-ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
                             <div>
-                                <div class="tg-title">АККАУНТ ПРИВЯЗАН</div>
-                                <div class="tg-sub">ID: <?= $user['telegram_id'] ?></div>
+                                <div class="tg-title">ПОДКЛЮЧЕНО</div>
                                 <?php if($user['telegram_username']): ?><div class="tg-user">@<?= htmlspecialchars($user['telegram_username']) ?></div><?php endif; ?>
                             </div>
                         </div>
                     <?php else: ?>
                         <div class="tg-disconnected">
-                            <p>Привяжите Telegram, чтобы входить без пароля и получать уведомления о статусе заказов.</p>
                             <div class="tg-widget-wrap">
                                 <script async src="https://telegram.org/js/telegram-widget.js?22" 
                                         data-telegram-login="rassvet_s_bot" 
-                                        data-size="large" 
+                                        data-size="medium" 
                                         data-radius="4" 
                                         data-auth-url="tg_auth.php" 
                                         data-request-access="write"></script>
@@ -144,7 +158,6 @@ $statuses = [
                                                 <?= $statuses[$ord['status']] ?? 'НЕИЗВЕСТНО' ?>
                                             </span>
                                         <?php endif; ?>
-                                        
                                         <span class="ord-arrow" onclick="this.closest('.order-row').click()">
                                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
                                         </span>
