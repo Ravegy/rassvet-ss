@@ -2,33 +2,36 @@
 session_start();
 require_once 'includes/db.php';
 
-// Если не авторизован - на выход
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit;
 }
 
-// ОБРАБОТКА СОХРАНЕНИЯ ГОРОДА
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['city'])) {
-    $city = trim($_POST['city']);
-    $stmt = $pdo->prepare("UPDATE users SET city = ? WHERE id = ?");
-    $stmt->execute([$city, $_SESSION['user_id']]);
-    
-    // Перезагружаем страницу, чтобы обновить данные
-    header('Location: profile.php');
-    exit;
-}
-
+$user_id = $_SESSION['user_id'];
 $stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
-$stmt->execute([$_SESSION['user_id']]);
+$stmt->execute([$user_id]);
 $user = $stmt->fetch();
+$is_admin = ($user['is_admin'] == 1);
 
-// Выход
-if (isset($_GET['logout'])) {
-    session_destroy();
-    header('Location: index.php');
-    exit;
+if ($is_admin) {
+    $sql = "SELECT o.*, u.name as reg_name, u.email as reg_email FROM orders o LEFT JOIN users u ON o.user_id = u.id ORDER BY o.created_at DESC";
+    $stmtOrders = $pdo->prepare($sql);
+    $stmtOrders->execute();
+} else {
+    $stmtOrders = $pdo->prepare("SELECT * FROM orders WHERE user_id = ? ORDER BY created_at DESC");
+    $stmtOrders->execute([$user_id]);
 }
+$orders = $stmtOrders->fetchAll();
+
+$stmtItems = $pdo->prepare("SELECT * FROM order_items WHERE order_id = ?");
+foreach ($orders as $k => $ord) {
+    $stmtItems->execute([$ord['id']]);
+    $orders[$k]['items'] = $stmtItems->fetchAll();
+}
+
+$statuses = [
+    'new' => 'В ОБРАБОТКЕ', 'work' => 'В РАБОТЕ', 'shipped' => 'ОТГРУЖЕН', 'done' => 'ВЫПОЛНЕН', 'cancel' => 'ОТМЕНЕН'
+];
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -36,121 +39,154 @@ if (isset($_GET['logout'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Личный кабинет | РАССВЕТ-С</title>
-    
     <link rel="stylesheet" href="common.css?v=<?= time() ?>">
     <link rel="stylesheet" href="pages/profile/style.css?v=<?= time() ?>">
 </head>
 <body>
+
 <?php include 'includes/header.php'; ?>
 
 <main class="profile-page">
     <div class="container">
+        
         <div class="page-header">
-            <h1 class="page-title">ЛИЧНЫЙ КАБИНЕТ</h1>
-            <div class="page-status"><span class="status-dot"></span> ОНЛАЙН</div>
+            <h1 class="page-title">ЛИЧНЫЙ КАБИНЕТ <?= $is_admin ? '<span style="color:#ff3333; font-size:0.6em; vertical-align:middle;">(ADMIN)</span>' : '' ?></h1>
+            <div class="page-status"><span class="status-dot"></span> УПРАВЛЕНИЕ АККАУНТОМ</div>
         </div>
-    </div>
 
-    <div class="container container-sm">
-        <div class="profile-card fade-up">
-            <div class="profile-avatar">
-                <?= mb_substr($user['name'], 0, 1) ?>
-            </div>
+        <div class="profile-grid">
             
-            <div class="profile-info">
-                <div class="profile-name"><?= htmlspecialchars($user['name']) ?></div>
-                
-                <div class="data-group">
-                    <span class="data-label">Электронная почта</span>
-                    <div class="data-value">
-                        <?= $user['email'] ? htmlspecialchars($user['email']) : '<span style="color:#666">Не указана (вход через Telegram)</span>' ?>
+            <div class="tech-card profile-info">
+                <span class="card-label">МОИ ДАННЫЕ</span>
+                <form id="profileForm" class="static-form">
+                    <input type="hidden" name="action" value="update_profile">
+                    <div class="form-group">
+                        <label class="input-label">Имя</label>
+                        <input type="text" name="name" class="c-input" value="<?= htmlspecialchars($user['name']) ?>">
                     </div>
-                </div>
-
-                <div class="data-group">
-                    <span class="data-label">Ваш Город (Для доставки)</span>
-                    <form method="POST" class="city-form static-form" id="cityForm">
-                        <div class="input-with-btn">
-                            <input type="text" name="city" id="userCity" 
-                                   class="profile-input" 
-                                   placeholder="Определяем..." 
-                                   value="<?= htmlspecialchars($user['city']) ?>" 
-                                   autocomplete="off">
-                            <button type="submit" class="btn-save-mini" title="Сохранить">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-                            </button>
-                        </div>
-                    </form>
-                </div>
-                
-                <div class="data-group">
-                    <span class="data-label">Привязка Telegram</span>
-                    <div>
-                        <?php if ($user['telegram_id']): ?>
-                            <div class="tg-status tg-linked">
-                                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-                                Подключен
-                            </div>
-                            <?php if($user['telegram_username']): ?>
-                                <div style="font-size:12px; color:#666; margin-top:4px;">@<?= htmlspecialchars($user['telegram_username']) ?></div>
-                            <?php endif; ?>
-                        <?php else: ?>
-                            <div class="tg-status tg-unlinked">Не подключен</div>
-                        <?php endif; ?>
+                    <div class="form-group">
+                        <label class="input-label">Телефон</label>
+                        <input type="tel" name="phone" class="c-input" value="<?= htmlspecialchars($user['phone'] ?? '') ?>" placeholder="+7...">
                     </div>
-                </div>
-
-                <?php if (!$user['telegram_id']): ?>
-                    <div class="tg-connect-box">
-                        <span class="tg-hint">Привяжите Telegram, чтобы входить на сайт в один клик без пароля:</span>
-                        
-                        <script async src="https://telegram.org/js/telegram-widget.js?22" 
-                                data-telegram-login="rassvet_s_bot" 
-                                data-size="medium" 
-                                data-radius="4" 
-                                data-auth-url="tg_auth.php" 
-                                data-request-access="write"></script>
+                    <div class="form-group">
+                        <label class="input-label">Email</label>
+                        <input type="email" name="email" class="c-input" value="<?= htmlspecialchars($user['email']) ?>">
                     </div>
-                <?php endif; ?>
-
-                <a href="profile.php?logout=1" class="btn-logout">ВЫЙТИ ИЗ АККАУНТА</a>
+                    <div class="form-group">
+                        <label class="input-label">Адрес доставки</label>
+                        <input type="text" name="address" class="c-input" value="<?= htmlspecialchars($user['address'] ?? '') ?>" placeholder="Город, улица...">
+                    </div>
+                    <button type="submit" class="btn btn-main btn-save">СОХРАНИТЬ ИЗМЕНЕНИЯ</button>
+                </form>
             </div>
+
+            <div class="tech-card profile-tg">
+                <span class="card-label">ПРИВЯЗКА TELEGRAM</span>
+                <div class="tg-status">
+                    <?php if (!empty($user['telegram_id'])): ?>
+                        <div class="tg-connected">
+                            <div class="tg-icon-ok">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            </div>
+                            <div>
+                                <div class="tg-title">АККАУНТ ПРИВЯЗАН</div>
+                                <div class="tg-sub">ID: <?= $user['telegram_id'] ?></div>
+                                <?php if($user['telegram_username']): ?><div class="tg-user">@<?= htmlspecialchars($user['telegram_username']) ?></div><?php endif; ?>
+                            </div>
+                        </div>
+                    <?php else: ?>
+                        <div class="tg-disconnected">
+                            <p>Привяжите Telegram, чтобы входить без пароля и получать уведомления о статусе заказов.</p>
+                            <div class="tg-widget-wrap">
+                                <script async src="https://telegram.org/js/telegram-widget.js?22" 
+                                        data-telegram-login="rassvet_s_bot" 
+                                        data-size="large" 
+                                        data-radius="4" 
+                                        data-auth-url="tg_auth.php" 
+                                        data-request-access="write"></script>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+
+            <div class="tech-card profile-history">
+                <span class="card-label"><?= $is_admin ? 'ВСЕ ЗАКАЗЫ ПОЛЬЗОВАТЕЛЕЙ' : 'ИСТОРИЯ ЗАКАЗОВ' ?></span>
+                
+                <div class="orders-list">
+                    <?php if (count($orders) > 0): ?>
+                        <?php foreach ($orders as $ord): ?>
+                            <div class="order-row <?= $is_admin ? 'admin-row' : '' ?>" onclick="toggleOrder(this)">
+                                
+                                <div class="ord-header">
+                                    <div class="ord-left">
+                                        <div class="ord-top-line">
+                                            <span class="ord-id">#<?= $ord['id'] ?></span>
+                                            <span class="ord-date"><?= date('d.m.y H:i', strtotime($ord['created_at'])) ?></span>
+                                        </div>
+                                        <?php if($is_admin): ?>
+                                            <div class="ord-client">
+                                                👤 <?= htmlspecialchars($ord['customer_name'] ?: $ord['reg_name']) ?> <br>
+                                                📞 <?= htmlspecialchars($ord['customer_phone']) ?>
+                                            </div>
+                                        <?php endif; ?>
+                                    </div>
+
+                                    <div class="ord-right" onclick="event.stopPropagation()">
+                                        <?php if ($is_admin): ?>
+                                            <select class="status-select st-<?= $ord['status'] ?>" onchange="changeStatus(this, <?= $ord['id'] ?>)">
+                                                <?php foreach($statuses as $key => $label): ?>
+                                                    <option value="<?= $key ?>" <?= $ord['status'] == $key ? 'selected' : '' ?>><?= $label ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        <?php else: ?>
+                                            <span class="ord-status st-<?= $ord['status'] ?>">
+                                                <?= $statuses[$ord['status']] ?? 'НЕИЗВЕСТНО' ?>
+                                            </span>
+                                        <?php endif; ?>
+                                        
+                                        <span class="ord-arrow" onclick="this.closest('.order-row').click()">
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                        </span>
+                                    </div>
+                                </div>
+                                
+                                <div class="ord-details">
+                                    Товаров: <b><?= $ord['total_qty'] ?> шт.</b> 
+                                    <?php if($ord['company_name']): ?>
+                                        <div class="ord-company">🏢 <?= htmlspecialchars($ord['company_name']) ?> (ИНН: <?= $ord['inn'] ?>)</div>
+                                    <?php endif; ?>
+                                    <?php if($ord['comment']): ?>
+                                        <div class="ord-comment">💬 <?= htmlspecialchars($ord['comment']) ?></div>
+                                    <?php endif; ?>
+                                </div>
+
+                                <div class="ord-products">
+                                    <?php foreach ($ord['items'] as $item): ?>
+                                        <div class="prod-item">
+                                            <div class="prod-info">
+                                                <span class="prod-art"><?= $item['part_number'] ?></span>
+                                                <span class="prod-name"><?= $item['name'] ?></span>
+                                            </div>
+                                            <div class="prod-qty">x<?= $item['qty'] ?></div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+
+                            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <div class="empty-history">Список заказов пуст.</div>
+                    <?php endif; ?>
+                </div>
+            </div>
+
         </div>
     </div>
 </main>
 
 <?php include 'includes/footer.php'; ?>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Анимация появления
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) entry.target.classList.add('visible');
-        });
-    });
-    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
-
-    // ЛОГИКА АВТООПРЕДЕЛЕНИЯ ГОРОДА (ИСПРАВЛЕНО НА HTTPS)
-    const cityInput = document.getElementById('userCity');
-    
-    // Если поле пустое - определяем IP через Sypex Geo (поддерживает HTTPS)
-    if (cityInput && cityInput.value.trim() === '') {
-        fetch('https://api.sypexgeo.net/json/')
-            .then(response => response.json())
-            .then(data => {
-                // Sypex Geo возвращает объект city с полем name_ru
-                if (data && data.city && data.city.name_ru) {
-                    cityInput.value = data.city.name_ru;
-                }
-            })
-            .catch(err => {
-                console.log('Ошибка определения города:', err);
-                cityInput.placeholder = 'Введите город вручную';
-            });
-    }
-});
-</script>
+<script src="pages/profile/script.js?v=<?= time() ?>"></script>
 
 </body>
 </html>

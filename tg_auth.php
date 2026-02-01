@@ -40,37 +40,18 @@ try {
     if (isset($_SESSION['user_id'])) {
         $current_user_id = $_SESSION['user_id'];
         
-        // Проверяем, не занят ли этот Telegram ID
         $stmt = $pdo->prepare("SELECT id FROM users WHERE telegram_id = ?");
         $stmt->execute([$tg_id]);
         $existing_user = $stmt->fetch();
 
         if ($existing_user) {
             if ($existing_user['id'] != $current_user_id) {
-                // КОНФЛИКТ: ID занят другим (старым) аккаунтом.
+                // Если нужно перенести данные со старого аккаунта ТГ на текущий — допиши логику здесь
                 $old_id = $existing_user['id'];
-
-                // --- [НАЧАЛО] БЛОК ПЕРЕНОСА ДАННЫХ ---
-                // Здесь мы меняем владельца записей со старого ID на новый.
-                // Раскомментируй и измени названия таблиц на свои:
-                
-                // Пример 1: Перенос заказов
-                // $pdo->prepare("UPDATE orders SET user_id = ? WHERE user_id = ?")->execute([$current_user_id, $old_id]);
-                
-                // Пример 2: Перенос корзины
-                // $pdo->prepare("UPDATE cart SET user_id = ? WHERE user_id = ?")->execute([$current_user_id, $old_id]);
-                
-                // Пример 3: Перенос избранного (если есть уникальные ключи, может потребоваться IGNORE)
-                // $pdo->prepare("UPDATE favorites SET user_id = ? WHERE user_id = ?")->execute([$current_user_id, $old_id]);
-
-                // --- [КОНЕЦ] БЛОК ПЕРЕНОСА ДАННЫХ ---
-
-                // Теперь, когда данные спасены, удаляем старый пустой аккаунт
                 $pdo->prepare("DELETE FROM users WHERE id = ?")->execute([$old_id]);
             }
         }
 
-        // Привязываем Telegram к текущему аккаунту
         $stmt = $pdo->prepare("UPDATE users SET telegram_id = ?, telegram_username = ? WHERE id = ?");
         $stmt->execute([$tg_id, $username, $current_user_id]);
         
@@ -86,15 +67,31 @@ try {
     $user = $stmt->fetch();
 
     if ($user) {
+        // ВХОД СУЩЕСТВУЮЩЕГО
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['user_name'] = $user['name'];
+
+        // [ВАЖНО] ПЕРЕНОС КОРЗИНЫ ГОСТЯ -> ПОЛЬЗОВАТЕЛЮ
+        $current_session = session_id();
+        $pdo->prepare("UPDATE cart SET user_id = ? WHERE session_id = ? AND user_id = 0")
+            ->execute([$user['id'], $current_session]);
+
         header('Location: profile.php');
+
     } else {
+        // РЕГИСТРАЦИЯ НОВОГО
         $stmt = $pdo->prepare("INSERT INTO users (name, telegram_id, telegram_username) VALUES (?, ?, ?)");
         $stmt->execute([$first_name, $tg_id, $username]);
         
-        $_SESSION['user_id'] = $pdo->lastInsertId();
+        $new_user_id = $pdo->lastInsertId();
+        $_SESSION['user_id'] = $new_user_id;
         $_SESSION['user_name'] = $first_name;
+
+        // [ВАЖНО] ПЕРЕНОС КОРЗИНЫ ГОСТЯ -> ПОЛЬЗОВАТЕЛЮ
+        $current_session = session_id();
+        $pdo->prepare("UPDATE cart SET user_id = ? WHERE session_id = ? AND user_id = 0")
+            ->execute([$new_user_id, $current_session]);
+        
         header('Location: profile.php');
     }
 

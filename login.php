@@ -3,6 +3,9 @@ session_start();
 require_once 'includes/db.php';
 
 if (isset($_SESSION['user_id'])) {
+    // Если пользователь уже вошел, но пришел со страницы оформления заказа,
+    // лучше вернуть его в корзину/оформление, а не в профиль.
+    // Но пока оставим профиль как стандартное поведение.
     header('Location: profile.php');
     exit;
 }
@@ -16,6 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
     $actionType = $action;
 
+    // --- ЛОГИКА РЕГИСТРАЦИИ ---
     if ($action === 'register') {
         $name = trim($_POST['name'] ?? '');
         
@@ -27,14 +31,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $hash = password_hash($password, PASSWORD_DEFAULT);
             $stmt = $pdo->prepare("INSERT INTO users (email, password, name) VALUES (?, ?, ?)");
             if ($stmt->execute([$email, $hash, $name])) {
-                $_SESSION['user_id'] = $pdo->lastInsertId();
+                $new_user_id = $pdo->lastInsertId();
+                $_SESSION['user_id'] = $new_user_id;
                 $_SESSION['user_name'] = $name;
+
+                // [ВАЖНО] ПЕРЕНОС КОРЗИНЫ ГОСТЯ -> ПОЛЬЗОВАТЕЛЮ
+                $current_session = session_id();
+                $pdo->prepare("UPDATE cart SET user_id = ? WHERE session_id = ? AND user_id = 0")
+                    ->execute([$new_user_id, $current_session]);
+
+                // Если пришли с checkout.php, можно сделать редирект обратно на checkout.php
+                // Для этого можно использовать параметр в URL (login.php?redirect=checkout)
+                // Но пока оставим редирект в профиль, как было.
                 header('Location: profile.php');
                 exit;
             } else {
                 $error = "Ошибка регистрации";
             }
         }
+
+    // --- ЛОГИКА ВХОДА ---
     } elseif ($action === 'login') {
         $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
         $stmt->execute([$email]);
@@ -43,6 +59,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($user && password_verify($password, $user['password'])) {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['user_name'] = $user['name'];
+
+            // [ВАЖНО] ПЕРЕНОС КОРЗИНЫ ГОСТЯ -> ПОЛЬЗОВАТЕЛЮ
+            $current_session = session_id();
+            $pdo->prepare("UPDATE cart SET user_id = ? WHERE session_id = ? AND user_id = 0")
+                ->execute([$user['id'], $current_session]);
+
             header('Location: profile.php');
             exit;
         } else {
@@ -56,10 +78,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
     <title>Вход | РАССВЕТ-С</title>
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css">
-    
     <link rel="stylesheet" href="common.css?v=<?= time() ?>">
     <link rel="stylesheet" href="pages/login/style.css?v=<?= time() ?>">
 </head>
@@ -69,7 +89,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <main class="auth-wrap">
     <div class="container">
-        
         <div class="page-header">
             <h1 class="page-title">ЛИЧНЫЙ КАБИНЕТ</h1>
             <div class="page-status"><span class="status-dot"></span> ДОСТУП В СИСТЕМУ</div>
@@ -82,7 +101,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <input class="checkbox" type="checkbox" id="reg-log" name="reg-log" 
                         <?= ($actionType === 'register' && $error) ? 'checked' : '' ?> 
                     />
-                    
                     <label for="reg-log" class="toggle-btn"></label>
                     
                     <div class="card-3d-wrap mx-auto">
@@ -91,24 +109,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <div class="card-front">
                                 <div class="center-wrap">
                                     <div class="section text-center">
-                                        
                                         <h4 class="mb-4 pb-3">ВХОД</h4>
-                                        
                                         <?php if ($error && ($actionType === 'login' || $actionType === '')): ?>
                                             <div class="error-msg"><?= $error ?></div>
                                         <?php endif; ?>
 
                                         <form action="login.php" method="POST" class="static-form">
                                             <input type="hidden" name="action" value="login">
-                                            
                                             <div class="form-group">
-                                                <input type="email" name="email" class="form-style" placeholder="Ваша почта" 
-                                                       required autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
+                                                <input type="email" name="email" class="form-style" placeholder="Ваша почта" required autocomplete="off">
                                                 <i class="input-icon uil uil-at"></i>
                                             </div>  
                                             <div class="form-group mt-2">
-                                                <input type="password" name="password" class="form-style" placeholder="Ваш пароль" 
-                                                       required autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
+                                                <input type="password" name="password" class="form-style" placeholder="Ваш пароль" required autocomplete="off">
                                                 <i class="input-icon uil uil-lock-alt"></i>
                                             </div>
                                             
@@ -117,7 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 $btnClass = $isLoginErr ? "btn-flip btn-error" : "btn-flip";
                                                 $btnText = $isLoginErr ? "ОШИБКА" : "ВОЙТИ";
                                             ?>
-                                            <button type="submit" class="<?= $btnClass ?>" id="login-btn" data-original="ВОЙТИ"><?= $btnText ?></button>
+                                            <button type="submit" class="<?= $btnClass ?>"><?= $btnText ?></button>
                                         </form>
                                         
                                         <a href="#" class="link">Забыли пароль?</a>
@@ -136,7 +149,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                         data-request-access="write"></script>
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
@@ -144,29 +156,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <div class="card-back">
                                 <div class="center-wrap">
                                     <div class="section text-center">
-                                        
                                         <h4 class="mb-4 pb-3">РЕГИСТРАЦИЯ</h4>
-                                        
                                         <?php if ($error && $actionType === 'register'): ?>
                                             <div class="error-msg"><?= $error ?></div>
                                         <?php endif; ?>
 
                                         <form action="login.php" method="POST" class="static-form">
                                             <input type="hidden" name="action" value="register">
-
                                             <div class="form-group">
-                                                <input type="text" name="name" class="form-style" placeholder="Ваше имя" 
-                                                       required autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
+                                                <input type="text" name="name" class="form-style" placeholder="Ваше имя" required autocomplete="off">
                                                 <i class="input-icon uil uil-user"></i>
                                             </div>  
                                             <div class="form-group mt-2">
-                                                <input type="email" name="email" class="form-style" placeholder="Ваша почта" 
-                                                       required autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
+                                                <input type="email" name="email" class="form-style" placeholder="Ваша почта" required autocomplete="off">
                                                 <i class="input-icon uil uil-at"></i>
                                             </div>  
                                             <div class="form-group mt-2">
-                                                <input type="password" name="password" class="form-style" placeholder="Придумайте пароль" 
-                                                       required autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
+                                                <input type="password" name="password" class="form-style" placeholder="Придумайте пароль" required autocomplete="off">
                                                 <i class="input-icon uil uil-lock-alt"></i>
                                             </div>
                                             
@@ -175,7 +181,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 $btnClass = $isRegErr ? "btn-flip btn-error" : "btn-flip";
                                                 $btnText = $isRegErr ? "ОШИБКА" : "СОЗДАТЬ АККАУНТ";
                                             ?>
-                                            <button type="submit" class="<?= $btnClass ?>" id="reg-btn" data-original="СОЗДАТЬ АККАУНТ"><?= $btnText ?></button>
+                                            <button type="submit" class="<?= $btnClass ?>"><?= $btnText ?></button>
                                         </form>
 
                                         <div class="tg-custom-wrapper">
@@ -192,7 +198,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                         data-request-access="write"></script>
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
@@ -206,7 +211,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </main>
 
 <script src="pages/login/script.js?v=<?= time() ?>"></script>
-
 <?php include 'includes/footer.php'; ?>
 </body>
 </html>

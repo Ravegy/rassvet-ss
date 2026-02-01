@@ -1,22 +1,22 @@
 <?php
-// Файл: api_actions.php
 require_once 'includes/db.php';
 session_start();
 
 header('Content-Type: application/json');
 
-$action = isset($_POST['action']) ? $_POST['action'] : '';
-$user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 0;
+$action = $_POST['action'] ?? '';
+$user_id = $_SESSION['user_id'] ?? 0;
 $session_id = session_id();
 
-// --- ИСПРАВЛЕННАЯ ФУНКЦИЯ (Без LEFT JOIN, чтобы не было дублей при выводе) ---
-function getCart($pdo, $user_id, $session_id) {
-    // Берем имя товара подзапросом
-    $sql = "SELECT c.qty, c.part_number, 
-            (SELECT name FROM parts WHERE part_number = c.part_number LIMIT 1) as name 
-            FROM cart c 
-            WHERE ";
+function isAdmin($pdo, $id) {
+    if ($id == 0) return false;
+    $stmt = $pdo->prepare("SELECT is_admin FROM users WHERE id = ?");
+    $stmt->execute([$id]);
+    return $stmt->fetchColumn() == 1;
+}
 
+function getCart($pdo, $user_id, $session_id) {
+    $sql = "SELECT c.qty, c.part_number, (SELECT name FROM parts WHERE part_number = c.part_number LIMIT 1) as name FROM cart c WHERE ";
     if ($user_id > 0) {
         $sql .= "c.user_id = ?";
         $params = [$user_id];
@@ -24,30 +24,24 @@ function getCart($pdo, $user_id, $session_id) {
         $sql .= "c.session_id = ? AND c.user_id = 0";
         $params = [$session_id];
     }
-
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
     return $stmt->fetchAll();
 }
 
 try {
-    // 1. ДОБАВИТЬ В КОРЗИНУ (С защитой от дублей)
     if ($action == 'add_cart') {
         $art = $_POST['article'];
-        $qty = isset($_POST['qty']) ? (int)$_POST['qty'] : 1;
-
+        $qty = (int)($_POST['qty'] ?? 1);
         if ($user_id > 0) {
-            $sql = "INSERT INTO cart (user_id, part_number, qty) VALUES (?, ?, ?) 
-                    ON DUPLICATE KEY UPDATE qty = qty + ?";
+            $sql = "INSERT INTO cart (user_id, part_number, qty) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE qty = qty + ?";
             $pdo->prepare($sql)->execute([$user_id, $art, $qty, $qty]);
         } else {
-            $sql = "INSERT INTO cart (user_id, session_id, part_number, qty) VALUES (0, ?, ?, ?) 
-                    ON DUPLICATE KEY UPDATE qty = qty + ?";
+            $sql = "INSERT INTO cart (user_id, session_id, part_number, qty) VALUES (0, ?, ?, ?) ON DUPLICATE KEY UPDATE qty = qty + ?";
             $pdo->prepare($sql)->execute([$session_id, $art, $qty, $qty]);
         }
         echo json_encode(['status' => 'success', 'cart' => getCart($pdo, $user_id, $session_id)]);
 
-    // 2. УДАЛИТЬ ИЗ КОРЗИНЫ
     } elseif ($action == 'delete_item') {
         $art = $_POST['article'];
         if ($user_id > 0) {
@@ -57,18 +51,15 @@ try {
         }
         echo json_encode(['status' => 'success', 'cart' => getCart($pdo, $user_id, $session_id)]);
 
-    // 3. ПОЛУЧИТЬ КОРЗИНУ
     } elseif ($action == 'get_cart') {
         echo json_encode(['status' => 'success', 'cart' => getCart($pdo, $user_id, $session_id)]);
 
-    // 4. ИЗБРАННОЕ (Тоггл)
     } elseif ($action == 'add_fav') {
         if ($user_id == 0) {
             echo json_encode(['status' => 'error', 'message' => 'Нужна авторизация']);
             exit;
         }
         $art = $_POST['article'];
-        
         $check = $pdo->prepare("SELECT id FROM favorites WHERE user_id = ? AND part_number = ?");
         $check->execute([$user_id, $art]);
         if($check->rowCount() > 0){
@@ -79,29 +70,76 @@ try {
              echo json_encode(['status' => 'added']);
         }
 
-    // 5. ИЗМЕНИТЬ КОЛИЧЕСТВО
     } elseif ($action == 'update_qty') {
         $art = $_POST['article'];
         $direction = $_POST['direction']; 
         $where = ($user_id > 0) ? "user_id = ?" : "session_id = ? AND user_id = 0";
         $params = ($user_id > 0) ? [$user_id, $art] : [$session_id, $art];
-        
         $stmt = $pdo->prepare("SELECT qty FROM cart WHERE $where AND part_number = ?");
         $stmt->execute($params);
         $row = $stmt->fetch();
-        
         if ($row) {
             $newQty = $row['qty'];
             if ($direction == 'plus') $newQty++;
             if ($direction == 'minus') $newQty--;
             if ($newQty < 1) $newQty = 1;
-            
             $sql = "UPDATE cart SET qty = ? WHERE $where AND part_number = ?";
-            // Добавляем newQty в начало массива параметров
             array_unshift($params, $newQty);
             $pdo->prepare($sql)->execute($params);
         }
         echo json_encode(['status' => 'success', 'cart' => getCart($pdo, $user_id, $session_id)]);
+
+    } elseif ($action == 'save_order') {
+        if ($user_id == 0) { echo json_encode(['status' => 'error', 'message' => 'Not auth']); exit; }
+        $cart = getCart($pdo, $user_id, $session_id);
+        if (empty($cart)) { echo json_encode(['status' => 'error', 'message' => 'Cart empty']); exit; }
+
+        $name = $_POST['name'] ?? '';
+        $phone = $_POST['phone'] ?? '';
+        $email = $_POST['email'] ?? '';
+        $address = $_POST['address'] ?? '';
+        $company = $_POST['company_name'] ?? '';
+        $inn = $_POST['inn'] ?? '';
+        $comment = $_POST['comment'] ?? '';
+        
+        $totalQty = 0;
+        foreach($cart as $item) $totalQty += $item['qty'];
+
+        $sqlOrder = "INSERT INTO orders (user_id, customer_name, customer_phone, customer_email, customer_address, company_name, inn, comment, total_qty, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'new')";
+        $pdo->prepare($sqlOrder)->execute([$user_id, $name, $phone, $email, $address, $company, $inn, $comment, $totalQty]);
+        $orderId = $pdo->lastInsertId();
+
+        $sqlItem = "INSERT INTO order_items (order_id, part_number, name, qty) VALUES (?, ?, ?, ?)";
+        $stmtItem = $pdo->prepare($sqlItem);
+        foreach ($cart as $item) {
+            $stmtItem->execute([$orderId, $item['part_number'], $item['name'], $item['qty']]);
+        }
+
+        $pdo->prepare("DELETE FROM cart WHERE user_id = ?")->execute([$user_id]);
+        $pdo->prepare("UPDATE users SET phone = ?, address = ?, city = ? WHERE id = ? AND (phone IS NULL OR phone = '')")->execute([$phone, $address, $address, $user_id]);
+
+        echo json_encode(['status' => 'success', 'order_id' => $orderId]);
+
+    } elseif ($action == 'update_profile') {
+        if ($user_id == 0) exit;
+        $name = $_POST['name'];
+        $email = $_POST['email'];
+        $phone = $_POST['phone'];
+        $address = $_POST['address'];
+        $sql = "UPDATE users SET name = ?, email = ?, phone = ?, address = ? WHERE id = ?";
+        $pdo->prepare($sql)->execute([$name, $email, $phone, $address, $user_id]);
+        echo json_encode(['status' => 'success']);
+
+    } elseif ($action == 'update_order_status') {
+        if (!isAdmin($pdo, $user_id)) {
+            echo json_encode(['status' => 'error', 'message' => 'Access denied']);
+            exit;
+        }
+        $order_id = $_POST['order_id'];
+        $new_status = $_POST['status'];
+        $stmt = $pdo->prepare("UPDATE orders SET status = ? WHERE id = ?");
+        $stmt->execute([$new_status, $order_id]);
+        echo json_encode(['status' => 'success']);
     }
 
 } catch (Exception $e) {

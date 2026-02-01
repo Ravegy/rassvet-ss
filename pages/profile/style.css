@@ -1,266 +1,207 @@
 /* pages/profile/style.css */
 
-.profile-page { 
-    padding-top: 140px; /* Идентично странице контактов */
-    padding-bottom: 80px; 
+.profile-page {
+    padding-top: 140px;
+    padding-bottom: 100px;
 }
 
-.container-sm { 
-    max-width: 800px; 
-    margin: 0 auto; 
+.profile-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 30px;
 }
 
-/* Синхронизация размера шрифта с контактами на планшетах */
-@media (max-width: 992px) {
-  .page-title {
-    font-size: 28px;
-  }
+.profile-info { grid-column: 1 / 2; grid-row: 1 / 2; }
+.profile-tg { grid-column: 2 / 3; grid-row: 1 / 2; }
+.profile-history { grid-column: 1 / 3; grid-row: 2 / 3; }
+
+.tech-card {
+    background: rgba(30, 30, 30, 0.85);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 30px;
 }
 
-/* Карточка профиля */
-.profile-card { 
-    background: #181818; 
-    border: 1px solid rgba(255,255,255,0.1); 
-    padding: 40px; 
-    border-radius: 12px; 
-    display: flex; 
-    gap: 40px; 
-    align-items: flex-start;
-    
-    /* Анимация появления */
-    opacity: 0;
-    transform: translateY(20px);
-    transition: 0.6s ease-out;
-}
-.profile-card.visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* Аватарка */
-.profile-avatar { 
-    width: 100px; 
-    height: 100px; 
-    background: #333; 
-    border-radius: 50%; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    font-size: 36px; 
-    color: var(--yellow); 
-    font-weight: 900; 
-    border: 2px solid var(--yellow); 
-    flex-shrink: 0;
-    text-transform: uppercase;
-}
-
-.profile-info { 
-    flex-grow: 1; 
-    width: 100%; 
-}
-
-.profile-name { 
-    font-family: var(--font-head); 
-    font-size: 32px; 
-    color: #fff; 
-    margin-bottom: 30px; 
-    text-transform: uppercase; 
-    line-height: 1.1;
-}
-
-/* Группы данных */
-.data-group {
-    margin-bottom: 20px;
-}
-
-.data-label {
-    font-size: 11px;
+.card-label {
+    display: block;
+    font-family: var(--font-head);
+    font-size: 12px;
+    font-weight: 700;
     color: #666;
     text-transform: uppercase;
     letter-spacing: 1px;
-    margin-bottom: 6px;
-    display: block;
-    font-weight: 700;
-}
-
-.data-value {
-    font-size: 16px;
-    color: #fff;
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
     padding-bottom: 10px;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
 }
 
-/* Статусы Telegram */
-.tg-status { 
-    display: inline-flex; 
-    align-items: center;
-    gap: 6px;
-    padding: 6px 12px; 
-    border-radius: 6px; 
-    font-size: 13px; 
-    font-weight: bold; 
-    margin-top: 5px;
-}
+.form-group { margin-bottom: 15px; }
+.input-label { display: block; font-size: 11px; color: #888; margin-bottom: 5px; text-transform: uppercase; }
+.c-input { width: 100%; background: rgba(0,0,0,0.3); border: 1px solid #444; color: #fff; padding: 10px 15px; border-radius: 4px; font-size: 14px; outline: none; transition: 0.3s; }
+.c-input:focus { border-color: var(--yellow); background: rgba(0,0,0,0.5); }
+.btn-save { width: 100%; margin-top: 10px; padding: 12px; }
 
-.tg-linked { 
-    background: rgba(50, 255, 50, 0.1); 
-    color: #44ff44; 
-    border: 1px solid rgba(50, 255, 50, 0.2); 
-}
+/* TELEGRAM */
+.tg-connected { display: flex; align-items: center; gap: 20px; background: rgba(40, 167, 69, 0.1); border: 1px solid #28a745; padding: 20px; border-radius: 8px; }
+.tg-icon-ok { width: 40px; height: 40px; color: #28a745; flex-shrink: 0; }
+.tg-title { font-weight: bold; color: #fff; margin-bottom: 5px; }
+.tg-sub { font-size: 12px; color: #aaa; }
+.tg-user { color: var(--yellow); font-family: monospace; margin-top: 5px; }
+.tg-disconnected p { font-size: 14px; color: #ccc; margin-bottom: 15px; line-height: 1.5; }
 
-.tg-unlinked { 
-    background: rgba(255, 255, 255, 0.05); 
-    color: #888; 
-    border: 1px solid rgba(255, 255, 255, 0.1); 
-}
+/* ИСТОРИЯ ЗАКАЗОВ */
+.orders-list { max-height: 500px; overflow-y: auto; padding-right: 5px; }
+.orders-list::-webkit-scrollbar { width: 4px; }
+.orders-list::-webkit-scrollbar-thumb { background: #444; border-radius: 2px; }
 
-/* Блок привязки */
-.tg-connect-box { 
-    margin-top: 25px; 
-    padding: 20px; 
-    background: rgba(255,204,0,0.05); 
-    border: 1px dashed rgba(255,204,0,0.3);
-    border-radius: 8px; 
-}
-
-.tg-hint { 
-    font-size: 13px; 
-    color: #ccc; 
-    margin-bottom: 15px; 
-    display: block; 
-    line-height: 1.4; 
-}
-
-/* Кнопка выхода */
-.btn-logout { 
-    display: inline-block;
-    margin-top: 30px;
-    background: transparent; 
-    border: 1px solid #333; 
-    color: #888; 
-    padding: 10px 25px; 
-    cursor: pointer; 
-    border-radius: 4px; 
-    transition: 0.2s; 
-    text-decoration: none; 
-    font-size: 13px; 
-    font-weight: 700;
-    text-transform: uppercase;
-}
-
-.btn-logout:hover { 
-    border-color: #ff3333; 
-    color: #ff3333; 
-}
-
-/* --- МОБИЛЬНАЯ ВЕРСИЯ --- */
-@media(max-width: 768px) {
-    .profile-page { 
-        padding-top: 100px; /* Идентично мобильной версии контактов */
-    }
-    
-    .profile-card { 
-        flex-direction: column; 
-        align-items: center; 
-        text-align: center; 
-        padding: 25px 20px;
-        gap: 25px;
-    }
-    
-    .profile-avatar {
-        width: 80px; 
-        height: 80px; 
-        font-size: 28px;
-    }
-    
-    .profile-name {
-        font-size: 24px;
-        margin-bottom: 25px;
-    }
-    
-    .data-group {
-        background: rgba(255,255,255,0.03); 
-        padding: 15px;
-        border-radius: 8px;
-        border: none;
-        margin-bottom: 10px;
-    }
-    
-    .data-value { 
-        border-bottom: none; 
-        padding-bottom: 0; 
-    }
-    
-    .btn-logout {
-        width: 100%;
-        text-align: center;
-        padding: 15px;
-        background: rgba(255, 50, 50, 0.1);
-        border-color: transparent;
-        color: #ff3333;
-        margin-top: 10px;
-    }
-    
-    .tg-connect-box {
-        text-align: center;
-        padding: 15px;
-    }
-}
-/* ... (Ваш существующий CSS) ... */
-
-/* Стили для поля города */
-.input-with-btn {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-
-.profile-input {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #fff;
-    padding: 10px 15px;
+.order-row {
+    background: rgba(0,0,0,0.2);
+    border: 1px solid #333;
     border-radius: 6px;
-    width: 100%;
-    font-family: var(--font-body);
-    font-size: 15px;
-    transition: 0.3s;
-}
-
-.profile-input:focus {
-    outline: none;
-    border-color: var(--yellow);
-    background: rgba(255, 255, 255, 0.1);
-}
-
-.btn-save-mini {
-    background: #333;
-    border: 1px solid #444;
-    color: var(--yellow);
-    width: 42px;
-    height: 42px;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
+    padding: 15px;
+    margin-bottom: 10px;
     transition: 0.2s;
-    flex-shrink: 0;
+    cursor: pointer; /* Указывает, что можно кликнуть */
+}
+.order-row:hover { border-color: #555; background: rgba(255,255,255,0.02); }
+
+/* Шапка заказа */
+.ord-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.ord-id { font-weight: bold; color: var(--yellow); font-family: var(--font-head); margin-right: 15px; }
+.ord-date { font-size: 13px; color: #888; }
+.ord-right { display: flex; align-items: center; gap: 15px; }
+.ord-status { font-size: 11px; padding: 3px 8px; border-radius: 3px; background: #333; color: #ccc; font-weight: bold; }
+
+/* Стрелочка */
+.ord-arrow { color: #666; transition: 0.3s; display: flex; }
+.order-row.active .ord-arrow { transform: rotate(180deg); color: var(--yellow); }
+
+.ord-details { font-size: 13px; color: #ccc; }
+
+/* ВЫПАДАЮЩИЙ СПИСОК ТОВАРОВ */
+.ord-products {
+    display: none; /* Скрыто по умолчанию */
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px dashed rgba(255,255,255,0.1);
+    animation: slideDown 0.3s ease;
+}
+.order-row.active .ord-products { display: block; } /* Показываем при классе active */
+
+.prod-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    font-size: 13px;
+}
+.prod-item:last-child { border-bottom: none; }
+
+.prod-art { color: var(--yellow); font-weight: bold; margin-right: 10px; font-family: monospace; }
+.prod-name { color: #aaa; }
+.prod-qty { color: #fff; font-weight: bold; background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px; font-size: 11px; }
+
+.empty-history { text-align: center; color: #666; padding: 40px; }
+.btn-link { color: var(--yellow); text-decoration: underline; }
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-.btn-save-mini:hover {
-    background: var(--yellow);
-    color: #000;
-    border-color: var(--yellow);
+@media (max-width: 900px) {
+    .profile-grid { grid-template-columns: 1fr; }
+    .profile-info, .profile-tg, .profile-history { grid-column: 1 / -1; grid-row: auto; }
+}
+/* Стили для заказа */
+.order-row {
+    background: rgba(0,0,0,0.2);
+    border: 1px solid #333;
+    border-radius: 6px;
+    padding: 15px;
+    margin-bottom: 10px;
+    transition: 0.2s;
+    cursor: pointer;
+}
+.order-row:hover { border-color: #555; background: rgba(255,255,255,0.02); }
+
+/* Специальный стиль для админской строки (чуть компактнее) */
+.admin-row .ord-client {
+    font-size: 11px;
+    color: #888;
+    margin-top: 5px;
+    padding-top: 5px;
+    border-top: 1px solid rgba(255,255,255,0.05);
 }
 
-.btn-save-mini svg {
-    width: 20px;
-    height: 20px;
+.ord-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+.ord-left { display: flex; flex-direction: column; }
+.ord-top-line { display: flex; align-items: center; gap: 10px; }
+
+.ord-id { font-weight: bold; color: var(--yellow); font-family: var(--font-head); }
+.ord-date { font-size: 12px; color: #666; }
+
+.ord-right { display: flex; align-items: center; gap: 10px; }
+
+/* СТАТУСЫ (Badge) */
+.ord-status { 
+    font-size: 10px; 
+    padding: 4px 8px; 
+    border-radius: 4px; 
+    font-weight: bold; 
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-@media(max-width: 768px) {
-    .profile-input {
-        font-size: 16px; /* Чтобы на айфонах не приближало */
-    }
+/* СТАТУСЫ (Select - для админа) */
+.status-select {
+    background: #111;
+    border: 1px solid #333;
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    text-transform: uppercase;
+    font-weight: bold;
+    outline: none;
+    cursor: pointer;
 }
+
+/* ЦВЕТА СТАТУСОВ */
+.st-new { background: rgba(255, 255, 255, 0.1); color: #fff; border: 1px solid #555; }
+.st-work { background: rgba(255, 193, 7, 0.2); color: #ffc107; border: 1px solid rgba(255, 193, 7, 0.3); } /* Желтый */
+.st-shipped { background: rgba(23, 162, 184, 0.2); color: #17a2b8; border: 1px solid rgba(23, 162, 184, 0.3); } /* Синий */
+.st-done { background: rgba(40, 167, 69, 0.2); color: #28a745; border: 1px solid rgba(40, 167, 69, 0.3); } /* Зеленый */
+.st-cancel { background: rgba(220, 53, 69, 0.2); color: #dc3545; border: 1px solid rgba(220, 53, 69, 0.3); } /* Красный */
+
+/* Стрелка */
+.ord-arrow { color: #666; transition: 0.3s; display: flex; width: 24px; height: 24px; align-items:center; justify-content:center; }
+.order-row.active .ord-arrow { transform: rotate(180deg); color: var(--yellow); }
+
+.ord-details { font-size: 13px; color: #ccc; margin-bottom: 5px; }
+.ord-company { color: #aaa; font-size: 12px; margin-top: 2px; }
+.ord-comment { color: #888; font-style: italic; font-size: 12px; margin-top: 3px; }
+
+/* Товары */
+.ord-products {
+    display: none;
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px dashed rgba(255,255,255,0.1);
+    animation: slideDown 0.3s ease;
+}
+.order-row.active .ord-products { display: block; }
+
+.prod-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.03); font-size: 13px;
+}
+.prod-item:last-child { border-bottom: none; }
+.prod-art { color: var(--yellow); font-weight: bold; margin-right: 10px; font-family: monospace; }
+.prod-name { color: #aaa; }
+.prod-qty { color: #fff; font-weight: bold; background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px; font-size: 11px; }
+
+@keyframes slideDown { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
