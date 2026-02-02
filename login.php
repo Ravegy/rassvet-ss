@@ -3,9 +3,6 @@ session_start();
 require_once 'includes/db.php';
 
 if (isset($_SESSION['user_id'])) {
-    // Если пользователь уже вошел, но пришел со страницы оформления заказа,
-    // лучше вернуть его в корзину/оформление, а не в профиль.
-    // Но пока оставим профиль как стандартное поведение.
     header('Location: profile.php');
     exit;
 }
@@ -19,57 +16,71 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
     $actionType = $action;
 
-    // --- ЛОГИКА РЕГИСТРАЦИИ ---
-    if ($action === 'register') {
-        $name = trim($_POST['name'] ?? '');
-        
-        $stmt = $pdo->prepare("SELECT id FROM users WHERE email = ?");
-        $stmt->execute([$email]);
-        if ($stmt->fetch()) {
-            $error = "Email занят!";
-        } else {
-            $hash = password_hash($password, PASSWORD_DEFAULT);
-            $stmt = $pdo->prepare("INSERT INTO users (email, password, name) VALUES (?, ?, ?)");
-            if ($stmt->execute([$email, $hash, $name])) {
-                $new_user_id = $pdo->lastInsertId();
-                $_SESSION['user_id'] = $new_user_id;
-                $_SESSION['user_name'] = $name;
+    try {
+        // --- ЛОГИКА РЕГИСТРАЦИИ ---
+        if ($action === 'register') {
+            $name = trim($_POST['name'] ?? '');
+            
+            $stmt = $pdo->prepare("SELECT id FROM users WHERE email = ?");
+            $stmt->execute([$email]);
+            if ($stmt->fetch()) {
+                $error = "Email занят!";
+            } else {
+                // Начинаем транзакцию
+                $pdo->beginTransaction();
 
-                // [ВАЖНО] ПЕРЕНОС КОРЗИНЫ ГОСТЯ -> ПОЛЬЗОВАТЕЛЮ
+                try {
+                    $hash = password_hash($password, PASSWORD_DEFAULT);
+                    $stmt = $pdo->prepare("INSERT INTO users (email, password, name) VALUES (?, ?, ?)");
+                    $stmt->execute([$email, $hash, $name]);
+                    
+                    $new_user_id = $pdo->lastInsertId();
+                    
+                    // Перенос корзины
+                    $current_session = session_id();
+                    $pdo->prepare("UPDATE cart SET user_id = ? WHERE session_id = ? AND user_id = 0")
+                        ->execute([$new_user_id, $current_session]);
+
+                    $pdo->commit(); // Всё ок, сохраняем
+
+                    $_SESSION['user_id'] = $new_user_id;
+                    $_SESSION['user_name'] = $name;
+
+                    header('Location: profile.php');
+                    exit;
+
+                } catch (Exception $e) {
+                    $pdo->rollBack(); // Ошибка? Отменяем регистрацию
+                    $error = "Ошибка при создании аккаунта. Попробуйте снова.";
+                }
+            }
+
+        // --- ЛОГИКА ВХОДА ---
+        } elseif ($action === 'login') {
+            $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
+            $stmt->execute([$email]);
+            $user = $stmt->fetch();
+
+            if ($user && password_verify($password, $user['password'])) {
+                // Здесь транзакция не так критична, но для надежности переноса корзины можно добавить
+                // (хотя при входе мы ничего не ломаем, если корзина не перенесется, просто будет обидно)
+                
                 $current_session = session_id();
+                // Просто выполняем перенос
                 $pdo->prepare("UPDATE cart SET user_id = ? WHERE session_id = ? AND user_id = 0")
-                    ->execute([$new_user_id, $current_session]);
+                    ->execute([$user['id'], $current_session]);
 
-                // Если пришли с checkout.php, можно сделать редирект обратно на checkout.php
-                // Для этого можно использовать параметр в URL (login.php?redirect=checkout)
-                // Но пока оставим редирект в профиль, как было.
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['user_name'] = $user['name'];
+
                 header('Location: profile.php');
                 exit;
             } else {
-                $error = "Ошибка регистрации";
+                $error = "Неверные данные";
             }
         }
-
-    // --- ЛОГИКА ВХОДА ---
-    } elseif ($action === 'login') {
-        $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
-        $stmt->execute([$email]);
-        $user = $stmt->fetch();
-
-        if ($user && password_verify($password, $user['password'])) {
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['user_name'] = $user['name'];
-
-            // [ВАЖНО] ПЕРЕНОС КОРЗИНЫ ГОСТЯ -> ПОЛЬЗОВАТЕЛЮ
-            $current_session = session_id();
-            $pdo->prepare("UPDATE cart SET user_id = ? WHERE session_id = ? AND user_id = 0")
-                ->execute([$user['id'], $current_session]);
-
-            header('Location: profile.php');
-            exit;
-        } else {
-            $error = "Неверные данные";
-        }
+    } catch (Exception $e) {
+        $error = "Системная ошибка: " . $e->getMessage();
     }
 }
 ?>

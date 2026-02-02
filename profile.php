@@ -23,10 +23,23 @@ if ($is_admin) {
 }
 $orders = $stmtOrders->fetchAll();
 
-$stmtItems = $pdo->prepare("SELECT * FROM order_items WHERE order_id = ?");
-foreach ($orders as $k => $ord) {
-    $stmtItems->execute([$ord['id']]);
-    $orders[$k]['items'] = $stmtItems->fetchAll();
+if ($orders) {
+    $ids = array_column($orders, 'id');
+    $in = str_repeat('?,', count($ids) - 1) . '?';
+    $sql = "SELECT * FROM order_items WHERE order_id IN ($in)";
+    $stmtItems = $pdo->prepare($sql);
+    $stmtItems->execute($ids);
+    $all_items = $stmtItems->fetchAll();
+
+    $items_map = [];
+    foreach ($all_items as $item) {
+        $items_map[$item['order_id']][] = $item;
+    }
+
+    foreach ($orders as &$ord) {
+        $ord['items'] = $items_map[$ord['id']] ?? [];
+    }
+    unset($ord);
 }
 
 $statuses = [
