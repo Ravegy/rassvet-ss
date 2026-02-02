@@ -241,7 +241,8 @@ window.updateCartUI = function(cart) {
         b.style.display = totalQty > 0 ? 'flex' : 'none';
     });
 
-    let html = `<div class="cart-modal"><div class="cart-header"><span class="cart-title">ВАШ ЗАКАЗ (${totalQty})</span><button id="cart-close">✕</button></div><div class="cart-body">`;
+    // ИСПРАВЛЕНИЕ: Добавлен class="btn-close-cart" для кнопки закрытия
+    let html = `<div class="cart-modal"><div class="cart-header"><span class="cart-title">ВАШ ЗАКАЗ (${totalQty})</span><button id="cart-close" class="btn-close-cart">✕</button></div><div class="cart-body">`;
     
     if (!cart || cart.length === 0) {
         html += `<div class="empty-cart-msg">Корзина пуста</div>`;
