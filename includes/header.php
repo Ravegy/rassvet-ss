@@ -1,13 +1,34 @@
+<?php
+// === БЛОК АВТОМАТИЧЕСКОГО ПОДКЛЮЧЕНИЯ СТИЛЕЙ ===
+// Определяем путь к корню сайта от текущего скрипта
+$root = __DIR__ . '/../'; 
+
+// 1. Подключаем основной стиль common.css с кэшированием
+// Проверяем дату изменения файла, чтобы сбрасывать кэш только при редактировании
+$common_css_ver = file_exists($root . 'common.css') ? filemtime($root . 'common.css') : time();
+echo '<link rel="stylesheet" href="common.css?v=' . $common_css_ver . '">' . PHP_EOL;
+
+// 2. Автоматически ищем и подключаем стиль текущей страницы
+// Например, для pages/about.php будет искать pages/about/style.css
+$current_page = basename($_SERVER['PHP_SELF'], '.php');
+$page_style_path = 'pages/' . $current_page . '/style.css';
+
+if (file_exists($root . $page_style_path)) {
+    $page_css_ver = filemtime($root . $page_style_path);
+    echo '<link rel="stylesheet" href="' . $page_style_path . '?v=' . $page_css_ver . '">' . PHP_EOL;
+}
+?>
+
 <header class="header">
     <div class="container header__inner">
         <a href="/" class="logo">РАССВЕТ-С</a>
         
         <nav class="nav" id="nav-menu">
-            <a href="/" class="nav__link active">Главная</a>
-            <a href="catalog.php" class="nav__link">Каталог Komatsu</a>
-            <a href="about.php" class="nav__link">О Компании</a>
-            <a href="delivery.php" class="nav__link">Доставка и Оплата</a>
-            <a href="contacts.php" class="nav__link">Контакты</a>
+            <a href="/" class="nav__link <?= $current_page == 'index' ? 'active' : '' ?>">Главная</a>
+            <a href="catalog.php" class="nav__link <?= $current_page == 'catalog' ? 'active' : '' ?>">Каталог Komatsu</a>
+            <a href="about.php" class="nav__link <?= $current_page == 'about' ? 'active' : '' ?>">О Компании</a>
+            <a href="delivery.php" class="nav__link <?= $current_page == 'delivery' ? 'active' : '' ?>">Доставка и Оплата</a>
+            <a href="contacts.php" class="nav__link <?= $current_page == 'contacts' ? 'active' : '' ?>">Контакты</a>
         </nav>
 
         <div class="header__right">
@@ -58,7 +79,11 @@
     </div>
 </header>
 
-<script src="common.js?v=<?= time() ?>"></script>
+<?php
+$common_js_ver = file_exists($root . 'common.js') ? filemtime($root . 'common.js') : time();
+?>
+<script src="common.js?v=<?= $common_js_ver ?>"></script>
+
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const toggle = document.getElementById('search-toggle');
@@ -93,6 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
+            // Оптимизация поиска: задержка 300мс перед запросом
             debounceTimer = setTimeout(() => {
                 fetch('api_search.php?q=' + encodeURIComponent(val))
                 .then(res => res.json())
@@ -105,7 +131,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             let link = document.createElement('a');
                             link.href = 'product.php?article=' + encodeURIComponent(item.part_number);
                             link.className = 'search-item';
-                            link.innerHTML = `<span class="s-art">${item.part_number}</span><span class="s-name">${item.name}</span>`;
+                            // Безопасный вывод данных
+                            link.innerHTML = `<span class="s-art">${item.part_number}</span><span class="s-name">${item.name || ''}</span>`;
                             results.appendChild(link);
                         });
                     }

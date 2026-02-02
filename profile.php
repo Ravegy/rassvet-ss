@@ -101,7 +101,7 @@ $statuses = [
                     <input type="hidden" name="action" value="update_profile">
                     <div class="form-group">
                         <label class="input-label">Название компании</label>
-                        <input type="text" name="company_name" class="c-input" value="<?= htmlspecialchars($user['company_name'] ?? '') ?>" placeholder='ООО "Пример"'>
+                        <input type="text" name="company_name" class="c-input" value="<?= htmlspecialchars($user['company_name'] ?? '') ?>" placeholder='Например: ООО "РАССВЕТ-С"'>
                     </div>
                     <div class="form-group">
                         <label class="input-label">ИНН</label>

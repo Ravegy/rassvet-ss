@@ -45,7 +45,7 @@
                         </div>
                     </div>
 
-                    <a href="#order-form" class="btn btn-main">ЗАКАЗАТЬ ВЫЕЗД МАСТЕРА</a>
+                    <a href="#order-form" class="btn-neon"><span></span><span></span><span></span><span></span>ЗАКАЗАТЬ ВЫЕЗД МАСТЕРА</a>
                 </div>
 <div class="hero-image-decor">
     <img src="img/service-car.png" alt="Сервисный автомобиль" class="hero-img">
@@ -259,19 +259,22 @@
                     </div>
                 </div>
                 <div class="fw-right">
-                    <form class="service-form">
-                        <div class="form-grid">
-                            <input type="text" class="c-input" placeholder="Ваше имя" required>
-                            <input type="tel" class="c-input" placeholder="+7 (___) ___-__-__" required>
-                            <input type="text" class="c-input" placeholder="Модель (например, Komatsu 875)">
-                            <input type="text" class="c-input" placeholder="Где находится машина?">
-                        </div>
-                        <textarea class="c-input c-area" placeholder="Описание неисправности..." rows="3"></textarea>
-                        <button type="submit" class="btn btn-full">
-                            ОТПРАВИТЬ ЗАЯВКУ
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                        </button>
-                    </form>
+<form class="service-form" id="serviceForm">
+    <div class="form-grid">
+        <input type="text" name="name" class="c-input" placeholder="Ваше имя" required>
+        <input type="tel" name="phone" class="c-input" placeholder="+7 (___) ___-__-__" required>
+        
+        <input type="text" name="model" class="c-input" placeholder="Модель (например, Komatsu 875)">
+        <input type="text" name="location" class="c-input" placeholder="Где находится машина?">
+    </div>
+    
+    <textarea name="message" class="c-input c-area" placeholder="Описание неисправности..." rows="3"></textarea>
+    
+    <button type="submit" class="btn-neon form-btn">
+        <span></span><span></span><span></span><span></span>
+        ОТПРАВИТЬ ЗАЯВКУ
+    </button>
+</form>
                 </div>
             </div>
         </section>

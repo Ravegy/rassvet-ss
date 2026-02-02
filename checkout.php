@@ -139,7 +139,7 @@ if (empty($cartItems)) {
                     <div id="legal-block" class="legal-fields">
                         <div class="form-group">
                             <label class="input-label">Название компании</label>
-                            <input type="text" name="company_name" class="c-input" placeholder="Например: ООО «ЛесТранс»" value="<?= $prefill_company ?>">
+                            <input type="text" name="company_name" class="c-input" placeholder="Например: ООО «РАССВЕТ-С»" value="<?= $prefill_company ?>">
                         </div>
                         <div class="form-group">
                             <label class="input-label">ИНН</label>

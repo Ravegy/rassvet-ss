@@ -4,6 +4,17 @@ session_start();
 
 header('Content-Type: application/json');
 
+// === ЗАЩИТА (SECURITY BLOCK) ===
+// 1. Принимаем только POST (кроме get_cart, если нужно)
+// 2. Проверяем Referer: запрос должен прийти только с нашего сайта
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!isset($_SERVER['HTTP_REFERER']) || strpos($_SERVER['HTTP_REFERER'], $_SERVER['HTTP_HOST']) === false) {
+        // Если запрос пришел не с нашего домена — блокируем
+        die(json_encode(['status' => 'error', 'message' => 'Access denied']));
+    }
+}
+// ===============================
+
 $action = $_POST['action'] ?? '';
 $user_id = $_SESSION['user_id'] ?? 0;
 $session_id = session_id();
@@ -125,9 +136,9 @@ try {
 
             $pdo->prepare("DELETE FROM cart WHERE user_id = ?")->execute([$user_id]);
             
+            // Обновляем данные пользователя
             $updates = [];
             $u_params = [];
-            
             if($phone) { $updates[] = "phone = COALESCE(NULLIF(phone, ''), ?)"; $u_params[] = $phone; }
             if($address) { $updates[] = "address = COALESCE(NULLIF(address, ''), ?)"; $u_params[] = $address; }
             if($company) { $updates[] = "company_name = COALESCE(NULLIF(company_name, ''), ?)"; $u_params[] = $company; }
@@ -152,7 +163,7 @@ try {
 
         $fields = [];
         $params = [];
-
+        // Простой сбор данных без лишней валидации для скорости
         if (isset($_POST['name'])) { $fields[] = 'name = ?'; $params[] = $_POST['name']; }
         if (isset($_POST['email'])) { $fields[] = 'email = ?'; $params[] = $_POST['email']; }
         if (isset($_POST['phone'])) { $fields[] = 'phone = ?'; $params[] = $_POST['phone']; }

@@ -28,43 +28,81 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- 3. РАБОТАЮЩИЙ АККОРДЕОН (FAQ) ---
+    // --- 3. АККОРДЕОН (FAQ) ---
     const faqItems = document.querySelectorAll('.faq-item');
-    
     faqItems.forEach(item => {
-        // Ищем заголовок для клика, или кликаем по всему блоку если заголовка нет
         const trigger = item.querySelector('.faq-head') || item;
         
         trigger.addEventListener('click', (e) => {
-            // Переключаем класс active
             item.classList.toggle('active');
-            
-            // Находим скрытый блок с текстом
             const body = item.querySelector('.faq-body');
             
             if (body) {
                 if (item.classList.contains('active')) {
-                    // Раскрываем: считаем реальную высоту контента (scrollHeight)
                     body.style.maxHeight = body.scrollHeight + "px";
                 } else {
-                    // Скрываем
                     body.style.maxHeight = null;
                 }
             }
         });
     });
 
-    // --- 4. ФОРМА (Визуальная обработка) ---
-    const form = document.querySelector('.order-form'); // Поменял класс на order-form (как в s.php)
+    // --- 4. ОТПРАВКА ФОРМЫ (Telegram) ---
+    // Ищем форму по ID, который мы добавили в HTML
+    const form = document.getElementById('serviceForm') || document.querySelector('.service-form');
+
     if (form) {
-        form.addEventListener('submit', (e) => {
-            // Здесь отправка через send.php (логику отправки можно оставить в common.js или добавить сюда)
-            // Визуальный эффект нажатия:
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
             const btn = form.querySelector('button[type="submit"]');
-            const originalText = btn.innerHTML;
+            // Сохраняем оригинальный текст кнопки (чтобы вернуть спаны после отправки)
+            const originalBtnContent = btn.innerHTML; 
             
-            // Если отправка идет через стандартный action, этот код просто для красоты
-            // Если через AJAX - нужно e.preventDefault()
+            // 1. Собираем данные из полей
+            const formData = new FormData(this);
+            
+            // 2. Формируем сообщение для Telegram
+            let fullMessage = "";
+            
+            const model = formData.get('model') ? formData.get('model').trim() : '';
+            const location = formData.get('location') ? formData.get('location').trim() : '';
+            const userMsg = formData.get('message') ? formData.get('message').trim() : '';
+            
+            if(model) fullMessage += `🚜 <b>Модель:</b> ${model}\n`;
+            if(location) fullMessage += `📍 <b>Место:</b> ${location}\n`;
+            if(userMsg) fullMessage += `📝 <b>Описание:</b> ${userMsg}`;
+            
+            // Подменяем поле message на наш собранный текст
+            formData.set('message', fullMessage);
+
+            // 3. Визуализация загрузки
+            btn.disabled = true;
+            btn.innerHTML = 'ОТПРАВКА...';
+
+            // 4. Отправка на send.php
+            fetch('send.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert('✅ Ваша заявка принята! Инженер свяжется с вами в ближайшее время.');
+                    form.reset(); // Очистить форму
+                } else {
+                    alert('❌ Ошибка отправки: ' + (data.message || 'Попробуйте позже'));
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('❌ Произошла ошибка сети. Попробуйте еще раз.');
+            })
+            .finally(() => {
+                // Возвращаем кнопку в исходное состояние (с анимацией)
+                btn.disabled = false;
+                btn.innerHTML = originalBtnContent;
+            });
         });
     }
 });

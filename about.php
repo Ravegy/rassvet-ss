@@ -135,7 +135,7 @@
                         </div>
                     </div>
 
-                    <a href="/service.php" class="btn btn-full">ПОДРОБНЕЕ</a>
+                    <a href="service.php" class="btn-neon"><span></span><span></span><span></span><span></span>ПОДРОБНЕЕ</a>
                 </div>
 
                 <div class="tech-card">
@@ -175,8 +175,7 @@
                             </div>
                         </div>
                     </div>
-
-                    <a href="/contacts.php" class="btn btn-full">СВЯЗАТЬСЯ С НАМИ</a>
+                    <a href="contacts.php" class="btn-neon"><span></span><span></span><span></span><span></span>СВЯЗАТЬСЯ С НАМИ</a>
                 </div>
             </div>
         </section>

@@ -343,3 +343,16 @@
 .delay-200 { animation-delay: 0.2s; }
 .delay-300 { animation-delay: 0.3s; }
 .delay-500 { animation-delay: 0.5s; }
+/* Кнопки Profile Style (High Contrast) + Slow Neon */
+.btn-neon{position:relative;display:inline-block;padding:15px 40px;color:#fff;font-family:var(--font-head);font-weight:700;text-transform:uppercase;letter-spacing:1px;text-decoration:none;font-size:12px;overflow:hidden;transition:.3s;margin-right:20px;background:rgba(20,20,20,.9);border:1px solid rgba(255,255,255,.2);border-radius:4px;z-index:1}.btn-neon:hover{background:#ff3333;color:#fff;border-color:#ff3333;box-shadow:0 0 20px rgba(255,51,51,.4)}.btn-neon span{position:absolute;display:block}.btn-neon span:nth-child(1){top:0;left:-100%;width:100%;height:1px;background:linear-gradient(90deg,transparent,#ff3333);animation:btn-anim1 3s linear infinite}.btn-neon span:nth-child(2){top:-100%;right:0;width:1px;height:100%;background:linear-gradient(180deg,transparent,#ff3333);animation:btn-anim2 3s linear infinite;animation-delay:.75s}.btn-neon span:nth-child(3){bottom:0;right:-100%;width:100%;height:1px;background:linear-gradient(270deg,transparent,#ff3333);animation:btn-anim3 3s linear infinite;animation-delay:1.5s}.btn-neon span:nth-child(4){bottom:-100%;left:0;width:1px;height:100%;background:linear-gradient(360deg,transparent,#ff3333);animation:btn-anim4 3s linear infinite;animation-delay:2.25s}@keyframes btn-anim1{0%{left:-100%}50%,100%{left:100%}}@keyframes btn-anim2{0%{top:-100%}50%,100%{top:100%}}@keyframes btn-anim3{0%{right:-100%}50%,100%{right:100%}}@keyframes btn-anim4{0%{bottom:-100%}50%,100%{bottom:100%}}
+/* Адаптация кнопки для формы VIN-запроса */
+.vin-form .btn-neon {
+    width: 100%;       /* На всю ширину формы */
+    margin: 0;         /* Убираем отступ справа */
+    padding: 15px 0;   /* Центруем текст по вертикали */
+    background: rgba(20, 20, 20, 0.9); /* Темный фон */
+}
+
+.vin-form .btn-neon:hover {
+    background: #ff3333; /* Красный фон при наведении */
+}

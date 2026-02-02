@@ -31,10 +31,16 @@
                         Прямые поставки комплектующих для харвестеров и форвардеров Komatsu Forest, Ponsse, John Deere. Собственный склад в Санкт-Петербурге.
                     </p>
                     
-                    <div class="hero__buttons anim-hidden animate-up delay-300">
-                        <a href="catalog.php" class="btn btn-main">ПЕРЕЙТИ В КАТАЛОГ</a>
-                        <a href="service.php" class="btn btn-sec">СЕРВИС И РЕМОНТ</a>
-                    </div>
+<div class="hero__buttons anim-hidden animate-up delay-300">
+    <a href="catalog.php" class="btn-neon">
+        <span></span><span></span><span></span><span></span>
+        ПЕРЕЙТИ В КАТАЛОГ
+    </a>
+    <a href="service.php" class="btn-neon">
+        <span></span><span></span><span></span><span></span>
+        СЕРВИС И РЕМОНТ
+    </a>
+</div>
                 </div>
                 
                 <div class="hero__bento-wrapper anim-hidden animate-right delay-100">
@@ -200,7 +206,7 @@
                         <div class="form-group">
                             <input type="text" name="message" class="form-input" placeholder="VIN-код или Модель техники">
                         </div>
-                        <button type="submit" class="btn btn-main form-btn">ПОДОБРАТЬ ЗАПЧАСТЬ</button>
+                        <button type="submit" class="btn-neon form-btn"><span></span><span></span><span></span><span></span>ПОДОБРАТЬ ЗАПЧАСТЬ</button>
                     </form>
                 </div>
             </div>
