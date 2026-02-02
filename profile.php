@@ -91,7 +91,7 @@ $statuses = [
                     </div>
                     
                     <button type="submit" class="btn-save-custom">СОХРАНИТЬ ИЗМЕНЕНИЯ</button>
-                    <a href="logout.php" class="btn-logout">ВЫЙТИ ИЗ АККАУНТА</a>
+                    <a href="login.php?action=logout" class="btn-logout">ВЫЙТИ ИЗ АККАУНТА</a>
                 </form>
             </div>
 

@@ -2,6 +2,15 @@
 session_start();
 require_once 'includes/db.php';
 
+// --- ЛОГИКА ВЫХОДА ---
+if (isset($_GET['action']) && $_GET['action'] === 'logout') {
+    session_unset();
+    session_destroy();
+    header('Location: login.php');
+    exit;
+}
+
+// Если пользователь уже вошел (и не нажал выход), отправляем в профиль
 if (isset($_SESSION['user_id'])) {
     header('Location: profile.php');
     exit;
@@ -62,11 +71,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $user = $stmt->fetch();
 
             if ($user && password_verify($password, $user['password'])) {
-                // Здесь транзакция не так критична, но для надежности переноса корзины можно добавить
-                // (хотя при входе мы ничего не ломаем, если корзина не перенесется, просто будет обидно)
                 
                 $current_session = session_id();
-                // Просто выполняем перенос
+                // Перенос корзины
                 $pdo->prepare("UPDATE cart SET user_id = ? WHERE session_id = ? AND user_id = 0")
                     ->execute([$user['id'], $current_session]);
 

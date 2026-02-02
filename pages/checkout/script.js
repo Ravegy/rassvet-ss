@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     
-    // --- ПЕРЕКЛЮЧАТЕЛЬ ---
+    // --- ПЕРЕКЛЮЧАТЕЛЬ ЮР/ФИЗ ЛИЦО ---
     const radios = document.querySelectorAll('input[name="entity_type"]');
     const legalBlock = document.getElementById('legal-block');
     const legalInputs = legalBlock.querySelectorAll('input');
@@ -36,33 +36,34 @@ document.addEventListener('DOMContentLoaded', () => {
             const fd = new FormData(form);
 
             try {
-                // 1. ОТПРАВКА В TELEGRAM
-                const tgResponse = await fetch('send.php', { method: 'POST', body: fd });
-                const tgResult = await tgResponse.json();
-
-                if (tgResult.status !== 'success') {
-                    throw new Error('Ошибка Telegram: ' + tgResult.message);
-                }
-
-                // 2. СОХРАНЕНИЕ В БАЗУ ДАННЫХ (И ОЧИСТКА КОРЗИНЫ)
+                // 1. СНАЧАЛА СОХРАНЯЕМ В БАЗУ (ГЛАВНЫЙ ПРИОРИТЕТ)
                 fd.append('action', 'save_order');
                 const dbResponse = await fetch('api_actions.php', { method: 'POST', body: fd });
                 
-                // Проверяем, что вернул сервер (вдруг там HTML ошибка)
+                // Проверяем ответ сервера
                 const dbText = await dbResponse.text();
                 let dbResult;
                 try {
                     dbResult = JSON.parse(dbText);
                 } catch (e) {
                     console.error('Ответ сервера (не JSON):', dbText);
-                    throw new Error('Ошибка сервера БД (см. консоль)');
+                    throw new Error('Ошибка сервера БД. Свяжитесь с поддержкой.');
                 }
 
                 if (dbResult.status !== 'success') {
                     throw new Error('Ошибка сохранения заказа: ' + dbResult.message);
                 }
 
-                // 3. ЕСЛИ ВСЕ ОК -> ПОКАЗЫВАЕМ УСПЕХ
+                // 2. ЕСЛИ СОХРАНИЛОСЬ -> ОТПРАВЛЯЕМ В TELEGRAM
+                // Добавляем номер заказа в начало сообщения для Телеграма
+                let currentMsg = fd.get('message') || '';
+                fd.set('message', `ЗАКАЗ №${dbResult.order_id}\n` + currentMsg);
+                
+                // Отправляем в фоне (не ждем ответа, чтобы не задерживать клиента)
+                // Если Телеграм ляжет, клиент все равно увидит успешный экран
+                fetch('send.php', { method: 'POST', body: fd }).catch(err => console.error('TG Error:', err));
+
+                // 3. ПОКАЗЫВАЕМ ЭКРАН УСПЕХА
                 const grid = document.querySelector('.checkout-grid');
                 grid.innerHTML = `
                     <div class="tech-card" style="grid-column: 1 / -1; text-align:center; padding: 60px 20px;">
@@ -83,12 +84,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
                 window.scrollTo({ top: 0, behavior: 'smooth' });
                 
-                // Обнуляем счетчик в шапке
+                // Обнуляем корзину в шапке
                 if(typeof updateCartUI === 'function') updateCartUI([]);
 
             } catch (error) {
                 console.error(error);
-                alert(error.message); // Теперь вы увидите конкретную ошибку!
+                alert(error.message);
                 btn.innerHTML = originalText;
                 btn.disabled = false;
                 btn.style.opacity = '1';
@@ -99,7 +100,8 @@ document.addEventListener('DOMContentLoaded', () => {
     recalcHiddenMessage();
 });
 
-// ... (Остальные функции: updateQty, removeItem, recalcHiddenMessage, updatePageTotals остаются без изменений) ...
+// --- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ---
+
 function recalcHiddenMessage() {
     const hiddenMsg = document.getElementById('full-message');
     if(!hiddenMsg) return;
@@ -113,8 +115,7 @@ function recalcHiddenMessage() {
     const address = fd.get('address');
     const comment = fd.get('comment');
 
-    let txt = "НОВЫЙ ЗАКАЗ (САЙТ)\n";
-    txt += "========================\n";
+    let txt = "------------------------\n";
     txt += `ТИП: ${isYur ? 'ЮР. ЛИЦО' : 'ФИЗ. ЛИЦО'}\n`;
     
     if(isYur) {
@@ -122,9 +123,7 @@ function recalcHiddenMessage() {
         if(inn)     txt += `ИНН: ${inn}\n`;
     }
     
-    txt += `КОНТАКТ: ${fd.get('name')}\n`;
-    txt += `ТЕЛЕФОН: ${fd.get('phone')}\n`;
-    if(fd.get('email')) txt += `EMAIL: ${fd.get('email')}\n`;
+    // Имя и телефон уже есть в полях send.php, дублируем для наглядности в теле письма
     if(address) txt += `АДРЕС: ${address}\n`;
     if(comment) txt += `КОММЕНТ: ${comment}\n`;
     
@@ -160,6 +159,7 @@ async function updateQty(btn, delta) {
     try {
         await fetch('api_actions.php', { method: 'POST', body: fd });
         if(typeof updateCartUI === 'function') {
+            // Обновляем шапку без перезагрузки
             let res = await fetch('api_actions.php', { method: 'POST', body: new URLSearchParams({action: 'get_cart'})});
             let data = await res.json();
             updateCartUI(data.cart);

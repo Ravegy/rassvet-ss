@@ -1,51 +1,103 @@
-// --- ГЛОБАЛЬНЫЕ ФУНКЦИИ (Доступны везде) ---
-
-function updateCartUI(cartData) {
-    const countEl = document.getElementById('cart-count');
-    const listEl = document.getElementById('cart-items');
+window.updateCartUI = function(cart) {
+    const countEls = document.querySelectorAll('.cart-count, .cart-badge');
+    const existingOverlay = document.querySelector('.cart-overlay');
     
-    let total = 0;
-    if(Array.isArray(cartData)) {
-        cartData.forEach(item => total += parseInt(item.qty));
+    let totalQty = 0;
+    if (cart && Array.isArray(cart)) {
+        cart.forEach(item => totalQty += parseInt(item.qty));
     }
-    if(countEl) countEl.innerText = total;
 
-    if(listEl) {
-        listEl.innerHTML = '';
+    countEls.forEach(el => {
+        el.innerText = totalQty;
+        el.style.display = totalQty > 0 ? 'flex' : 'none';
         
-        if(!cartData || cartData.length === 0) {
-            listEl.innerHTML = '<div class="cart-empty">Ваша корзина пуста</div>';
-        } else {
-            cartData.forEach(item => {
-                let row = document.createElement('div');
-                row.className = 'cart-item-row';
-                
-                row.innerHTML = `
+        el.classList.remove('pulse-anim');
+        void el.offsetWidth;
+        el.classList.add('pulse-anim');
+    });
+
+    let overlay = existingOverlay;
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.className = 'cart-overlay';
+        overlay.id = 'cart-overlay';
+        document.body.appendChild(overlay);
+        
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) overlay.classList.remove('active');
+        });
+    }
+
+    let html = `
+        <div class="cart-modal">
+            <div class="cart-header">
+                <span class="cart-title">ВАШ ЗАКАЗ (${totalQty})</span>
+                <button class="btn-close-cart" id="cart-close">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <div class="cart-body">
+    `;
+
+    if (!cart || cart.length === 0) {
+        html += `
+            <div class="empty-cart-msg">
+                <svg class="empty-cart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                <div>Ваша корзина пуста</div>
+            </div>
+        `;
+    } else {
+        cart.forEach(item => {
+            html += `
+                <div class="cart-item-row">
                     <div class="c-info">
                         <span class="c-art">${item.part_number}</span>
-                        <span class="c-name">${item.name || 'Без названия'}</span>
+                        <span class="c-name">${item.name || 'Товар без названия'}</span>
                     </div>
-                    
                     <div class="c-controls">
                         <button class="btn-qty btn-minus" data-art="${item.part_number}">−</button>
                         <span class="c-qty-val">${item.qty}</span>
                         <button class="btn-qty btn-plus" data-art="${item.part_number}">+</button>
                     </div>
-
-                    <button class="btn-del-item" data-art="${item.part_number}" title="Удалить">
-                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    <button class="btn-del-item" data-art="${item.part_number}">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                     </button>
-                `;
-                listEl.appendChild(row);
-            });
-        }
+                </div>
+            `;
+        });
     }
-}
 
-// --- ОСНОВНОЙ КОД ---
+    html += `</div>`; 
+
+    if (cart && cart.length > 0) {
+        html += `
+            <div class="cart-footer">
+                <div class="cart-total-row">
+                    <span>Позиций:</span>
+                    <span class="cart-total-val">${cart.length}</span>
+                </div>
+                <div class="cart-total-row">
+                    <span>Всего товаров:</span>
+                    <span class="cart-total-val">${totalQty}</span>
+                </div>
+                <a href="checkout.php" class="btn-order-cart">Оформить заказ</a>
+            </div>
+        `;
+    }
+
+    html += `</div>`;
+    overlay.innerHTML = html;
+
+    const closeBtn = overlay.querySelector('#cart-close');
+    if(closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            overlay.classList.remove('active');
+        });
+    }
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     
-    // Вспомогательная функция для запросов внутри common.js
     async function apiRequest(action, data = {}) {
         let formData = new FormData();
         formData.append('action', action);
@@ -55,12 +107,11 @@ document.addEventListener('DOMContentLoaded', () => {
             let res = await fetch('api_actions.php', { method: 'POST', body: formData });
             return await res.json();
         } catch (e) {
-            console.error('API Error:', e);
+            console.error(e);
             return { status: 'error', message: 'Connection failed' };
         }
     }
 
-    // 1. БУРГЕР МЕНЮ
     const burger = document.querySelector('.burger-btn');
     const nav = document.querySelector('.nav');
 
@@ -86,7 +137,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 2. АНИМАЦИИ
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -101,7 +151,6 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(el);
     });
 
-    // 3. МАСКА ТЕЛЕФОНА
     const phoneInputs = document.querySelectorAll('input[type="tel"]');
     phoneInputs.forEach(input => {
         input.addEventListener('input', (e) => {
@@ -114,7 +163,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 4. FAQ
     const faqItems = document.querySelectorAll('.faq-item');
     faqItems.forEach(item => {
         item.addEventListener('click', () => {
@@ -122,7 +170,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 5. КОПИРОВАНИЕ
     const copyBtns = document.querySelectorAll('.copy-btn, .copy-btn-mini, .copy-text');
     copyBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
@@ -133,7 +180,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     const originalHTML = btn.innerHTML;
                     btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>';
                     btn.style.color = '#ff3333';
-
                     setTimeout(() => {
                         btn.innerHTML = originalHTML;
                         btn.style.color = '';
@@ -143,7 +189,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 6. ОТПРАВКА ФОРМ
     const forms = document.querySelectorAll('form');
     forms.forEach(form => {
         if (form.classList.contains('static-form')) return;
@@ -190,7 +235,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
     
-    // 7. СЛАЙДЕР
     const slides = document.querySelectorAll('.slide');
     if (slides.length > 0) {
         const container = document.querySelector('.slide-card-container');
@@ -209,65 +253,48 @@ document.addEventListener('DOMContentLoaded', () => {
         setInterval(nextSlide, 5000);
     }
 
-    // 8. КОРЗИНА (Оверлей и Кнопки внутри корзины)
-    const cartOverlay = document.getElementById('cart-overlay');
-    const cartToggle = document.getElementById('cart-toggle');
-    const cartClose = document.getElementById('cart-close');
-    const cartItemsContainer = document.getElementById('cart-items');
-
-    if(cartToggle && cartOverlay) {
+    const cartToggle = document.querySelector('.header-cart-btn') || document.getElementById('cart-toggle');
+    if(cartToggle) {
         cartToggle.addEventListener('click', (e) => {
             e.preventDefault();
-            cartOverlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
+            e.stopPropagation();
+            const overlay = document.querySelector('.cart-overlay');
+            if(overlay) overlay.classList.add('active');
         });
     }
 
-    function closeCart() {
-        if(cartOverlay) {
-            cartOverlay.classList.remove('active');
-            document.body.style.overflow = '';
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.btn-plus')) {
+            e.preventDefault();
+            e.stopPropagation();
+            const btn = e.target.closest('.btn-plus');
+            apiRequest('update_qty', { article: btn.getAttribute('data-art'), direction: 'plus' })
+                .then(res => { if(res.status === 'success') updateCartUI(res.cart); });
         }
-    }
-
-    if(cartClose) cartClose.addEventListener('click', closeCart);
-    if(cartOverlay) {
-        cartOverlay.addEventListener('click', (e) => { if (e.target === cartOverlay) closeCart(); });
-    }
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && cartOverlay && cartOverlay.classList.contains('active')) closeCart();
+        if (e.target.closest('.btn-minus')) {
+            e.preventDefault();
+            e.stopPropagation();
+            const btn = e.target.closest('.btn-minus');
+            apiRequest('update_qty', { article: btn.getAttribute('data-art'), direction: 'minus' })
+                .then(res => { if(res.status === 'success') updateCartUI(res.cart); });
+        }
+        if (e.target.closest('.btn-del-item')) {
+            e.preventDefault();
+            e.stopPropagation();
+            const btn = e.target.closest('.btn-del-item');
+            const row = btn.closest('.cart-item-row');
+            if(row) row.style.opacity = '0.5';
+            apiRequest('delete_item', { article: btn.getAttribute('data-art') })
+                .then(res => { if(res.status === 'success') updateCartUI(res.cart); });
+        }
     });
 
-    if (cartItemsContainer) {
-        cartItemsContainer.addEventListener('click', function(e) {
-            if (e.target.closest('.btn-plus')) {
-                const btn = e.target.closest('.btn-plus');
-                apiRequest('update_qty', { article: btn.getAttribute('data-art'), direction: 'plus' })
-                    .then(res => { if(res.status === 'success') updateCartUI(res.cart); });
-            }
-            if (e.target.closest('.btn-minus')) {
-                const btn = e.target.closest('.btn-minus');
-                apiRequest('update_qty', { article: btn.getAttribute('data-art'), direction: 'minus' })
-                    .then(res => { if(res.status === 'success') updateCartUI(res.cart); });
-            }
-            if (e.target.closest('.btn-del-item')) {
-                const btn = e.target.closest('.btn-del-item');
-                btn.closest('.cart-item-row').style.opacity = '0.5';
-                apiRequest('delete_item', { article: btn.getAttribute('data-art') })
-                    .then(res => { if(res.status === 'success') updateCartUI(res.cart); });
-            }
-        });
-    }
-
-    // 9. ИНИЦИАЛИЗАЦИЯ КОРЗИНЫ
     apiRequest('get_cart').then(res => {
         if(res.status === 'success') updateCartUI(res.cart);
     });
 
-    // 10. КНОПКИ ДОБАВЛЕНИЯ (Обычные, не на схеме)
     const addCartBtns = document.querySelectorAll('.btn-add-cart');
     addCartBtns.forEach(btn => {
-        // Проверяем, что это не кнопка схемы (у них своя логика)
         if(!btn.classList.contains('scheme-btn')) {
             btn.addEventListener('click', function() {
                 let art = this.getAttribute('data-art');

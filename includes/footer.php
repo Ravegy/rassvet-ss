@@ -77,26 +77,3 @@
         </div>
     </div>
 </footer>
-
-<div class="cart-overlay" id="cart-overlay">
-    <div class="cart-modal">
-        <div class="cart-header">
-            <span class="cart-title">ВАШ ЗАКАЗ</span>
-            <button class="btn-close-cart" id="cart-close" aria-label="Закрыть">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-            </button>
-        </div>
-        
-        <div class="cart-items" id="cart-items"></div>
-
-        <div class="cart-footer">
-            <div class="cart-total-row">
-                <span>ИТОГО:</span>
-                <span class="cart-total-sum" id="cart-total-sum">По запросу</span>
-            </div>
-            <a href="checkout.php" class="btn btn-main">ЗАПРОСИТЬ</a>
-        </div>
-    </div>
-</div>
-
-<script src="common.js?v=<?= time() ?>"></script>
