@@ -84,7 +84,7 @@
 </div>
 <div class="tech-card form-card">
 <h3 class="card-label">НАПИСАТЬ СООБЩЕНИЕ</h3>
-<form class="contact-form" id="contactForm" enctype="multipart/form-data">
+<form class="contact-form js-send-form" enctype="multipart/form-data">
 <div class="form-row">
 <input type="text" name="name" class="c-input" placeholder="Ваше имя" required>
 <input type="tel" name="phone" class="c-input" placeholder="Ваш телефон" required>

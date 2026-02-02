@@ -196,7 +196,7 @@
                         </ul>
                     </div>
                     
-                    <form class="vin-form">
+                    <form class="vin-form js-send-form">
                         <div class="form-group">
                             <input type="text" name="name" class="form-input" placeholder="Ваше имя" required>
                         </div>

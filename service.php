@@ -259,7 +259,7 @@
                     </div>
                 </div>
                 <div class="fw-right">
-<form class="service-form" id="serviceForm">
+<form class="service-form js-send-form">
     <div class="form-grid">
         <input type="text" name="name" class="c-input" placeholder="Ваше имя" required>
         <input type="tel" name="phone" class="c-input" placeholder="+7 (___) ___-__-__" required>

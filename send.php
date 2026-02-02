@@ -24,17 +24,23 @@ try {
 
     $name = isset($_POST['name']) ? trim($_POST['name']) : 'Без имени';
     $phone = isset($_POST['phone']) ? trim($_POST['phone']) : '';
-    $email = isset($_POST['email']) ? trim($_POST['email']) : ''; // Добавили Email
+    $email = isset($_POST['email']) ? trim($_POST['email']) : '';
+    // message теперь принимаем как есть (JS сам его отформатировал)
     $message = isset($_POST['message']) ? trim($_POST['message']) : '';
     
     if (strlen($phone) < 5) throw new Exception('Укажите телефон');
 
+    // Формируем шапку
     $txt = "<b>🔔 ЗАЯВКА С САЙТА</b>\n";
     $txt .= "--------------------------------\n";
     $txt .= "👤 <b>Имя:</b> " . htmlspecialchars($name) . "\n";
     $txt .= "📞 <b>Телефон:</b> " . htmlspecialchars($phone) . "\n";
-    if (!empty($email)) $txt .= "📧 <b>Email:</b> " . htmlspecialchars($email) . "\n"; // Добавили в текст
-    if (!empty($message)) $txt .= "💬 <b>Инфо:</b> " . htmlspecialchars($message) . "\n";
+    if (!empty($email)) $txt .= "📧 <b>Email:</b> " . htmlspecialchars($email) . "\n";
+    
+    // Вставляем сообщение БЕЗ изменений и БЕЗ приставки "Инфо", так как JS сам добавляет иконки и заголовки
+    if (!empty($message)) {
+        $txt .= "\n" . $message . "\n";
+    }
 
     $endpoint = 'sendMessage';
     $post_fields = [
@@ -56,7 +62,6 @@ try {
     }
 
     // === ОТПРАВКА ===
-    // Используем прямой IP для обхода блокировок DNS на хостинге
     $url = "https://149.154.167.220/bot{$config['tg_token']}/{$endpoint}";
     
     $ch = curl_init($url);
