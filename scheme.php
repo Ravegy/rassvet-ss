@@ -6,18 +6,22 @@ $model = isset($_GET['model']) ? urldecode($_GET['model']) : '';
 $scheme_id = isset($_GET['id']) ? $_GET['id'] : '';
 $highlight = isset($_GET['highlight']) ? $_GET['highlight'] : '';
 
-// 1. Получаем массивы артикулов
 $cur_user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 0;
 $cur_session_id = session_id();
 
-// Корзина
+$is_admin = 0;
+if ($cur_user_id) {
+    $stmt_admin = $pdo->prepare("SELECT is_admin FROM users WHERE id = ?");
+    $stmt_admin->execute([$cur_user_id]);
+    $is_admin = $stmt_admin->fetchColumn();
+}
+
 $cart_parts = [];
 $sql_c = "SELECT part_number FROM cart WHERE " . ($cur_user_id ? "user_id = ?" : "session_id = ?");
 $stmt_c = $pdo->prepare($sql_c);
 $stmt_c->execute([$cur_user_id ?: $cur_session_id]);
 $cart_parts = $stmt_c->fetchAll(PDO::FETCH_COLUMN);
 
-// Избранное
 $fav_parts = [];
 try {
     $sql_f = "SELECT part_number FROM favorites WHERE " . ($cur_user_id ? "user_id = ?" : "session_id = ?");
@@ -26,7 +30,6 @@ try {
     $fav_parts = $stmt_f->fetchAll(PDO::FETCH_COLUMN);
 } catch (Exception $e) {}
 
-// Инфо о схеме
 $stmt = $pdo->prepare("SELECT name, image, parent_id FROM structure WHERE cat_id = ? AND model = ?");
 $stmt->execute([$scheme_id, $model]);
 $scheme_info = $stmt->fetch();
@@ -35,7 +38,6 @@ $scheme_title = $scheme_info ? $scheme_info['name'] : 'Схема';
 $scheme_image = (!empty($scheme_info['image'])) ? $scheme_info['image'] : 'cat-harvester.jpg';
 $back_id = (!empty($scheme_info['parent_id']) && $scheme_info['parent_id'] != '0') ? $scheme_info['parent_id'] : 'ROOT';
 
-// Хлебные крошки
 $breadcrumbs = [];
 $curr_id = $back_id;
 while ($curr_id && $curr_id !== 'ROOT') {
@@ -50,7 +52,6 @@ while ($curr_id && $curr_id !== 'ROOT') {
     }
 }
 
-// Запчасти
 $stmt_parts = $pdo->prepare("SELECT * FROM parts WHERE cat_id = ? AND model = ?");
 $stmt_parts->execute([$scheme_id, $model]);
 $parts = $stmt_parts->fetchAll();
@@ -105,14 +106,41 @@ usort($parts, function($a, $b) { return (int)$a['pos_code'] <=> (int)$b['pos_cod
                         <button class="btn-tool" id="btn-zoom-in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
                     </div>
                 </div>
+                
                 <div class="scheme-img-wrapper" id="scheme-wrapper">
-                    <img src="img/<?= htmlspecialchars($scheme_image) ?>" alt="<?= htmlspecialchars($scheme_title) ?>" class="scheme-image" id="scheme-image">
-                    <div class="scheme-watermark">
-                        <div class="wm-line">ОНЛАЙН КАТАЛОГ РАССВЕТ-С</div>
-                        <div class="wm-line wm-sub">RASSVET-S.RU</div>
+                    <div id="scheme-transform-layer" style="position: relative; transform-origin: 0 0;">
+                        <img src="img/<?= htmlspecialchars($scheme_image) ?>" alt="<?= htmlspecialchars($scheme_title) ?>" class="scheme-image" id="scheme-image">
+                        
+                        <?php foreach ($parts as $part): ?>
+                            <?php 
+                            $x_list = explode(';', $part['pos_x']);
+                            $y_list = explode(';', $part['pos_y']);
+                            
+                            foreach ($x_list as $index => $x_val):
+                                $y_val = isset($y_list[$index]) ? $y_list[$index] : null;
+                                
+                                // ВАЖНОЕ ИЗМЕНЕНИЕ: Рисуем только если координата > 0
+                                if ((float)$x_val > 0 && (float)$y_val > 0):
+                            ?>
+                                <div class="scheme-marker" 
+                                     data-pos="<?= $part['pos_code'] ?>" 
+                                     data-art="<?= $part['part_number'] ?>"
+                                     style="top: <?= trim($x_val) ?>%; left: <?= trim($y_val) ?>%;">
+                                </div>
+                            <?php 
+                                endif;
+                            endforeach; 
+                            ?>
+                        <?php endforeach; ?>
+
+                        <div class="scheme-watermark">
+                            <div class="wm-line">ОНЛАЙН КАТАЛОГ РАССВЕТ-С</div>
+                            <div class="wm-line wm-sub">RASSVET-S.RU</div>
+                        </div>
                     </div>
                 </div>
-                <div class="scheme-controls"><span class="hint">Колесико / Щипок: Зум &bull; Драг: Перемещение</span></div>
+
+                <div class="scheme-controls"><span class="hint">Колесико / Щипок: Зум &bull; Драг: Перемещение &bull; ПКМ: Удалить точку</span></div>
             </div>
 
             <div class="parts-list tech-card">
@@ -135,8 +163,6 @@ usort($parts, function($a, $b) { return (int)$a['pos_code'] <=> (int)$b['pos_cod
                                     $is_highlight = ($highlight && (string)$part['part_number'] === (string)$highlight);
                                     $row_class = $is_highlight ? 'highlight-row' : '';
                                     $row_id = $is_highlight ? 'target-part' : '';
-
-                                    // Проверка
                                     $in_cart = in_array((string)$part['part_number'], $cart_parts);
                                     $in_fav = in_array((string)$part['part_number'], $fav_parts);
                                 ?>
@@ -150,54 +176,22 @@ usort($parts, function($a, $b) { return (int)$a['pos_code'] <=> (int)$b['pos_cod
                                 <tr class="part-details-row">
                                     <td colspan="5">
                                         <div class="details-content">
-                                            
                                             <div class="cart-container" data-art="<?= $part['part_number'] ?>" title="В корзину">
                                                 <input type="checkbox" class="checkbox" <?= $in_cart ? 'checked' : '' ?>>
                                                 <div class="svg-container">
-                                                    
-                                                    <svg viewBox="0 0 24 24" class="svg-outline" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                        <circle cx="9" cy="21" r="1"></circle>
-                                                        <circle cx="20" cy="21" r="1"></circle>
-                                                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                                                    </svg>
-                                                    
-                                                    <svg viewBox="0 0 24 24" class="svg-filled" fill="currentColor" stroke="none">
-                                                        <circle cx="9" cy="21" r="1"></circle>
-                                                        <circle cx="20" cy="21" r="1"></circle>
-                                                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                                                    </svg>
-                                                    
-                                                    <svg class="svg-celebrate" width="100" height="100" xmlns="http://www.w3.org/2000/svg">
-                                                        <polygon points="10,10 20,20"></polygon>
-                                                        <polygon points="10,50 20,50"></polygon>
-                                                        <polygon points="20,80 30,70"></polygon>
-                                                        <polygon points="90,10 80,20"></polygon>
-                                                        <polygon points="90,50 80,50"></polygon>
-                                                        <polygon points="80,80 70,70"></polygon>
-                                                    </svg>
+                                                    <svg viewBox="0 0 24 24" class="svg-outline" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                                                    <svg viewBox="0 0 24 24" class="svg-filled" fill="currentColor" stroke="none"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                                                    <svg class="svg-celebrate" width="100" height="100" xmlns="http://www.w3.org/2000/svg"><polygon points="10,10 20,20"></polygon><polygon points="10,50 20,50"></polygon><polygon points="20,80 30,70"></polygon><polygon points="90,10 80,20"></polygon><polygon points="90,50 80,50"></polygon><polygon points="80,80 70,70"></polygon></svg>
                                                 </div>
                                             </div>
-                                            
                                             <div class="heart-container" data-art="<?= $part['part_number'] ?>" title="В избранное">
                                                 <input type="checkbox" class="checkbox" <?= $in_fav ? 'checked' : '' ?>>
                                                 <div class="svg-container">
-                                                    <svg viewBox="0 0 24 24" class="svg-outline" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Zm-3.585,18.4a2.973,2.973,0,0,1-3.83,0C4.947,16.006,2,11.87,2,8.967a4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,11,8.967a1,1,0,0,0,2,0,4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,22,8.967C22,11.87,19.053,16.006,13.915,20.313Z"></path>
-                                                    </svg>
-                                                    <svg viewBox="0 0 24 24" class="svg-filled" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Z"></path>
-                                                    </svg>
-                                                    <svg class="svg-celebrate" width="100" height="100" xmlns="http://www.w3.org/2000/svg">
-                                                        <polygon points="10,10 20,20"></polygon>
-                                                        <polygon points="10,50 20,50"></polygon>
-                                                        <polygon points="20,80 30,70"></polygon>
-                                                        <polygon points="90,10 80,20"></polygon>
-                                                        <polygon points="90,50 80,50"></polygon>
-                                                        <polygon points="80,80 70,70"></polygon>
-                                                    </svg>
+                                                    <svg viewBox="0 0 24 24" class="svg-outline" xmlns="http://www.w3.org/2000/svg"><path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Zm-3.585,18.4a2.973,2.973,0,0,1-3.83,0C4.947,16.006,2,11.87,2,8.967a4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,11,8.967a1,1,0,0,0,2,0,4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,22,8.967C22,11.87,19.053,16.006,13.915,20.313Z"></path></svg>
+                                                    <svg viewBox="0 0 24 24" class="svg-filled" xmlns="http://www.w3.org/2000/svg"><path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Z"></path></svg>
+                                                    <svg class="svg-celebrate" width="100" height="100" xmlns="http://www.w3.org/2000/svg"><polygon points="10,10 20,20"></polygon><polygon points="10,50 20,50"></polygon><polygon points="20,80 30,70"></polygon><polygon points="90,10 80,20"></polygon><polygon points="90,50 80,50"></polygon><polygon points="80,80 70,70"></polygon></svg>
                                                 </div>
                                             </div>
-
                                         </div>
                                     </td>
                                 </tr>
@@ -213,6 +207,10 @@ usort($parts, function($a, $b) { return (int)$a['pos_code'] <=> (int)$b['pos_cod
     </div>
 </main>
 <?php include 'includes/footer.php'; ?>
+
+<script>
+    const IS_ADMIN = <?= $is_admin == 1 ? 'true' : 'false' ?>;
+</script>
 <script src="pages/scheme/script.js?v=<?= time() ?>"></script>
 </body>
 </html>

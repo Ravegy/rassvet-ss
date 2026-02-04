@@ -1,35 +1,245 @@
-.catalog-page{padding-top:140px;padding-bottom:100px}
-.catalog-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:15px;margin-bottom:80px}
-.cat-item{background:#181818;border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden;text-decoration:none;transition:0.3s;display:flex;flex-direction:column;height:100%;position:relative}
-.cat-item:hover{border-color:rgba(255,255,255,0.2);transform:translateY(-5px);box-shadow:0 10px 40px rgba(0,0,0,0.6)}
-.cat-img{aspect-ratio:1/1;width:100%;background:#111;display:flex;align-items:center;justify-content:center;border-bottom:1px solid rgba(255,255,255,0.05);overflow:hidden;position:relative}
-.cat-img img{width:100%;height:100%;object-fit:cover;object-position:center;transition:opacity 0.3s ease;opacity:0.9}
-.cat-img svg{width:60px;height:60px;color:#444;transition:0.4s ease;position:absolute;z-index:0}
-.cat-item:hover .cat-img img{opacity:1}
-.cat-content{padding:20px 15px;display:flex;flex-direction:column;flex-grow:1;text-align:center;position:relative;z-index:1;background:#181818}
-.cat-content h3{font-family:var(--font-head);font-size:13px;font-weight:800;color:#fff;margin:0;margin-bottom:15px;text-transform:uppercase;line-height:1.4;transition:0.3s;word-wrap:break-word}
-.cat-item:hover .cat-content h3{color:var(--yellow)}
-.cat-link{margin-top:auto;font-size:10px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:1px;transition:0.3s;border:1px solid rgba(255,255,255,0.1);padding:8px 5px;border-radius:4px;width:100%}
-.cat-item:hover .cat-link{background:var(--yellow);color:#fff;border-color:var(--yellow);box-shadow:0 5px 15px rgba(255,51,51,0.3)}
-.vin-request-block{padding:60px;text-align:center;border:1px solid var(--yellow);background:radial-gradient(circle at center,rgba(255,51,51,0.05) 0%,#181818 70%);border-radius:12px}
-.vr-content h2{font-family:var(--font-head);font-size:28px;font-weight:900;color:#fff;text-transform:uppercase;margin-bottom:15px}
-.vr-content p{color:#bbb;font-size:15px;margin-bottom:30px;max-width:600px;margin-left:auto;margin-right:auto;line-height:1.6}
-.vin-form-row{display:flex;gap:20px;max-width:900px;margin:0 auto;align-items:stretch}
-.vin-form-row .c-input{background:#111;height:55px;flex:1;min-width:0;border:1px solid rgba(255,255,255,0.1);padding:0 20px;color:#fff;border-radius:4px;font-family:var(--font-body);font-size:14px;outline:none;transition:0.3s}
-.vin-form-row .c-input:focus{border-color:var(--yellow);background:#000}
-.vin-form-row .btn{white-space:nowrap;height:55px;flex-shrink:0;padding:0 35px;border:none;cursor:pointer;font-family:var(--font-head);font-weight:700;font-size:13px;text-transform:uppercase;border-radius:4px;background:var(--yellow);color:#fff;box-shadow:0 5px 15px rgba(255,51,51,0.2);transition:0.3s}
-.vin-form-row .btn:hover{background:#fff;color:#000;transform:translateY(-2px);box-shadow:0 10px 25px rgba(255,51,51,0.4)}
-.brand-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;max-width:900px;margin:0 auto 80px}
-.brand-item .cat-img{height:300px}
-.brand-overlay{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--font-head);font-size:32px;font-weight:900;color:#fff;text-shadow:0 5px 15px rgba(0,0,0,0.8);border:2px solid var(--yellow);padding:10px 30px;background:rgba(0,0,0,0.4);backdrop-filter:blur(5px)}
+.catalog-page {
+    padding-top: 140px;
+    padding-bottom: 100px;
+}
+
+.catalog-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 15px;
+    margin-bottom: 80px;
+}
+
+/* === КАРТОЧКИ КАТАЛОГА / ГРУПП / БРЕНДОВ === */
+/* Было: background: #181818; */
+/* Стало: Стекло, как ты просил */
+.cat-item {
+    background: rgba(30, 30, 30, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    overflow: hidden;
+    text-decoration: none;
+    transition: 0.3s;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
+}
+
+.cat-item:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+    background: rgba(40, 40, 40, 0.9); /* Чуть светлее при наведении */
+}
+
+.cat-img {
+    aspect-ratio: 1/1;
+    width: 100%;
+    background: #111; /* Подложку под фото оставляем плотной, чтобы фото не просвечивало */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    overflow: hidden;
+    position: relative;
+}
+
+.cat-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: opacity 0.3s ease;
+    opacity: 0.9;
+}
+
+.cat-img svg {
+    width: 60px;
+    height: 60px;
+    color: #444;
+    transition: 0.4s ease;
+    position: absolute;
+    z-index: 0;
+}
+
+.cat-item:hover .cat-img img {
+    opacity: 1;
+}
+
+/* Контент карточки - фон убираем, так как он задан у родителя (.cat-item) */
+.cat-content {
+    padding: 20px 15px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    background: transparent; /* Прозрачный, чтобы видно было стекло */
+}
+
+.cat-content h3 {
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+    margin: 0;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    line-height: 1.4;
+    transition: 0.3s;
+    word-wrap: break-word;
+}
+
+.cat-item:hover .cat-content h3 {
+    color: var(--yellow);
+}
+
+.cat-link {
+    margin-top: auto;
+    font-size: 10px;
+    font-weight: 700;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: 0.3s;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 8px 5px;
+    border-radius: 4px;
+    width: 100%;
+}
+
+.cat-item:hover .cat-link {
+    background: var(--yellow);
+    color: #fff;
+    border-color: var(--yellow);
+    box-shadow: 0 5px 15px rgba(255, 51, 51, 0.3);
+}
+
+/* Блок VIN тоже делаем стеклянным для единообразия */
+.vin-request-block {
+    padding: 60px;
+    text-align: center;
+    border: 1px solid var(--yellow);
+    /* Стекло + легкий красный градиент */
+    background: radial-gradient(circle at center, rgba(255, 51, 51, 0.1) 0%, rgba(30, 30, 30, 0.85) 70%);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 12px;
+}
+
+.vr-content h2 {
+    font-family: var(--font-head);
+    font-size: 28px;
+    font-weight: 900;
+    color: #fff;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+}
+
+.vr-content p {
+    color: #bbb;
+    font-size: 15px;
+    margin-bottom: 30px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+}
+
+.vin-form-row {
+    display: flex;
+    gap: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+    align-items: stretch;
+}
+
+.vin-form-row .c-input {
+    background: rgba(0, 0, 0, 0.5); /* Чуть темнее инпуты */
+    height: 55px;
+    flex: 1;
+    min-width: 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0 20px;
+    color: #fff;
+    border-radius: 4px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    outline: none;
+    transition: 0.3s;
+}
+
+.vin-form-row .c-input:focus {
+    border-color: var(--yellow);
+    background: #000;
+}
+
+.vin-form-row .btn {
+    white-space: nowrap;
+    height: 55px;
+    flex-shrink: 0;
+    padding: 0 35px;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: 13px;
+    text-transform: uppercase;
+    border-radius: 4px;
+    background: var(--yellow);
+    color: #fff;
+    box-shadow: 0 5px 15px rgba(255, 51, 51, 0.2);
+    transition: 0.3s;
+}
+
+.vin-form-row .btn:hover {
+    background: #fff;
+    color: #000;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(255, 51, 51, 0.4);
+}
+
+.brand-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    max-width: 900px;
+    margin: 0 auto 80px;
+}
+
+.brand-item .cat-img {
+    height: 300px;
+}
+
+.brand-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--font-head);
+    font-size: 32px;
+    font-weight: 900;
+    color: #fff;
+    text-shadow: 0 5px 15px rgba(0, 0, 0, 0.8);
+    border: 2px solid var(--yellow);
+    padding: 10px 30px;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(5px);
+}
+
+/* КНОПКА НАЗАД */
 .btn-back {
-    color: #fff; /* Белый текст */
+    color: #fff;
     text-decoration: none;
     font-size: 12px;
     font-weight: 700;
-    /* Красная рамка и легкий красный фон сразу */
     border: 1px solid var(--yellow);
-    background: rgba(255, 51, 51, 0.15); 
+    background: rgba(255, 51, 51, 0.15);
     padding: 10px 20px;
     border-radius: 4px;
     display: inline-block;
@@ -40,66 +250,163 @@
 }
 
 .btn-back:hover {
-    background: var(--yellow); /* При наведении заливаем полностью */
+    background: var(--yellow);
     color: #fff;
     box-shadow: 0 5px 15px rgba(255, 51, 51, 0.3);
 }
-.models-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:80px}
-.model-card{background:#181818;border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:25px;display:flex;justify-content:space-between;align-items:center;text-decoration:none;transition:0.3s}
-.model-card:hover{background:var(--yellow);border-color:var(--yellow);transform:translateY(-5px)}
-.model-name{font-family:var(--font-head);font-size:20px;font-weight:800;color:#fff;text-transform:uppercase}
-.model-arrow{color:#555;font-weight:900;font-size:20px;transition:0.3s}
-.model-card:hover .model-name{color:#000}
-.model-card:hover .model-arrow{color:#000;transform:translateX(5px)}
-.model-info{display:flex;flex-direction:column;gap:4px}
-.model-sn{font-size:11px;color:#666;font-weight:500;text-transform:uppercase;letter-spacing:0.5px}
-.model-card:hover .model-sn{color:#333}
-@media (max-width:1200px){.catalog-grid{grid-template-columns:repeat(3,1fr)}}
-@media (max-width:992px){.models-grid{grid-template-columns:repeat(3,1fr)}}
-@media (max-width:768px){.catalog-grid{grid-template-columns:repeat(2,1fr)}.vin-form-row{flex-direction:column}.vin-form-row .btn{width:100%}.brand-grid{grid-template-columns:1fr;gap:20px}.brand-item .cat-img{height:200px}.models-grid{grid-template-columns:repeat(2,1fr)}}
-@media (max-width:576px){.catalog-grid{grid-template-columns:repeat(2,1fr);gap:10px}.cat-content{padding:15px 8px}.cat-content h3{font-size:11px;margin-bottom:10px}.cat-link{font-size:9px;padding:6px 2px}.vr-content h2{font-size:22px}.vin-request-block{padding:40px 20px}.models-grid{grid-template-columns:1fr}.model-card{padding:20px}}
-/* --- СТИЛИ ДЛЯ ИКОНОК ГРУПП ЗАПЧАСТЕЙ (category_demo.php) --- */
 
-/* 1. Настройки контейнера картинки */
+.models-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 80px;
+}
+
+/* === КАРТОЧКИ МОДЕЛЕЙ (КОТОРЫЕ ТЫ УТВЕРДИЛ) === */
+.model-card {
+    background: rgba(30, 30, 30, 0.85); /* Стекло */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    
+    border-left: 4px solid var(--yellow);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    
+    border-radius: 4px;
+    padding: 20px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-decoration: none;
+    transition: 0.2s ease-in-out;
+    position: relative;
+}
+
+.model-card:hover {
+    background: rgba(40, 40, 40, 0.9);
+    transform: translateX(5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    border-top-color: rgba(255, 255, 255, 0.2);
+    border-right-color: rgba(255, 255, 255, 0.2);
+    border-bottom-color: rgba(255, 255, 255, 0.2);
+}
+
+.model-name {
+    font-family: var(--font-head);
+    font-size: 20px;
+    font-weight: 800;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+.model-card:hover .model-name {
+    color: var(--yellow);
+}
+
+.model-arrow {
+    color: #555;
+    font-weight: 900;
+    font-size: 20px;
+    transition: 0.3s;
+}
+
+.model-card:hover .model-arrow {
+    color: var(--yellow);
+    transform: translateX(5px);
+}
+
+.model-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.model-sn {
+    font-size: 11px;
+    color: #888;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.model-card:hover .model-sn {
+    color: #aaa;
+}
+
+/* === АДАПТИВ (КАК БЫЛ) === */
+@media (max-width: 1200px) {
+    .catalog-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 992px) {
+    .models-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 768px) {
+    .catalog-grid { grid-template-columns: repeat(2, 1fr); }
+    .vin-form-row { flex-direction: column; }
+    .vin-form-row .btn { width: 100%; }
+    .brand-grid { grid-template-columns: 1fr; gap: 20px; }
+    .brand-item .cat-img { height: 200px; }
+    .models-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 576px) {
+    .catalog-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .cat-content { padding: 15px 8px; }
+    .cat-content h3 { font-size: 11px; margin-bottom: 10px; }
+    .cat-link { font-size: 9px; padding: 6px 2px; }
+    .vr-content h2 { font-size: 22px; }
+    .vin-request-block { padding: 40px 20px; }
+    .models-grid { grid-template-columns: 1fr; }
+    .model-card { padding: 20px; }
+}
+
+/* --- СТИЛИ ДЛЯ ИКОНОК ГРУПП --- */
 .group-img {
     background: #ffffff !important;
-    padding: 20px !important; 
-    box-sizing: border-box !important; /* ВАЖНО: Чтобы padding не увеличивал размер блока */
-    aspect-ratio: 1 / 1 !important;    /* Строго квадрат, как в главном каталоге */
+    padding: 20px !important;
+    box-sizing: border-box !important;
+    aspect-ratio: 1 / 1 !important;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-/* 2. Настройка самой картинки внутри */
 .group-img img {
     width: 100% !important;
-    height: 75% !important; /* Чуть меньше по высоте, как ты просил */
+    height: 75% !important;
     object-fit: contain !important;
     object-position: center;
     opacity: 1 !important;
     transition: transform 0.3s ease;
 }
 
-/* Эффект увеличения при наведении */
 .cat-item:hover .group-img img {
     transform: scale(1.1);
 }
 
-/* 3. Красные цифры ID (1000000...) */
 .cat-content span {
     font-size: 10px;
-    color: var(--yellow); /* Красный цвет */
+    color: var(--yellow);
     font-weight: 700;
     margin-bottom: 5px;
     display: block;
     letter-spacing: 0.5px;
 }
 
-/* 4. Выравнивание высоты контента */
-/* Чтобы карточки с короткими названиями (Двигатель) были такой же высоты, как в главном каталоге */
 .cat-content {
-    justify-content: space-between; /* Раскидываем заголовок и кнопку по высоте */
-    min-height: 110px; /* Минимальная высота текстовой части */
+    justify-content: space-between;
+    min-height: 110px;
+}
+
+@media (max-width: 600px) {
+    .page-title {
+        font-size: 22px !important;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-word;
+        hyphens: auto;
+        max-width: 100%;
+        padding: 0 10px;
+    }
 }

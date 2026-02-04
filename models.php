@@ -77,7 +77,7 @@ if ($brand == 'komatsu') {
         
         <div class="page-header">
             <h1 class="page-title"><?= $page_title ?></h1>
-            <a href="#" onclick="history.back(); return false;" class="btn-back">← НАЗАД К ВЫБОРУ БРЕНДА</a>
+            <a href="brand_select.php?type=<?= $type ?>" class="btn-back">← НАЗАД К ВЫБОРУ БРЕНДА</a>
         </div>
 
         <div class="models-grid">

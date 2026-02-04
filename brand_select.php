@@ -22,7 +22,10 @@ $type = isset($_GET['type']) ? $_GET['type'] : 'harvester'; // По умолча
         
         <div class="page-header">
             <h1 class="page-title"><?= htmlspecialchars($title) ?></h1>
-            <a href="catalog.php" class="btn-back">← НАЗАД В КАТАЛОГ</a>
+            <a href="catalog.php" class="btn-back">
+    <span></span><span></span><span></span><span></span>
+    ← НАЗАД В КАТАЛОГ
+</a>
         </div>
 
         <div class="brand-grid">

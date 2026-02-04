@@ -104,8 +104,8 @@ function importParts($pdo, $file, $delimiter) {
 // --- ЗАПУСК ---
 // Очистка таблиц перед импортом для избежания дублей (опционально)
 // Будь осторожен: это полностью удаляет старые данные!
-$pdo->query("TRUNCATE TABLE structure");
-$pdo->query("TRUNCATE TABLE parts");
+//$pdo->query("TRUNCATE TABLE structure");
+//$pdo->query("TRUNCATE TABLE parts");
 
 if (file_exists('structure.csv')) {
     importStructure($pdo, 'structure.csv', $delimiter);
