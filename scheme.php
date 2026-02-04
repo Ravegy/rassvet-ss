@@ -119,12 +119,11 @@ usort($parts, function($a, $b) { return (int)$a['pos_code'] <=> (int)$b['pos_cod
                             foreach ($x_list as $index => $x_val):
                                 $y_val = isset($y_list[$index]) ? $y_list[$index] : null;
                                 
-                                // ВАЖНОЕ ИЗМЕНЕНИЕ: Рисуем только если координата > 0
                                 if ((float)$x_val > 0 && (float)$y_val > 0):
                             ?>
                                 <div class="scheme-marker" 
                                      data-pos="<?= $part['pos_code'] ?>" 
-                                     data-art="<?= $part['part_number'] ?>"
+                                     data-id="<?= $part['id'] ?>"
                                      style="top: <?= trim($x_val) ?>%; left: <?= trim($y_val) ?>%;">
                                 </div>
                             <?php 
@@ -166,7 +165,7 @@ usort($parts, function($a, $b) { return (int)$a['pos_code'] <=> (int)$b['pos_cod
                                     $in_cart = in_array((string)$part['part_number'], $cart_parts);
                                     $in_fav = in_array((string)$part['part_number'], $fav_parts);
                                 ?>
-                                <tr class="part-row <?= $row_class ?>" id="<?= $row_id ?>">
+                                <tr class="part-row <?= $row_class ?>" id="<?= $row_id ?>" data-db-id="<?= $part['id'] ?>">
                                     <td class="pos-cell"><span class="pos-num"><?= $part['pos_code'] ?></span></td>
                                     <td class="art-cell"><span class="part-art"><?= $part['part_number'] ?></span></td>
                                     <td><?= $part['name'] ?></td>

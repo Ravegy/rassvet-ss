@@ -240,6 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (transformLayer) {
+        // ОБРАБОТЧИК КЛИКА (ДОБАВЛЕНИЕ ТОЧКИ)
         transformLayer.addEventListener('click', (e) => {
             if (isEditMode && selectedRow) {
                 const rect = transformLayer.getBoundingClientRect();
@@ -248,9 +249,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 const percentTop = (y / rect.height) * 100;
                 const percentLeft = (x / rect.width) * 100;
 
+                // ВАЖНО: Получаем ID из data-db-id
+                const dbId = selectedRow.getAttribute('data-db-id');
                 const artElement = selectedRow.querySelector('.part-art');
-                if(artElement) {
-                    saveCoordinates(artElement.innerText.trim(), percentTop, percentLeft, selectedRow);
+                
+                if(dbId && artElement) {
+                    saveCoordinates(dbId, artElement.innerText.trim(), percentTop, percentLeft, selectedRow);
                 }
                 return;
             }
@@ -264,6 +268,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
+        // ОБРАБОТЧИК ПРАВОГО КЛИКА (УДАЛЕНИЕ ТОЧКИ)
         transformLayer.addEventListener('contextmenu', (e) => {
             if (!isEditMode) return;
             
@@ -273,12 +278,13 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
 
             if (confirm('Удалить эту точку?')) {
-                const art = marker.getAttribute('data-art');
+                // ВАЖНО: Получаем ID из маркера
+                const dbId = marker.getAttribute('data-id'); 
                 const topVal = marker.style.top;
                 const leftVal = marker.style.left;
 
                 const formData = new FormData();
-                formData.append('article', art);
+                formData.append('id', dbId); // Отправляем ID
                 formData.append('x', topVal);
                 formData.append('y', leftVal);
 
@@ -299,11 +305,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function saveCoordinates(art, top, left, row) {
+    function saveCoordinates(dbId, art, top, left, row) {
         const formData = new FormData();
+        formData.append('id', dbId); // Отправляем ID
         formData.append('article', art);
         formData.append('x', top);
         formData.append('y', left);
+        
         fetch('api_save_coords.php', { method: 'POST', body: formData })
         .then(res => res.json())
         .then(data => {
@@ -311,8 +319,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 row.style.background = '#d4edda';
                 row.classList.remove('selected-for-edit');
                 selectedRow = null;
+                
+                // Создаем маркер и добавляем ему ID
                 const marker = document.createElement('div');
                 marker.className = 'scheme-marker temp-marker active';
+                marker.setAttribute('data-id', dbId); // <--- Присваиваем ID новому маркеру
+                marker.setAttribute('data-pos', row.querySelector('.pos-num').innerText);
                 marker.style.top = top + '%';
                 marker.style.left = left + '%';
                 transformLayer.appendChild(marker);
