@@ -204,6 +204,47 @@ usort($parts, function($a, $b) { return (int)$a['pos_code'] <=> (int)$b['pos_cod
             </div>
         </div>
     </div>
+    <div id="admin-panel" style="display: none; position: fixed; bottom: 30px; right: 30px; z-index: 1000;">
+        <button id="btn-add-part-modal" class="btn-tool" style="width: auto; padding: 0 20px; font-weight: bold; background: var(--yellow); color: #000; border: none; box-shadow: 0 0 20px rgba(255, 204, 0, 0.4);">
+            ➕ ДОБАВИТЬ ЗАПЧАСТЬ
+        </button>
+    </div>
+
+    <div id="add-part-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-window tech-card">
+            <h3 style="color: #fff; margin-top: 0;">НОВАЯ ЗАПЧАСТЬ</h3>
+            <form id="form-add-part">
+                <input type="hidden" name="cat_id" value="<?= htmlspecialchars($scheme_id) ?>">
+                <input type="hidden" name="model" value="<?= htmlspecialchars($model) ?>">
+
+                <div class="form-group">
+                    <label>№ Позиции</label>
+                    <input type="text" name="pos_code" class="c-input" placeholder="Напр: 1, 15A">
+                </div>
+                <div class="form-group">
+                    <label>Артикул</label>
+                    <input type="text" name="part_number" class="c-input" required placeholder="Напр: 205-70-71360">
+                </div>
+                <div class="form-group">
+                    <label>Название</label>
+                    <input type="text" name="name" class="c-input" required placeholder="Напр: БОЛТ">
+                </div>
+                <div class="form-group">
+                    <label>Размеры / Инфо</label>
+                    <input type="text" name="specs" class="c-input" placeholder="Напр: M10x50">
+                </div>
+                <div class="form-group">
+                    <label>Кол-во</label>
+                    <input type="text" name="qty" class="c-input" value="1">
+                </div>
+
+                <div class="modal-buttons" style="margin-top: 20px; display: flex; gap: 10px;">
+                    <button type="submit" class="btn" style="flex: 1; background: var(--yellow); color: #000; border: none;">СОХРАНИТЬ</button>
+                    <button type="button" id="btn-cancel-add" class="btn" style="flex: 1; background: #333; color: #fff; border: 1px solid #555;">ОТМЕНА</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </main>
 <?php include 'includes/footer.php'; ?>
 

@@ -10,7 +10,6 @@
 <body>
 
 <?php include 'includes/header.php'; ?>
-
 <main class="policy-page">
     <div class="container">
         
