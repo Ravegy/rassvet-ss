@@ -43,7 +43,11 @@
 .features__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
 
 .tech-card { 
-    background: #181818; 
+    /* ИЗМЕНЕНИЕ: Стеклянный фон */
+    background: rgba(30, 30, 30, 0.85); 
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
     border: 1px solid rgba(255,255,255,0.08); 
     border-radius: 12px; 
     padding: 30px; 
@@ -61,16 +65,33 @@
 .feature-card { display: flex; align-items: center; gap: 20px; }
 .feature-icon { width: 60px; height: 60px; background: rgba(255, 255, 255, 0.05); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--yellow); transition: 0.3s; border: 1px solid rgba(255,255,255,0.05); }
 .feature-icon svg { width: 30px; height: 30px; }
-.feature-card:hover .feature-icon { background: var(--yellow); color: #000; transform: scale(1.1); }
+
+/* ИЗМЕНЕНИЕ: Иконка становится белой (#fff) при наведении */
+.feature-card:hover .feature-icon { 
+    background: var(--yellow); 
+    color: #fff; 
+    transform: scale(1.1); 
+}
 
 .feature-text { display: flex; flex-direction: column; gap: 5px; }
 .feature-title { font-family: var(--font-head); font-size: 16px; font-weight: 800; color: #fff; text-transform: uppercase; letter-spacing: 0.5px; margin: 0; }
 .feature-desc { color: #999; font-size: 13px; line-height: 1.4; margin: 0; }
 
 /* ======================== */
-/* TICKER */
+/* TICKER (UPDATED - GLASS STYLE) */
 /* ======================== */
-.ticker-wrap { width: 100%; overflow: hidden; background: #111; padding: 30px 0; border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); margin-bottom: 80px; }
+.ticker-wrap { 
+    width: 100%; 
+    overflow: hidden; 
+    background: rgba(30, 30, 30, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 30px 0; 
+    border-top: 1px solid rgba(255,255,255,0.1); 
+    border-bottom: 1px solid rgba(255,255,255,0.1); 
+    margin-bottom: 80px; 
+}
+
 .ticker { display: flex; white-space: nowrap; animation: ticker 30s linear infinite; }
 .ticker__item { font-family: var(--font-head); font-size: 24px; font-weight: 900; color: #222; text-transform: uppercase; margin: 0 40px; -webkit-text-stroke: 1px rgba(255,255,255,0.2); transition: 0.3s; cursor: default; }
 .ticker__item:hover { color: var(--yellow); -webkit-text-stroke: 0; text-shadow: 0 0 15px rgba(255,51,51,0.4); }
@@ -149,210 +170,42 @@
     .industrial-box { height: 250px; }
     .categories__grid { grid-template-columns: 1fr; }
 }
-/* --- Стили для Bento-галереи внутри Hero --- */
 
-/* Контейнер для выравнивания в правой колонке */
-.hero__bento-wrapper {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: flex-end; /* Прижимаем вправо */
-    align-items: center; /* Центрируем по вертикали */
-}
-
-/* Сама сетка */
-.bento-container {
-    width: 100%;
-    max-width: 500px; 
-    /* Важно: задаем соотношение сторон, чтобы блок всегда был квадратным */
-    aspect-ratio: 1 / 1; 
-    display: grid;
-    gap: 10px;
-    /* По умолчанию 3 равные колонки */
-    grid-template-columns: 1fr 1fr 1fr;
-    transition: all 500ms ease-in-out;
-}
-
-/* === Логика "раздвигания" колонок === */
+/* --- Bento-галерея (без изменений) --- */
+.hero__bento-wrapper { width: 100%; height: 100%; display: flex; justify-content: flex-end; align-items: center; }
+.bento-container { width: 100%; max-width: 500px; aspect-ratio: 1 / 1; display: grid; gap: 10px; grid-template-columns: 1fr 1fr 1fr; transition: all 500ms ease-in-out; }
 .bento-container:has(.bento-col:nth-child(1):hover) { grid-template-columns: 3fr 1fr 1fr; }
 .bento-container:has(.bento-col:nth-child(2):hover) { grid-template-columns: 1fr 3fr 1fr; }
 .bento-container:has(.bento-col:nth-child(3):hover) { grid-template-columns: 1fr 1fr 3fr; }
-
-/* Колонки */
-.bento-col {
-    display: grid;
-    gap: 10px;
-    height: 100%; /* Заполняем высоту контейнера */
-    /* По умолчанию 3 равных ряда */
-    grid-template-rows: 1fr 1fr 1fr;
-    transition: all 500ms ease-in-out;
-}
-
-/* === Логика "раздвигания" рядов === */
+.bento-col { display: grid; gap: 10px; height: 100%; grid-template-rows: 1fr 1fr 1fr; transition: all 500ms ease-in-out; }
 .bento-col:has(.bento-item:nth-child(1):hover) { grid-template-rows: 3fr 1fr 1fr; }
 .bento-col:has(.bento-item:nth-child(2):hover) { grid-template-rows: 1fr 3fr 1fr; }
 .bento-col:has(.bento-item:nth-child(3):hover) { grid-template-rows: 1fr 1fr 3fr; }
-
-/* Ячейка с картинкой */
-.bento-item {
-    position: relative; /* Важно для позиционирования картинки */
-    overflow: hidden;
-    border-radius: 8px;
-    cursor: pointer;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    background: #222;
-    /* Исправление бага с "полосой": запрещаем блоку схлопываться */
-    min-height: 0; 
-    min-width: 0;
-}
-
-/* Сама картинка */
-.bento-item img {
-    /* АБСОЛЮТНОЕ ПОЗИЦИОНИРОВАНИЕ - РЕШАЕТ ПРОБЛЕМУ */
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* Картинка обрезается, но заполняет весь блок */
-    
-    transition: all 500ms ease-in-out;
-    filter: brightness(0.8) contrast(1.1) saturate(1); /* ЧБ по умолчанию */
-}
-
-/* Эффекты при наведении */
-.bento-col:hover .bento-item img {
-    /* Если навели на колонку - остальные темнеют */
-    filter: blur(2px) brightness(0.4) saturate(0);
-}
-
-.bento-col .bento-item:hover img {
-    /* Активная картинка - яркая и четкая */
-    filter: blur(0) brightness(1.1) contrast(1.1) saturate(1.1);
-    transform: scale(1.1); /* Легкий зум */
-}
-
-/* --- Адаптив для мобильных --- */
+.bento-item { position: relative; overflow: hidden; border-radius: 8px; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.3); background: #222; min-height: 0; min-width: 0; }
+.bento-item img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: all 500ms ease-in-out; filter: brightness(0.8) contrast(1.1) saturate(1); }
+.bento-col:hover .bento-item img { filter: blur(2px) brightness(0.4) saturate(0); }
+.bento-col .bento-item:hover img { filter: blur(0) brightness(1.1) contrast(1.1) saturate(1.1); transform: scale(1.1); }
 @media (max-width: 992px) {
-    .hero__grid {
-        grid-template-columns: 1fr; /* Одна колонка */
-        gap: 30px;
-        text-align: center;
-    }
-    
-    /* === ИСПРАВЛЕНИЕ ПОРЯДКА === */
-    .hero__content {
-        order: 1; /* Текст и кнопки - СВЕРХУ */
-    }
-
-    .hero__bento-wrapper {
-        order: 2; /* Галерея - СНИЗУ */
-        justify-content: center;
-        margin-top: 20px;
-    }
-    /* =========================== */
-    
-    /* Настройки блока галереи */
-    .bento-container {
-        max-width: 340px; 
-        width: 100%;
-        aspect-ratio: 1 / 1;
-    }
-
-    /* Отключаем сложные эффекты наведения для телефона */
-    .bento-container:has(.bento-col:nth-child(1):hover),
-    .bento-container:has(.bento-col:nth-child(2):hover),
-    .bento-container:has(.bento-col:nth-child(3):hover) { 
-        grid-template-columns: 1fr 1fr 1fr; 
-    }
-
-    .bento-col:has(.bento-item:nth-child(1):hover),
-    .bento-col:has(.bento-item:nth-child(2):hover),
-    .bento-col:has(.bento-item:nth-child(3):hover) { 
-        grid-template-rows: 1fr 1fr 1fr; 
-    }
-
-    .bento-item img {
-        filter: none !important;
-        transform: none !important;
-    }
-    
-    .bento-col:hover .bento-item img {
-        filter: none !important;
-    }
+    .hero__grid { grid-template-columns: 1fr; gap: 30px; text-align: center; }
+    .hero__content { order: 1; }
+    .hero__bento-wrapper { order: 2; justify-content: center; margin-top: 20px; }
+    .bento-container { max-width: 340px; width: 100%; aspect-ratio: 1 / 1; }
+    .bento-container:has(.bento-col:nth-child(1):hover), .bento-container:has(.bento-col:nth-child(2):hover), .bento-container:has(.bento-col:nth-child(3):hover) { grid-template-columns: 1fr 1fr 1fr; }
+    .bento-col:has(.bento-item:nth-child(1):hover), .bento-col:has(.bento-item:nth-child(2):hover), .bento-col:has(.bento-item:nth-child(3):hover) { grid-template-rows: 1fr 1fr 1fr; }
+    .bento-item img { filter: none !important; transform: none !important; }
+    .bento-col:hover .bento-item img { filter: none !important; }
 }
-/* ======================== */
-/* АНИМАЦИИ ПОЯВЛЕНИЯ */
-/* ======================== */
-
-/* 1. Появление слева (для текста) */
-@keyframes slideInLeft {
-    from {
-        opacity: 0;
-        transform: translateX(-100px); /* Едет из-за левого края */
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-/* 2. Появление справа (для фото/галереи) */
-@keyframes slideInRight {
-    from {
-        opacity: 0;
-        transform: translateX(100px); /* Едет из-за правого края */
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-/* 3. Появление снизу (для кнопок или мелких деталей) */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(40px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Классы, которые мы будем вешать в HTML */
-.anim-hidden {
-    opacity: 0; /* Скрываем элементы до начала анимации */
-}
-
-.animate-left {
-    animation: slideInLeft 1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-}
-
-.animate-right {
-    animation: slideInRight 1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-}
-
-.animate-up {
-    animation: fadeInUp 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-}
-
-/* Задержки (чтобы элементы появлялись по очереди) */
+@keyframes slideInLeft { from { opacity: 0; transform: translateX(-100px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes slideInRight { from { opacity: 0; transform: translateX(100px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+.anim-hidden { opacity: 0; }
+.animate-left { animation: slideInLeft 1s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+.animate-right { animation: slideInRight 1s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+.animate-up { animation: fadeInUp 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
 .delay-100 { animation-delay: 0.1s; }
 .delay-200 { animation-delay: 0.2s; }
 .delay-300 { animation-delay: 0.3s; }
 .delay-500 { animation-delay: 0.5s; }
-/* Кнопки Profile Style (High Contrast) + Slow Neon */
 .btn-neon{position:relative;display:inline-block;padding:15px 40px;color:#fff;font-family:var(--font-head);font-weight:700;text-transform:uppercase;letter-spacing:1px;text-decoration:none;font-size:12px;overflow:hidden;transition:.3s;margin-right:20px;background:rgba(20,20,20,.9);border:1px solid rgba(255,255,255,.2);border-radius:4px;z-index:1}.btn-neon:hover{background:#ff3333;color:#fff;border-color:#ff3333;box-shadow:0 0 20px rgba(255,51,51,.4)}.btn-neon span{position:absolute;display:block}.btn-neon span:nth-child(1){top:0;left:-100%;width:100%;height:1px;background:linear-gradient(90deg,transparent,#ff3333);animation:btn-anim1 3s linear infinite}.btn-neon span:nth-child(2){top:-100%;right:0;width:1px;height:100%;background:linear-gradient(180deg,transparent,#ff3333);animation:btn-anim2 3s linear infinite;animation-delay:.75s}.btn-neon span:nth-child(3){bottom:0;right:-100%;width:100%;height:1px;background:linear-gradient(270deg,transparent,#ff3333);animation:btn-anim3 3s linear infinite;animation-delay:1.5s}.btn-neon span:nth-child(4){bottom:-100%;left:0;width:1px;height:100%;background:linear-gradient(360deg,transparent,#ff3333);animation:btn-anim4 3s linear infinite;animation-delay:2.25s}@keyframes btn-anim1{0%{left:-100%}50%,100%{left:100%}}@keyframes btn-anim2{0%{top:-100%}50%,100%{top:100%}}@keyframes btn-anim3{0%{right:-100%}50%,100%{right:100%}}@keyframes btn-anim4{0%{bottom:-100%}50%,100%{bottom:100%}}
-/* Адаптация кнопки для формы VIN-запроса */
-.vin-form .btn-neon {
-    width: 100%;       /* На всю ширину формы */
-    margin: 0;         /* Убираем отступ справа */
-    padding: 15px 0;   /* Центруем текст по вертикали */
-    background: rgba(20, 20, 20, 0.9); /* Темный фон */
-}
-
-.vin-form .btn-neon:hover {
-    background: #ff3333; /* Красный фон при наведении */
-}
+.vin-form .btn-neon { width: 100%; margin: 0; padding: 15px 0; background: rgba(20, 20, 20, 0.9); }
+.vin-form .btn-neon:hover { background: #ff3333; }

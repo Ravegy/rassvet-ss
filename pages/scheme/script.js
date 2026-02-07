@@ -215,13 +215,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function toggleEditMode() {
         isEditMode = !isEditMode;
+        const adminPanel = document.getElementById('admin-panel');
+
         if (isEditMode) {
             alert('РЕЖИМ РЕДАКТОРА ВКЛЮЧЕН');
             document.body.classList.add('editor-mode');
+            if(adminPanel) adminPanel.style.display = 'block';
             fitLayerToImage();
         } else {
             alert('Режим редактора выключен');
             document.body.classList.remove('editor-mode');
+            if(adminPanel) adminPanel.style.display = 'none';
             if(selectedRow) selectedRow.classList.remove('selected-for-edit');
             selectedRow = null;
         }
@@ -240,7 +244,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (transformLayer) {
-        // ОБРАБОТЧИК КЛИКА (ДОБАВЛЕНИЕ ТОЧКИ)
         transformLayer.addEventListener('click', (e) => {
             if (isEditMode && selectedRow) {
                 const rect = transformLayer.getBoundingClientRect();
@@ -249,7 +252,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const percentTop = (y / rect.height) * 100;
                 const percentLeft = (x / rect.width) * 100;
 
-                // ВАЖНО: Получаем ID из data-db-id
                 const dbId = selectedRow.getAttribute('data-db-id');
                 const artElement = selectedRow.querySelector('.part-art');
                 
@@ -268,7 +270,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // ОБРАБОТЧИК ПРАВОГО КЛИКА (УДАЛЕНИЕ ТОЧКИ)
         transformLayer.addEventListener('contextmenu', (e) => {
             if (!isEditMode) return;
             
@@ -278,13 +279,12 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
 
             if (confirm('Удалить эту точку?')) {
-                // ВАЖНО: Получаем ID из маркера
                 const dbId = marker.getAttribute('data-id'); 
                 const topVal = marker.style.top;
                 const leftVal = marker.style.left;
 
                 const formData = new FormData();
-                formData.append('id', dbId); // Отправляем ID
+                formData.append('id', dbId);
                 formData.append('x', topVal);
                 formData.append('y', leftVal);
 
@@ -307,7 +307,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function saveCoordinates(dbId, art, top, left, row) {
         const formData = new FormData();
-        formData.append('id', dbId); // Отправляем ID
+        formData.append('id', dbId);
         formData.append('article', art);
         formData.append('x', top);
         formData.append('y', left);
@@ -320,15 +320,46 @@ document.addEventListener('DOMContentLoaded', () => {
                 row.classList.remove('selected-for-edit');
                 selectedRow = null;
                 
-                // Создаем маркер и добавляем ему ID
                 const marker = document.createElement('div');
                 marker.className = 'scheme-marker temp-marker active';
-                marker.setAttribute('data-id', dbId); // <--- Присваиваем ID новому маркеру
+                marker.setAttribute('data-id', dbId);
                 marker.setAttribute('data-pos', row.querySelector('.pos-num').innerText);
                 marker.style.top = top + '%';
                 marker.style.left = left + '%';
                 transformLayer.appendChild(marker);
             } else { alert('Ошибка сохранения'); }
+        });
+    }
+
+    const modalAdd = document.getElementById('add-part-modal');
+    const btnAddModal = document.getElementById('btn-add-part-modal');
+    const btnCancelAdd = document.getElementById('btn-cancel-add');
+    const formAdd = document.getElementById('form-add-part');
+
+    if (btnAddModal && modalAdd) {
+        btnAddModal.addEventListener('click', () => {
+            modalAdd.style.display = 'flex';
+        });
+
+        btnCancelAdd.addEventListener('click', () => {
+            modalAdd.style.display = 'none';
+        });
+
+        formAdd.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const formData = new FormData(formAdd);
+
+            fetch('api_add_part.php', { method: 'POST', body: formData })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert('Запчасть добавлена! Страница перезагрузится.');
+                    location.reload();
+                } else {
+                    alert('Ошибка: ' + data.message);
+                }
+            })
+            .catch(err => alert('Ошибка сети'));
         });
     }
 });

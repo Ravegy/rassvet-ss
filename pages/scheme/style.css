@@ -254,3 +254,27 @@ body.editor-mode .scheme-marker {
     50% { transform: translate(-50%, -50%) scale(1.5); opacity: 0.7; box-shadow: 0 0 15px rgba(255, 0, 0, 0); }
     100% { transform: translate(-50%, -50%) scale(1); opacity: 1; box-shadow: 0 0 5px rgba(255, 0, 0, 0.6); }
 }
+/* Модальное окно добавления запчасти */
+.modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8); z-index: 10000;
+    display: flex; align-items: center; justify-content: center;
+    backdrop-filter: blur(5px);
+}
+.modal-window {
+    width: 400px; max-width: 90%;
+    /* Наш фирменный стеклянный стиль */
+    background: rgba(30, 30, 30, 0.95);
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--yellow);
+    box-shadow: 0 0 50px rgba(255, 204, 0, 0.15);
+    padding: 30px; border-radius: 12px;
+}
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; color: #888; font-size: 12px; margin-bottom: 5px; font-weight: 700; }
+.c-input { 
+    width: 100%; height: 40px; background: #111; 
+    border: 1px solid rgba(255,255,255,0.1); 
+    color: #fff; padding: 0 10px; border-radius: 4px; outline: none; 
+}
+.c-input:focus { border-color: var(--yellow); }
