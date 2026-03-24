@@ -9,6 +9,23 @@ $highlight = isset($_GET['highlight']) ? $_GET['highlight'] : '';
 $cur_user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 0;
 $cur_session_id = session_id();
 
+// --- 1. ТИП И БРЕНД ---
+$detected_brand = 'komatsu';
+$detected_type = 'harvester'; 
+$detected_type_name = 'ЛЕСОЗАГОТОВИТЕЛЬНЫЕ МАШИНЫ';
+
+if (preg_match('/^8\d+/', $model)) {
+    $detected_type = 'forwarder';
+    $detected_type_name = 'ФОРВАРДЕР';
+} elseif (preg_match('/^C\d+/', $model)) {
+    $detected_type = 'head';
+    $detected_type_name = 'ГОЛОВКИ';
+}
+if ($model == '901.3') {
+    $detected_brand = 'valmet';
+}
+// ----------------------
+
 $is_admin = 0;
 if ($cur_user_id) {
     $stmt_admin = $pdo->prepare("SELECT is_admin FROM users WHERE id = ?");
@@ -36,21 +53,41 @@ $scheme_info = $stmt->fetch();
 
 $scheme_title = $scheme_info ? $scheme_info['name'] : 'Схема';
 $scheme_image = (!empty($scheme_info['image'])) ? $scheme_info['image'] : 'cat-harvester.jpg';
-$back_id = (!empty($scheme_info['parent_id']) && $scheme_info['parent_id'] != '0') ? $scheme_info['parent_id'] : 'ROOT';
 
+// === ЛОГИКА МУЛЬТИ-РОДИТЕЛЯ ДЛЯ КРОШЕК ===
+// Берем первый ID из списка родителей для построения пути
+$parents_list = isset($scheme_info['parent_id']) ? explode(',', $scheme_info['parent_id']) : [];
+$main_parent = isset($parents_list[0]) ? trim($parents_list[0]) : '';
+$back_id = (!empty($main_parent) && $main_parent != '0') ? $main_parent : 'ROOT';
+
+// --- 2. ЦЕПОЧКА КРОШЕК ---
 $breadcrumbs = [];
 $curr_id = $back_id;
-while ($curr_id && $curr_id !== 'ROOT') {
+$limit = 0;
+
+while ($curr_id && $curr_id !== 'ROOT' && $limit < 10) {
     $stmt_path = $pdo->prepare("SELECT name, parent_id FROM structure WHERE cat_id = ? AND model = ?");
     $stmt_path->execute([$curr_id, $model]);
     $node = $stmt_path->fetch();
+    
     if ($node) {
-        $breadcrumbs[] = $node['name'];
-        $curr_id = (!empty($node['parent_id']) && $node['parent_id'] != '0') ? $node['parent_id'] : 'ROOT';
+        $breadcrumbs[] = [
+            'id' => $curr_id,
+            'name' => $node['name']
+        ];
+        
+        // Снова берем первого родителя из списка
+        $p_list = explode(',', $node['parent_id']);
+        $p_main = trim($p_list[0]);
+        
+        $curr_id = (!empty($p_main) && $p_main != '0') ? $p_main : 'ROOT';
     } else {
         break;
     }
+    $limit++;
 }
+$breadcrumbs = array_reverse($breadcrumbs);
+// -------------------------
 
 $stmt_parts = $pdo->prepare("SELECT * FROM parts WHERE cat_id = ? AND model = ?");
 $stmt_parts->execute([$scheme_id, $model]);
@@ -65,6 +102,7 @@ usort($parts, function($a, $b) { return (int)$a['pos_code'] <=> (int)$b['pos_cod
     <title><?= htmlspecialchars($scheme_title) ?> | РАССВЕТ-С</title>
     <link rel="stylesheet" href="common.css?v=<?= time() ?>">
     <link rel="stylesheet" href="pages/scheme/style.css?v=<?= time() ?>">
+    <link rel="stylesheet" href="style.css?v=<?= time() ?>">
 </head>
 <body>
 
@@ -73,22 +111,42 @@ usort($parts, function($a, $b) { return (int)$a['pos_code'] <=> (int)$b['pos_cod
 <main class="scheme-page">
     <div class="container">
         
-        <div class="back-nav">
-            <a href="groups.php?model=<?= urlencode($model) ?>&id=<?= $back_id ?>" class="back-link">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-                НАЗАД
-            </a>
+        <div class="smart-breadcrumbs">
+            <div class="sb-list">
+                <a href="catalog.php" class="sb-item" title="Каталог">Каталог</a>
+                <span class="sb-sep">></span>
+
+                <a href="brand_select.php?type=<?= $detected_type ?>&title=<?= urlencode($detected_type_name) ?>" class="sb-item" title="<?= $detected_type_name ?>">
+                    <?= $detected_type_name ?>
+                </a>
+                <span class="sb-sep">></span>
+
+                <a href="models.php?brand=<?= $detected_brand ?>&type=<?= $detected_type ?>" class="sb-item" title="<?= strtoupper($detected_brand) ?>">
+                    <?= strtoupper($detected_brand) ?>
+                </a>
+                <span class="sb-sep">></span>
+
+                <a href="groups.php?model=<?= urlencode($model) ?>&id=ROOT" class="sb-item" title="Модель <?= htmlspecialchars($model) ?>">
+                    <?= htmlspecialchars($model) ?>
+                </a>
+                <span class="sb-sep">></span>
+
+                <?php foreach ($breadcrumbs as $crumb): ?>
+                    <a href="groups.php?model=<?= urlencode($model) ?>&id=<?= $crumb['id'] ?>" class="sb-item" title="<?= htmlspecialchars($crumb['name']) ?>">
+                        <?= htmlspecialchars($crumb['name']) ?>
+                    </a>
+                    <span class="sb-sep">></span>
+                <?php endforeach; ?>
+
+                <span class="sb-item active" title="<?= htmlspecialchars($scheme_id . ' ' . $scheme_title) ?>">
+                    <?= htmlspecialchars($scheme_id . ' ' . $scheme_title) ?>
+                </span>
+            </div>
         </div>
 
         <div class="scheme-header">
             <div class="scheme-number">
                 № <?= htmlspecialchars($scheme_id) ?>
-                <?php foreach ($breadcrumbs as $crumb): ?>
-                    <span style="color: #666; margin: 0 5px;">/</span> 
-                    <span style="color: #ccc;"><?= htmlspecialchars($crumb) ?></span>
-                <?php endforeach; ?>
-                <span style="color: #666; margin: 0 5px;">/</span> 
-                <span style="color: #fff;"><?= htmlspecialchars($model) ?></span>
             </div>
             <h1 class="scheme-title"><?= htmlspecialchars($scheme_title) ?></h1>
         </div>
@@ -166,7 +224,7 @@ usort($parts, function($a, $b) { return (int)$a['pos_code'] <=> (int)$b['pos_cod
                                     $in_fav = in_array((string)$part['part_number'], $fav_parts);
                                 ?>
                                 <tr class="part-row <?= $row_class ?>" id="<?= $row_id ?>" data-db-id="<?= $part['id'] ?>">
-                                    <td class="pos-cell"><span class="pos-num"><?= $part['pos_code'] ?></span></td>
+                                    <td class="pos-cell"><span class="pos-num"><?= ($part['pos_code'] == 0) ? '' : $part['pos_code'] ?></span></td>
                                     <td class="art-cell"><span class="part-art"><?= $part['part_number'] ?></span></td>
                                     <td><?= $part['name'] ?></td>
                                     <td style="color: #999; font-size: 12px;"><?= $part['specs'] ?></td>

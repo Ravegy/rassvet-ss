@@ -6,6 +6,7 @@
     <title>Выбор бренда | РАССВЕТ-С</title>
     <link rel="stylesheet" href="common.css?v=<?= time() ?>">
     <link rel="stylesheet" href="pages/catalog/style.css?v=<?= time() ?>">
+    <link rel="stylesheet" href="style.css?v=<?= time() ?>">
 </head>
 <body>
 
@@ -20,12 +21,20 @@ $type = isset($_GET['type']) ? $_GET['type'] : 'harvester'; // По умолча
 <main class="catalog-page">
     <div class="container">
         
-        <div class="page-header">
+        <div class="smart-breadcrumbs">
+            <div class="sb-list">
+                <a href="catalog.php" class="sb-item" title="Каталог запчастей">Каталог</a>
+                <span class="sb-sep">></span>
+                
+                <span class="sb-item active" title="<?= htmlspecialchars($title) ?>">
+                    <?= htmlspecialchars($title) ?>
+                </span>
+            </div>
+        </div>
+
+        <div class="page-header-styled">
+            <span class="page-sub-label">РАЗДЕЛ КАТАЛОГА</span>
             <h1 class="page-title"><?= htmlspecialchars($title) ?></h1>
-            <a href="catalog.php" class="btn-back">
-    <span></span><span></span><span></span><span></span>
-    ← НАЗАД В КАТАЛОГ
-</a>
         </div>
 
         <div class="brand-grid">

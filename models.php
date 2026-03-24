@@ -6,6 +6,7 @@
     <title>Выбор модели | РАССВЕТ-С</title>
     <link rel="stylesheet" href="common.css?v=<?= time() ?>">
     <link rel="stylesheet" href="pages/catalog/style.css?v=<?= time() ?>">
+    <link rel="stylesheet" href="style.css?v=<?= time() ?>">
 </head>
 <body>
 
@@ -15,7 +16,14 @@
 $brand = isset($_GET['brand']) ? $_GET['brand'] : 'komatsu';
 $type = isset($_GET['type']) ? $_GET['type'] : 'harvester';
 
-// Структура массива теперь: ['name' => 'Модель', 'sn' => 'Серийный номер']
+// Определяем название типа для хлебных крошек
+$type_name = "ТЕХНИКА";
+if($type == 'harvester') $type_name = "ЛЕСОЗАГОТОВИТЕЛЬНЫЕ МАШИНЫ";
+if($type == 'forwarder') $type_name = "ФОРВАРДЕР";
+if($type == 'head') $type_name = "ГОЛОВКИ";
+if($type == 'tracked') $type_name = "ГУСЕНИЧНЫЙ КОМБАЙН";
+
+// Структура массива
 $models = [];
 $page_title = "";
 
@@ -49,7 +57,6 @@ if ($brand == 'komatsu') {
             ['name' => '951XC', 'sn' => '9513010271 -'],
         ];
     } elseif ($type == 'forwarder') {
-        // Тут пока заглушки, потом заполним так же
         $models = [
             ['name' => '855', 'sn' => 'Серия 1'],
             ['name' => '875', 'sn' => 'Серия 1'],
@@ -64,7 +71,6 @@ if ($brand == 'komatsu') {
     
 } elseif ($brand == 'valmet') {
     $page_title = "МОДЕЛЬНЫЙ РЯД VALMET";
-    // Пример для Valmet
     $models = [
         ['name' => '901.3', 'sn' => 'Old Series'],
         ['name' => '911.4', 'sn' => 'Old Series']
@@ -75,9 +81,25 @@ if ($brand == 'komatsu') {
 <main class="catalog-page">
     <div class="container">
         
-        <div class="page-header">
+        <div class="smart-breadcrumbs">
+            <div class="sb-list">
+                <a href="catalog.php" class="sb-item" title="Каталог запчастей">Каталог</a>
+                <span class="sb-sep">></span>
+
+                <a href="brand_select.php?type=<?= $type ?>&title=<?= urlencode($type_name) ?>" class="sb-item" title="<?= $type_name ?>">
+                    <?= $type_name ?>
+                </a>
+                <span class="sb-sep">></span>
+
+                <span class="sb-item active" title="<?= strtoupper($brand) ?>">
+                    <?= strtoupper($brand) ?>
+                </span>
+            </div>
+        </div>
+        
+        <div class="page-header-styled">
+            <span class="page-sub-label">ВЫБЕРИТЕ ВАШУ ТЕХНИКУ</span>
             <h1 class="page-title"><?= $page_title ?></h1>
-            <a href="brand_select.php?type=<?= $type ?>" class="btn-back">← НАЗАД К ВЫБОРУ БРЕНДА</a>
         </div>
 
         <div class="models-grid">

@@ -278,3 +278,66 @@ body.editor-mode .scheme-marker {
     color: #fff; padding: 0 10px; border-radius: 4px; outline: none; 
 }
 .c-input:focus { border-color: var(--yellow); }
+
+/* --- SMART BREADCRUMBS (Белый текст, Красный активный) --- */
+.smart-breadcrumbs {
+    width: 100%;
+    background: transparent;
+    padding: 20px 0 5px 0;
+    margin-bottom: 10px;
+    border: none;
+}
+
+.sb-list {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    overflow: hidden;
+    font-size: 13px;
+    font-family: var(--font-head, sans-serif);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+.sb-item {
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 35px;         /* Сжатый вид */
+    
+    color: #fff;             /* БЕЛЫЙ ЦВЕТ ТЕКСТА */
+    text-decoration: none;
+    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    cursor: pointer;
+    vertical-align: middle;
+    text-transform: uppercase;
+    opacity: 0.8;            /* Чуть прозрачный, чтобы не резало глаз */
+}
+
+/* Эффект при наведении */
+.sb-item:hover {
+    max-width: 400px;
+    color: var(--yellow, #ffcc00); /* При наведении - желтый */
+    padding-right: 5px;
+    opacity: 1;
+}
+
+/* Разделитель (стрелочка) */
+.sb-sep {
+    margin: 0 8px;
+    color: #fff;             /* БЕЛАЯ СТРЕЛКА */
+    font-size: 10px;
+    opacity: 0.5;
+}
+
+/* Активный элемент (Где мы сейчас) */
+.sb-item.active {
+    max-width: none;
+    color: #ff3333;          /* КРАСНЫЙ ЦВЕТ (как на лайках) */
+    font-weight: 700;
+    cursor: default;
+    pointer-events: none;
+    opacity: 1;
+    text-shadow: 0 0 10px rgba(255, 51, 51, 0.3); /* Легкое свечение */
+}
